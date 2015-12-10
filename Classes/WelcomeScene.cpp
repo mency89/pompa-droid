@@ -1,8 +1,13 @@
 ﻿#include "WelcomeScene.h"
 
 #include "GameScene.h"
+#include "TPManager.h"
 #include "VisibleRect.h"
 using namespace cocos2d;
+
+#include "Entity/BaseGameEntity.h"
+#include "Entity/GameEntityCreator.h"
+#include <Box2D/Box2D.h>
 
 
 Scene* WelcomeScene::createScene()
@@ -39,7 +44,8 @@ bool WelcomeScene::init()
 	{
 		if (touchtostart->getBoundingBox().containsPoint(touch->getLocation()))
 		{
-			CCLOG("start game");
+			Director::getInstance()->getTextureCache()->removeUnusedTextures();
+			TPManager::instance()->loadCategory("images");
 			Director::getInstance()->replaceScene(TransitionFadeBL::create(0.5f, GameScene::createScene()));
 		}
 		return true;
