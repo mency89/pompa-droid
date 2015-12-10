@@ -27,7 +27,7 @@ namespace
 TPManager::TPManager()
 	: working_(false)
 {
-	loadCategoryConfigFile("config/texturepacker.json");
+	loadCategoryConfigFile("config/texture_packer.json");
 }
 
 TPManager::~TPManager()
