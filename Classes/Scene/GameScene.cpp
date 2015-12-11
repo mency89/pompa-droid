@@ -1,13 +1,16 @@
 ﻿#include "GameScene.h"
 
 #include <Box2D/Box2D.h>
+#include "VisibleRect.h"
 #include "Entity/Hero.h"
+
 #include "Entity/BaseGameEntity.h"
 #include "Entity/GameEntityCreator.h"
 using namespace cocos2d;
 
 
 GameScene::GameScene()
+	: hero_(nullptr)
 {
 
 }
@@ -32,9 +35,16 @@ bool GameScene::init()
 		return false;
 	}
 
-	auto hero = GameEntityCreator<Hero>().create(nullptr);
-	hero->setPosition(Vec2(200, 200));
-	addChild(hero);
+	hero_ = GameEntityCreator<Hero>().create(nullptr);
+	hero_->setPosition(VisibleRect::center());
+	addChild(hero_);
+
+	scheduleUpdate();
 
 	return true;
+}
+
+void GameScene::update(float delta)
+{
+	hero_->update();
 }

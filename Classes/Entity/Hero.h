@@ -17,6 +17,8 @@ public:
 
 	virtual void update() override;
 
+	StateMachine<Hero>* getStateMachine();
+
 private:
 	HeroStateMachine state_machine_;
 };

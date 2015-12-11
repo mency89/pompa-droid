@@ -1,4 +1,5 @@
 ﻿#include "AppDelegate.h"
+#include "GameApplication.h"
 #include "Scene/WelcomeScene.h"
 
 USING_NS_CC;
@@ -55,6 +56,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::EXACT_FIT);
 	
     register_all_packages();
+
+	Director::getInstance()->setNotificationNode(GameApplication::instance());
 
     // create a scene. it's an autorelease object
 	auto scene = WelcomeScene::createScene();

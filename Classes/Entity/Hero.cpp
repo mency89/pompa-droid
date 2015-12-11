@@ -30,3 +30,8 @@ void Hero::update()
 {
 	state_machine_->update();
 }
+
+StateMachine<Hero>* Hero::getStateMachine()
+{
+	return state_machine_.get();
+}

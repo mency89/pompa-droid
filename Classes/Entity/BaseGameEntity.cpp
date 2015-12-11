@@ -23,6 +23,8 @@ bool BaseGameEntity::init()
 		return false;
 	}
 
+	setDirection(Direction::Right);
+
 	return true;
 }
 
@@ -38,4 +40,22 @@ void BaseGameEntity::update_collision_body_by_spriteframe()
 void BaseGameEntity::update()
 {
 	update_collision_body_by_spriteframe();
+}
+
+BaseGameEntity::Direction BaseGameEntity::getDirection() const
+{
+	return direction_;
+}
+
+void BaseGameEntity::setDirection(Direction direction)
+{
+	direction_ = direction;
+	if (direction_ == Direction::Right)
+	{
+		setFlippedX(false);
+	}
+	else if (direction_ == Direction::Left)
+	{
+		setFlippedX(true);
+	}
 }

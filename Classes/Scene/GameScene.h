@@ -3,6 +3,8 @@
 
 #include "cocos2d.h"
 
+class Hero;
+
 class GameScene : public cocos2d::Layer
 {
 public:
@@ -14,7 +16,12 @@ public:
 
 	virtual bool init() override;
 
+	virtual void update(float delta) override;
+
 	CREATE_FUNC(GameScene);
+
+private:
+	Hero* hero_;
 };
 
 #endif
