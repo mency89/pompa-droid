@@ -15,9 +15,16 @@ public:
 
 	virtual ~BaseGameEntity();
 
+	virtual bool init() override;
+
+	virtual void update();
+
+	void update_collision_body_by_spriteframe();
+
 private:
-	b2Body* collision_body_;
-	std::shared_ptr<b2World> world_;
+	std::shared_ptr<b2World>		world_;
+	b2Body*							collision_body_;
+	std::string						sprite_frame_name_;
 };
 
 #endif
