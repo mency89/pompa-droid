@@ -16,6 +16,9 @@
     <Filter Include="src\Entity">
       <UniqueIdentifier>{3a26ee6e-6ef0-40a6-afea-362f361c712e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Scene">
+      <UniqueIdentifier>{efa58daa-e16b-4e4c-955d-1c9d75b2a566}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,17 +27,11 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\WelcomeScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\VisibleRect.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\State\HeroOwnedStates.cpp">
       <Filter>src\State</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameScene.cpp">
-      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Singleton.cpp">
       <Filter>src</Filter>
@@ -48,15 +45,27 @@
     <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp">
       <Filter>src\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Hero.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GB2ShapeCache.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\GameScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\WelcomeScene.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\VisibleRect.h">
@@ -70,9 +79,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\State\StateMachine.h">
       <Filter>src\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\GameScene.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Singleton.h">
       <Filter>src</Filter>
@@ -88,6 +94,24 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\GameEntityCreator.h">
       <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Hero.h">
+      <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GB2ShapeCache.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ActionTags.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Application.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\GameScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\WelcomeScene.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

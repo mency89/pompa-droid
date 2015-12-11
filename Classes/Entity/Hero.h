@@ -2,9 +2,12 @@
 #define __HERO_H__
 
 #include "BaseGameEntity.h"
+#include "State/StateMachine.h"
 
 class Hero : public BaseGameEntity
 {
+	typedef std::auto_ptr<StateMachine<Hero> > HeroStateMachine;
+
 public:
 	Hero(std::shared_ptr<b2World> world);
 
@@ -15,7 +18,7 @@ public:
 	virtual void update() override;
 
 private:
-
+	HeroStateMachine state_machine_;
 };
 
 #endif

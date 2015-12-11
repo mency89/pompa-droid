@@ -1,4 +1,5 @@
 ﻿#include "Hero.h"
+#include "State/HeroOwnedStates.h"
 
 
 Hero::Hero(std::shared_ptr<b2World> world)
@@ -19,10 +20,13 @@ bool Hero::init()
 		return false;
 	}
 
+	state_machine_.reset(new StateMachine<Hero>(this));
+	state_machine_->change_state(HeroIdle::instance());
+
 	return true;
 }
 
 void Hero::update()
 {
-
+	state_machine_->update();
 }

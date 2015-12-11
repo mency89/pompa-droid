@@ -147,27 +147,34 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AnimationManger.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp" />
-    <ClCompile Include="..\Classes\GameScene.cpp" />
+    <ClCompile Include="..\Classes\Entity\Hero.cpp" />
+    <ClCompile Include="..\Classes\Application.cpp" />
+    <ClCompile Include="..\Classes\GB2ShapeCache.cpp" />
+    <ClCompile Include="..\Classes\Scene\GameScene.cpp" />
+    <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp" />
     <ClCompile Include="..\Classes\Singleton.cpp" />
     <ClCompile Include="..\Classes\State\HeroOwnedStates.cpp" />
     <ClCompile Include="..\Classes\TPManager.cpp" />
     <ClCompile Include="..\Classes\VisibleRect.cpp" />
-    <ClCompile Include="..\Classes\WelcomeScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\ActionTags.h" />
     <ClInclude Include="..\Classes\AnimationManger.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Entity\BaseGameEntity.h" />
     <ClInclude Include="..\Classes\Entity\GameEntityCreator.h" />
-    <ClInclude Include="..\Classes\GameScene.h" />
+    <ClInclude Include="..\Classes\Entity\Hero.h" />
+    <ClInclude Include="..\Classes\Application.h" />
+    <ClInclude Include="..\Classes\GB2ShapeCache.h" />
+    <ClInclude Include="..\Classes\Scene\GameScene.h" />
+    <ClInclude Include="..\Classes\Scene\WelcomeScene.h" />
     <ClInclude Include="..\Classes\Singleton.h" />
     <ClInclude Include="..\Classes\State\HeroOwnedStates.h" />
     <ClInclude Include="..\Classes\State\State.h" />
     <ClInclude Include="..\Classes\State\StateMachine.h" />
     <ClInclude Include="..\Classes\TPManager.h" />
     <ClInclude Include="..\Classes\VisibleRect.h" />
-    <ClInclude Include="..\Classes\WelcomeScene.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
