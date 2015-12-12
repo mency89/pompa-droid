@@ -5,6 +5,8 @@ enum ActionTags
 {
 	hero_idle = 1001,
 	hero_walk = 1002,
+	hero_run = 1003,
+	hero_jump = 1004,
 };
 
 #endif

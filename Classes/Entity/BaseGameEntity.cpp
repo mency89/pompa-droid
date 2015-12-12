@@ -12,6 +12,8 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	: world_(world)
 	, run_speed_(0.0f)
 	, walk_speed_(0.0f)
+	, jump_force_(0.0f)
+	, jump_height_(0.0f)
 	, collision_body_(nullptr)
 	, entity_id_(++s_next_entity_id_)
 {
@@ -109,6 +111,30 @@ float BaseGameEntity::getWalkSpeed() const
 void BaseGameEntity::setWalkSpeed(float speed)
 {
 	walk_speed_ = speed;
+}
+
+// 获取跳跃力
+float BaseGameEntity::getJumpForce() const
+{
+	return jump_force_;
+}
+
+// 设置跳跃力
+void BaseGameEntity::setJumpForce(float force)
+{
+	jump_force_ = force;
+}
+
+// 获取最大跳跃高度
+float BaseGameEntity::getMaxJumpHeight() const
+{
+	return jump_height_;
+}
+
+// 设置最大跳跃高度
+void BaseGameEntity::setMaxJumpHeight(float height)
+{
+	jump_height_ = height;
 }
 
 // 获取方向

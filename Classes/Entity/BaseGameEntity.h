@@ -66,6 +66,26 @@ public:
 	void setWalkSpeed(float speed);
 
 	/**
+	 * 获取跳跃力
+	 */
+	float getJumpForce() const;
+
+	/**
+	 * 设置跳跃力
+	 */
+	void setJumpForce(float force);
+
+	/**
+	 * 获取最大跳跃高度
+	 */
+	float getMaxJumpHeight() const;
+
+	/**
+	 * 设置跳跃高度
+	 */
+	void setMaxJumpHeight(float height);
+
+	/**
 	 * 获取方向
 	 */
 	Direction getDirection() const;
@@ -81,6 +101,8 @@ private:
 	b2Body*						collision_body_;
 	float						run_speed_;
 	float						walk_speed_;
+	float						jump_force_;
+	float						jump_height_;
 	Direction					direction_;
 	std::string					sprite_frame_name_;
 	static int					s_next_entity_id_;
