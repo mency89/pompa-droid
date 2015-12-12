@@ -3,6 +3,11 @@
 
 #include "State.h"
 
+template<typename T>
+struct StateMachineData
+{
+};
+
 template <typename T>
 class StateMachine
 {
@@ -96,11 +101,17 @@ public:
 		return false;
 	}
 
+	StateMachineData<EntityType>& userdata()
+	{
+		return userdata_;
+	}
+
 private:
-	EntityType* const owner_;
-	State<EntityType>* current_state_;
-	State<EntityType>* previous_state_;
-	State<EntityType>* global_state_;
+	EntityType* const				owner_;
+	State<EntityType>*				current_state_;
+	State<EntityType>*				previous_state_;
+	State<EntityType>*				global_state_;
+	StateMachineData<EntityType>	userdata_;
 };
 
 #endif
