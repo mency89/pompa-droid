@@ -7,6 +7,8 @@ enum ActionTags
 	hero_walk = 1002,
 	hero_run = 1003,
 	hero_jump = 1004,
+	hero_attack = 1005,
+	hero_runattack = 1006,
 };
 
 #endif

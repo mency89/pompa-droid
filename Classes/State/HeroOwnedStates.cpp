@@ -92,6 +92,11 @@ bool HeroIdle::on_message(Hero *object, const Telegram &msg)
 				object->getStateMachine()->change_state(HeroJump::instance());
 				return true;
 			}
+			else if (IsAttackKey(keyCode))
+			{
+				object->getStateMachine()->change_state(HeroAttack::instance());
+				return true;
+			}
 			else if (IsDirectionKey(keyCode))
 			{
 				BaseGameEntity::Direction direction = ConvertDirectionKeyToHeroDirection(keyCode);
@@ -153,6 +158,11 @@ bool HeroWalk::on_message(Hero *object, const Telegram &msg)
 			object->getStateMachine()->change_state(HeroJump::instance());
 			return true;
 		}
+		else if (IsAttackKey(keyCode))
+		{
+			object->getStateMachine()->change_state(HeroAttack::instance());
+			return true;
+		}
 	}
 
 	if (MessageTypes::msg_KeyReleased == msg.msg_code)
@@ -197,6 +207,11 @@ bool HeroRun::on_message(Hero *object, const Telegram &msg)
 		if (IsJumpKey(keyCode))
 		{
 			object->getStateMachine()->change_state(HeroJump::instance());
+			return true;
+		}
+		else if (IsAttackKey(keyCode))
+		{
+			object->getStateMachine()->change_state(HeroRuningAttack::instance());
 			return true;
 		}
 	}
@@ -281,5 +296,62 @@ bool HeroJump::on_message(Hero *object, const Telegram &msg)
 			return true;
 		}
 	}
+	return false;
+}
+
+/******英雄攻击状态******/
+
+void HeroAttack::enter(Hero *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("hero_attack_00");
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::hero_attack);
+	object->runAction(animate);
+}
+
+void HeroAttack::exit(Hero *object)
+{
+	object->stopActionByTag(ActionTags::hero_attack);
+}
+
+void HeroAttack::execute(Hero *object)
+{
+	if (object->getActionByTag(ActionTags::hero_attack) == nullptr)
+	{
+		object->getStateMachine()->change_state(HeroIdle::instance());
+	}
+}
+
+bool HeroAttack::on_message(Hero *object, const Telegram &msg)
+{
+	return false;
+}
+
+/******英雄奔跑攻击状态******/
+
+void HeroRuningAttack::enter(Hero *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("hero_runattack");
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::hero_runattack);
+	object->runAction(animate);
+}
+
+void HeroRuningAttack::exit(Hero *object)
+{
+	object->stopActionByTag(ActionTags::hero_runattack);
+}
+
+void HeroRuningAttack::execute(Hero *object)
+{
+	object->move(object->getRunSpeed());
+	if (object->getActionByTag(ActionTags::hero_runattack) == nullptr)
+	{
+		object->getStateMachine()->change_state(HeroIdle::instance());
+	}
+}
+
+bool HeroRuningAttack::on_message(Hero *object, const Telegram &msg)
+{
 	return false;
 }

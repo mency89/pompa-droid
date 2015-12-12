@@ -88,4 +88,38 @@ public:
 	virtual bool on_message(Hero *object, const Telegram &msg) override;
 };
 
+/**
+ * 英雄攻击状态
+ */
+class HeroAttack : public State < Hero >, public Singleton < HeroAttack >
+{
+	SINGLETON_DEFAULT(HeroAttack);
+
+public:
+	virtual void enter(Hero *object) override;
+
+	virtual void exit(Hero *object) override;
+
+	virtual void execute(Hero *object) override;
+
+	virtual bool on_message(Hero *object, const Telegram &msg) override;
+};
+
+/**
+ * 英雄奔跑攻击
+ */
+class HeroRuningAttack : public State < Hero >, public Singleton < HeroRuningAttack >
+{
+	SINGLETON_DEFAULT(HeroRuningAttack);
+
+public:
+	virtual void enter(Hero *object) override;
+
+	virtual void exit(Hero *object) override;
+
+	virtual void execute(Hero *object) override;
+
+	virtual bool on_message(Hero *object, const Telegram &msg) override;
+};
+
 #endif
