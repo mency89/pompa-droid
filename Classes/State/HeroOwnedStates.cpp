@@ -57,6 +57,11 @@ void HeroIdle::execute(Hero *object)
 	}*/
 }
 
+bool HeroIdle::on_message(Hero *object, const Telegram &msg)
+{
+	return true;
+}
+
 /******英雄行走状态******/
 
 void HeroRun::enter(Hero *object)
@@ -116,4 +121,9 @@ void HeroRun::execute(Hero *object)
 			object->getStateMachine()->change_state(HeroIdle::instance());
 		}
 	}*/
+}
+
+bool HeroRun::on_message(Hero *object, const Telegram &msg)
+{
+	return false;
 }

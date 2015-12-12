@@ -38,7 +38,7 @@ void Hero::update()
 
 void Hero::handleMenssage(const Telegram &msg)
 {
-
+	state_machine_->handle_message(msg);
 }
 
 StateMachine<Hero>* Hero::getStateMachine()

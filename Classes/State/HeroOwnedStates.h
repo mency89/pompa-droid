@@ -18,6 +18,8 @@ public:
 	virtual void exit(Hero *object) override;
 
 	virtual void execute(Hero *object) override;
+
+	virtual bool on_message(Hero *object, const Telegram &msg) override;
 };
 
 /**
@@ -33,6 +35,8 @@ public:
 	virtual void exit(Hero *object) override;
 
 	virtual void execute(Hero *object) override;
+
+	virtual bool on_message(Hero *object, const Telegram &msg) override;
 };
 
 #endif

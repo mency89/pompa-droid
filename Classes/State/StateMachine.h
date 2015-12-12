@@ -81,6 +81,21 @@ public:
 		return global_state_;
 	}
 
+	bool handle_message(const Telegram &msg)
+	{
+		if (current_state_ != nullptr && current_state_->on_message(owner_, msg))
+		{
+			return true;
+		}
+
+		if (global_state_ != nullptr && global_state_->on_message(owner_, msg))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 private:
 	EntityType* const owner_;
 	State<EntityType>* current_state_;
