@@ -5,12 +5,6 @@
 #include "Singleton.h"
 #include "Entity/Hero.h"
 
-template <>
-struct StateMachineData < Hero >
-{
-	int a;
-};
-
 /**
  * 英雄待机状态
  */
