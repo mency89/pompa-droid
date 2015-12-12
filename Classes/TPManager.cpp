@@ -85,6 +85,16 @@ void TPManager::loadCategory(const std::string &category)
 	for (auto &filename : files)
 	{
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile(filename);
+		std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
+		ValueMap dictionary = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+		ValueMap &framesDict = dictionary["frames"].asValueMap();
+		for (auto iter = framesDict.begin(); iter != framesDict.end(); ++iter)
+		{
+			auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(iter->first);
+			PolygonInfo info = frame->getPolygonInfo();
+			info.filename = iter->first;
+			frame->setPolygonInfo(info);
+		}
 	}
 }
 
@@ -101,6 +111,16 @@ void TPManager::loadCategory(const std::vector<std::string> &category)
 	for (auto &filename : files)
 	{
 		SpriteFrameCache::getInstance()->addSpriteFramesWithFile(filename);
+		std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
+		ValueMap dictionary = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+		ValueMap &framesDict = dictionary["frames"].asValueMap();
+		for (auto iter = framesDict.begin(); iter != framesDict.end(); ++iter)
+		{
+			auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(iter->first);
+			PolygonInfo info = frame->getPolygonInfo();
+			info.filename = iter->first;
+			frame->setPolygonInfo(info);
+		}
 	}
 }
 

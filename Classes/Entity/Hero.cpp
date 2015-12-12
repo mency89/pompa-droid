@@ -29,10 +29,10 @@ bool Hero::init()
 void Hero::update()
 {
 	state_machine_->update();
-	auto f = Sprite::getSpriteFrame();
-	if (f != nullptr)
+	auto frame = Sprite::getSpriteFrame();
+	if (frame != nullptr)
 	{
-		CCLOG("%s", f->getPolygonInfo().filename.c_str());
+		CCLOG("current sprite frame: %s", frame->getPolygonInfo().filename.c_str());
 	}
 	
 }
