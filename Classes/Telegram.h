@@ -7,8 +7,8 @@ struct Telegram
 	int receiver;
 	int msg_code;
 	float dispatch_time;
-	void* extra_info;
-	size_t size;
+	const void* extra_info;
+	size_t extra_info_size;
 
 	Telegram()
 		: sender(0)
@@ -16,7 +16,7 @@ struct Telegram
 		, msg_code(0)
 		, dispatch_time(0.0f)
 		, extra_info(nullptr)
-		, size(0)
+		, extra_info_size(0)
 	{
 
 	}

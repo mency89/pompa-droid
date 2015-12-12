@@ -28,6 +28,8 @@ bool GameApplication::init()
 	};
 	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
+	scheduleUpdate();
+
 	return true;
 }
 

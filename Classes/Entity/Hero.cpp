@@ -34,7 +34,6 @@ void Hero::update()
 	{
 		CCLOG("current sprite frame: %s", frame->getPolygonInfo().filename.c_str());
 	}
-	
 }
 
 StateMachine<Hero>* Hero::getStateMachine()
