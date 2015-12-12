@@ -20,6 +20,9 @@ bool Hero::init()
 		return false;
 	}
 
+	setWalkSpeed(1.0f);
+	setRunSpeed(getWalkSpeed() * 2);
+
 	state_machine_.reset(new StateMachine<Hero>(this));
 	state_machine_->change_state(HeroIdle::instance());
 
@@ -29,11 +32,6 @@ bool Hero::init()
 void Hero::update()
 {
 	state_machine_->update();
-	auto frame = Sprite::getSpriteFrame();
-	if (frame != nullptr)
-	{
-		CCLOG("current sprite frame: %s", frame->getPolygonInfo().filename.c_str());
-	}
 }
 
 void Hero::handleMenssage(const Telegram &msg)

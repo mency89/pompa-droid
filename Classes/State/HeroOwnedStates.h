@@ -25,9 +25,9 @@ public:
 /**
  * 英雄行走状态
  */
-class HeroRun : public State < Hero >, public Singleton < HeroRun >
+class HeroWalk : public State < Hero >, public Singleton < HeroWalk >
 {
-	SINGLETON_DEFAULT(HeroRun);
+	SINGLETON_DEFAULT(HeroWalk);
 
 public:
 	virtual void enter(Hero *object) override;

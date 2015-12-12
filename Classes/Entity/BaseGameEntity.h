@@ -34,18 +34,55 @@ public:
 	void update_collision_body_by_spriteframe();
 
 public:
+	/**
+	 * 获取唯一id
+	 */
 	int get_id() const;
 
+	/**
+	 * 移动
+	 * @param float 移动速度
+	 */
+	void move(float speed);
+
+	/**
+	 * 获取跑动速度
+	 */
+	float getRunSpeed() const;
+
+	/**
+	 * 设置跑动速度
+	 */
+	void setRunSpeed(float speed);
+
+	/**
+	 * 获取行走速度
+	 */
+	float getWalkSpeed() const;
+
+	/**
+	 * 设置行走速度
+	 */
+	void setWalkSpeed(float speed);
+
+	/**
+	 * 获取方向
+	 */
 	Direction getDirection() const;
 
+	/**
+	 * 设置方向
+	 */
 	void setDirection(Direction direction);
 
 private:
 	int							entity_id_;
 	std::shared_ptr<b2World>	world_;
 	b2Body*						collision_body_;
-	std::string					sprite_frame_name_;
+	float						run_speed_;
+	float						walk_speed_;
 	Direction					direction_;
+	std::string					sprite_frame_name_;
 	static int					s_next_entity_id_;
 };
 

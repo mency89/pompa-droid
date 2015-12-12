@@ -62,7 +62,7 @@ void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	Telegram msg;
 	msg.receiver = hero_->get_id();
-	msg.msg_code = MessageTypes::msg_EventKeyboard;
+	msg.msg_code = MessageTypes::msg_KeyPressed;
 	msg.extra_info = &keyCode;
 	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
 	MessageDispatcher::instance()->dispatchMessage(msg);
@@ -72,7 +72,7 @@ void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	Telegram msg;
 	msg.receiver = hero_->get_id();
-	msg.msg_code = MessageTypes::msg_EventKeyboard;
+	msg.msg_code = MessageTypes::msg_KeyReleased;
 	msg.extra_info = &keyCode;
 	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
 	MessageDispatcher::instance()->dispatchMessage(msg);

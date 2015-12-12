@@ -1,9 +1,63 @@
 ﻿#include "HeroOwnedStates.h"
 
 #include "ActionTags.h"
+#include "MeesageTypes.h"
 #include "AnimationManger.h"
 #include "GameApplication.h"
 using namespace cocos2d;
+
+namespace
+{
+	bool IsOpenKeyCode(EventKeyboard::KeyCode keyCode)
+	{
+		return keyCode == EventKeyboard::KeyCode::KEY_W ||
+			keyCode == EventKeyboard::KeyCode::KEY_S ||
+			keyCode == EventKeyboard::KeyCode::KEY_A ||
+			keyCode == EventKeyboard::KeyCode::KEY_D ||
+			keyCode == EventKeyboard::KeyCode::KEY_J ||
+			keyCode == EventKeyboard::KeyCode::KEY_SPACE;
+	}
+
+	bool IsDirectionKey(EventKeyboard::KeyCode keyCode)
+	{
+		return keyCode == EventKeyboard::KeyCode::KEY_W ||
+			keyCode == EventKeyboard::KeyCode::KEY_S ||
+			keyCode == EventKeyboard::KeyCode::KEY_A ||
+			keyCode == EventKeyboard::KeyCode::KEY_D ||
+			keyCode == EventKeyboard::KeyCode::KEY_J;
+	}
+
+	bool IsAttackKey(EventKeyboard::KeyCode keyCode)
+	{
+		return keyCode == EventKeyboard::KeyCode::KEY_J;
+	}
+
+	bool IsJumpKey(EventKeyboard::KeyCode keyCode)
+	{
+		return keyCode == EventKeyboard::KeyCode::KEY_SPACE;
+	}
+
+	BaseGameEntity::Direction ConvertDirectionKeyToHeroDirection(EventKeyboard::KeyCode keyCode)
+	{
+		CCAssert(IsDirectionKey(keyCode), "");
+		if (keyCode == EventKeyboard::KeyCode::KEY_W)
+		{
+			return BaseGameEntity::Direction::Up;
+		}
+		else if (keyCode == EventKeyboard::KeyCode::KEY_S)
+		{
+			return BaseGameEntity::Direction::Down;
+		}
+		else if (keyCode == EventKeyboard::KeyCode::KEY_A)
+		{
+			return BaseGameEntity::Direction::Left;
+		}
+		else
+		{
+			return BaseGameEntity::Direction::Right;
+		}
+	}
+}
 
 
 /******英雄待机状态******/
@@ -24,106 +78,66 @@ void HeroIdle::exit(Hero *object)
 
 void HeroIdle::execute(Hero *object)
 {
-	/*cocos2d::EventKeyboard::KeyCode key = GameApplication::instance()->takeKeyPressed();
-	if (key != EventKeyboard::KeyCode::KEY_NONE)
-	{
-		switch (key)
-		{
-			case EventKeyboard::KeyCode::KEY_W:
-			{
-				object->setDirection(BaseGameEntity::Up);
-				object->getStateMachine()->change_state(HeroRun::instance());
-				break;
-			}
-			case EventKeyboard::KeyCode::KEY_S:
-			{
-				object->setDirection(BaseGameEntity::Down);
-				object->getStateMachine()->change_state(HeroRun::instance());
-				break;
-			}
-			case EventKeyboard::KeyCode::KEY_A:
-			{
-				object->setDirection(BaseGameEntity::Left);
-				object->getStateMachine()->change_state(HeroRun::instance());
-				break;
-			}
-			case EventKeyboard::KeyCode::KEY_D:
-			{
-				object->setDirection(BaseGameEntity::Right);
-				object->getStateMachine()->change_state(HeroRun::instance());
-				break;
-			}
-		}
-	}*/
+
 }
 
 bool HeroIdle::on_message(Hero *object, const Telegram &msg)
 {
-	return true;
+	if (MessageTypes::msg_KeyPressed == msg.msg_code)
+	{
+		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
+		if (IsOpenKeyCode(keyCode))
+		{
+			if (IsDirectionKey(keyCode))
+			{
+				object->setDirection(ConvertDirectionKeyToHeroDirection(keyCode));
+				object->getStateMachine()->change_state(HeroWalk::instance());
+			}
+			return true;
+		}
+	}
+	return false;
 }
 
 /******英雄行走状态******/
 
-void HeroRun::enter(Hero *object)
+void HeroWalk::enter(Hero *object)
 {
-	Animation *animation = AnimationManger::instance()->getAnimation("hero_run");
+	Animation *animation = AnimationManger::instance()->getAnimation("hero_walk");
 	animation->setLoops(-1);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_run);
+	animate->setTag(ActionTags::hero_walk);
 	object->runAction(animate);
 }
 
-void HeroRun::exit(Hero *object)
+void HeroWalk::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_run);
+	object->stopActionByTag(ActionTags::hero_walk);
 }
 
-void HeroRun::execute(Hero *object)
+void HeroWalk::execute(Hero *object)
 {
-	/*bool stop = true;
-	cocos2d::EventKeyboard::KeyCode key = GameApplication::instance()->takeKeyPressed();
-	if (key != EventKeyboard::KeyCode::KEY_NONE)
+	object->move(object->getWalkSpeed());
+	if (object->getActionByTag(ActionTags::hero_walk) == nullptr)
 	{
-		switch (key)
+		object->getStateMachine()->change_state(HeroIdle::instance());
+	}
+}
+
+bool HeroWalk::on_message(Hero *object, const Telegram &msg)
+{
+	if (MessageTypes::msg_KeyReleased == msg.msg_code)
+	{
+		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
+		if (IsOpenKeyCode(keyCode))
 		{
-			case EventKeyboard::KeyCode::KEY_W:
+			if (IsDirectionKey(keyCode))
 			{
-				stop = false;
-				object->setDirection(BaseGameEntity::Up);
-				break;
+				object->setDirection(ConvertDirectionKeyToHeroDirection(keyCode));
+				object->getStateMachine()->change_state(HeroIdle::instance());
 			}
-			case EventKeyboard::KeyCode::KEY_S:
-			{
-				stop = false;
-				object->setDirection(BaseGameEntity::Down);
-				break;
-			}
-			case EventKeyboard::KeyCode::KEY_A:
-			{
-				stop = false;
-				object->setDirection(BaseGameEntity::Left);
-				break;
-			}
-			case EventKeyboard::KeyCode::KEY_D:
-			{
-				stop = false;
-				object->setDirection(BaseGameEntity::Right);
-				break;
-			}
+			return true;
 		}
 	}
-
-	if (stop)
-	{
-		cocos2d::EventKeyboard::KeyCode key = GameApplication::instance()->takeKeyReleased();
-		if (key != EventKeyboard::KeyCode::KEY_NONE)
-		{
-			object->getStateMachine()->change_state(HeroIdle::instance());
-		}
-	}*/
-}
-
-bool HeroRun::on_message(Hero *object, const Telegram &msg)
-{
 	return false;
 }

@@ -3,7 +3,8 @@
 
 enum MessageTypes
 {
-	msg_EventKeyboard,		// 键盘事件
+	msg_KeyPressed = 1000,
+	msg_KeyReleased = 1001,
 };
 
 #endif
