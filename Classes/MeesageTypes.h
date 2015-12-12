@@ -3,7 +3,7 @@
 
 enum MessageTypes
 {
-	
+	msg_EventKeyboard,		// 键盘事件
 };
 
 #endif

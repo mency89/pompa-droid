@@ -4,8 +4,9 @@
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
 
+#include "MeesageTypes.h"
+#include "MessageDispatcher.h"
 #include "Entity/BaseGameEntity.h"
-#include "Entity/GameEntityCreator.h"
 using namespace cocos2d;
 
 
@@ -35,9 +36,17 @@ bool GameScene::init()
 		return false;
 	}
 
-	hero_ = GameEntityCreator<Hero>().create(nullptr);
+	world_ = std::make_shared<b2World>(b2Vec2(0, 0));
+	world_->SetContinuousPhysics(true);
+
+	hero_ = GameEntityCreator<Hero>().create(world_);
 	hero_->setPosition(VisibleRect::center());
 	addChild(hero_);
+
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);
+	listener->onKeyReleased = CC_CALLBACK_2(GameScene::onKeyReleased, this);
+	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
 	scheduleUpdate();
 
@@ -47,4 +56,24 @@ bool GameScene::init()
 void GameScene::update(float delta)
 {
 	hero_->update();
+}
+
+void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+	Telegram msg;
+	msg.receiver = hero_->get_id();
+	msg.msg_code = MessageTypes::msg_EventKeyboard;
+	msg.extra_info = &keyCode;
+	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
+	MessageDispatcher::instance()->dispatchMessage(msg);
+}
+
+void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+{
+	Telegram msg;
+	msg.receiver = hero_->get_id();
+	msg.msg_code = MessageTypes::msg_EventKeyboard;
+	msg.extra_info = &keyCode;
+	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
+	MessageDispatcher::instance()->dispatchMessage(msg);
 }

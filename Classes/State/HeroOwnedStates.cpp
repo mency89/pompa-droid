@@ -24,7 +24,7 @@ void HeroIdle::exit(Hero *object)
 
 void HeroIdle::execute(Hero *object)
 {
-	cocos2d::EventKeyboard::KeyCode key = GameApplication::instance()->takeKeyPressed();
+	/*cocos2d::EventKeyboard::KeyCode key = GameApplication::instance()->takeKeyPressed();
 	if (key != EventKeyboard::KeyCode::KEY_NONE)
 	{
 		switch (key)
@@ -54,7 +54,7 @@ void HeroIdle::execute(Hero *object)
 				break;
 			}
 		}
-	}
+	}*/
 }
 
 /******英雄行走状态******/
@@ -75,7 +75,7 @@ void HeroRun::exit(Hero *object)
 
 void HeroRun::execute(Hero *object)
 {
-	bool stop = true;
+	/*bool stop = true;
 	cocos2d::EventKeyboard::KeyCode key = GameApplication::instance()->takeKeyPressed();
 	if (key != EventKeyboard::KeyCode::KEY_NONE)
 	{
@@ -115,5 +115,5 @@ void HeroRun::execute(Hero *object)
 		{
 			object->getStateMachine()->change_state(HeroIdle::instance());
 		}
-	}
+	}*/
 }

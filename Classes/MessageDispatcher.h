@@ -22,9 +22,9 @@ public:
 
 	void postMessage(const Telegram &msg);
 
-public:
 	void update(float delta);
 
+private:
 	void erase_extra_info(const void *extra_info, size_t size);
 
 	const void* insert_extra_info(const void *extra_info, size_t size);

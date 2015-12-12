@@ -36,6 +36,11 @@ void Hero::update()
 	}
 }
 
+void Hero::handleMenssage(const Telegram &msg)
+{
+
+}
+
 StateMachine<Hero>* Hero::getStateMachine()
 {
 	return state_machine_.get();

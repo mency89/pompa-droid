@@ -17,6 +17,9 @@ public:
 
 	virtual void update() override;
 
+	virtual void handleMenssage(const Telegram &msg) override;
+
+public:
 	StateMachine<Hero>* getStateMachine();
 
 private:

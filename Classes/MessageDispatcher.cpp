@@ -53,7 +53,10 @@ const void* MessageDispatcher::insert_extra_info(const void *extra_info, size_t 
 void MessageDispatcher::postMessage(const Telegram &msg)
 {
 	message_queue_.push_back(msg);
-	message_queue_.back().extra_info = insert_extra_info(msg.extra_info, msg.extra_info_size);
+	if (msg.extra_info != nullptr && msg.extra_info_size > 0)
+	{
+		message_queue_.back().extra_info = insert_extra_info(msg.extra_info, msg.extra_info_size);
+	}
 }
 
 void MessageDispatcher::dispatchMessage(const Telegram &msg)
@@ -83,7 +86,10 @@ void MessageDispatcher::update(float delta)
 			const void *extra_info = itr->extra_info;
 			const size_t extra_info_size = itr->extra_info_size;
 			dispatchMessage(*itr);
-			erase_extra_info(extra_info, extra_info_size);
+			if (extra_info != nullptr && extra_info_size > 0)
+			{
+				erase_extra_info(extra_info, extra_info_size);
+			}	
 			itr = message_queue_.erase(itr);
 		}
 		else

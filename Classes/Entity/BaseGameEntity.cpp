@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <Box2D/Box2D.h>
+#include "MessageDispatcher.h"
 using namespace cocos2d;
 
 
@@ -12,7 +13,7 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	, collision_body_(nullptr)
 	, entity_id_(++s_next_entity_id_)
 {
-	//CCAssert(world_ != nullptr, "");
+	CCAssert(world_ != nullptr, "");
 	if (s_next_entity_id_ == std::numeric_limits<int>::max())
 	{
 		s_next_entity_id_ = 0;
@@ -21,7 +22,7 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 
 BaseGameEntity::~BaseGameEntity()
 {
-
+	MessageDispatcher::instance()->unregisterEntity(this);
 }
 
 bool BaseGameEntity::init()
@@ -32,6 +33,7 @@ bool BaseGameEntity::init()
 	}
 
 	setDirection(Direction::Right);
+	MessageDispatcher::instance()->registerEntity(this);
 
 	return true;
 }
