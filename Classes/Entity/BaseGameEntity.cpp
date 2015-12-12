@@ -1,14 +1,22 @@
 ﻿#include "BaseGameEntity.h"
 
+#include <limits>
 #include <Box2D/Box2D.h>
 using namespace cocos2d;
 
 
+int BaseGameEntity::s_next_entity_id_ = 0;
+
 BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	: world_(world)
 	, collision_body_(nullptr)
+	, entity_id_(++s_next_entity_id_)
 {
 	//CCAssert(world_ != nullptr, "");
+	if (s_next_entity_id_ == std::numeric_limits<int>::max())
+	{
+		s_next_entity_id_ = 0;
+	}
 }
 
 BaseGameEntity::~BaseGameEntity()
@@ -28,6 +36,11 @@ bool BaseGameEntity::init()
 	return true;
 }
 
+void BaseGameEntity::handleMenssage(const Telegram &msg)
+{
+
+}
+
 void BaseGameEntity::update_collision_body_by_spriteframe()
 {
 	if (collision_body_ != nullptr)
@@ -40,6 +53,11 @@ void BaseGameEntity::update_collision_body_by_spriteframe()
 void BaseGameEntity::update()
 {
 	update_collision_body_by_spriteframe();
+}
+
+int BaseGameEntity::get_id() const
+{
+	return entity_id_;
 }
 
 BaseGameEntity::Direction BaseGameEntity::getDirection() const

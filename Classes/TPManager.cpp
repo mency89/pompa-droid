@@ -178,6 +178,17 @@ void TPManager::loadImage()
 			Director::getInstance()->getTextureCache()->addImageAsync(Splitext(filename)[0] + ".png", [&task, &filename, this, idx](Texture2D *texture)
 			{
 				SpriteFrameCache::getInstance()->addSpriteFramesWithFile(filename, texture);
+				std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
+				ValueMap dictionary = FileUtils::getInstance()->getValueMapFromFile(fullPath);
+				ValueMap &framesDict = dictionary["frames"].asValueMap();
+				for (auto iter = framesDict.begin(); iter != framesDict.end(); ++iter)
+				{
+					auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(iter->first);
+					PolygonInfo info = frame->getPolygonInfo();
+					info.filename = iter->first;
+					frame->setPolygonInfo(info);
+				}
+
 				task.callback(idx, task.filelist.size());
 				if (idx == task.filelist.size())
 				{

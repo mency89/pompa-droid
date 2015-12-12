@@ -1,4 +1,6 @@
 ﻿#include "GameApplication.h"
+
+#include "MessageDispatcher.h"
 using namespace cocos2d;
 
 
@@ -27,6 +29,11 @@ bool GameApplication::init()
 	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
 	return true;
+}
+
+void GameApplication::update(float delta)
+{
+	MessageDispatcher::instance()->update(delta);
 }
 
 EventKeyboard::KeyCode GameApplication::takeKeyPressed()

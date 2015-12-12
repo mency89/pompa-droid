@@ -29,6 +29,12 @@ bool Hero::init()
 void Hero::update()
 {
 	state_machine_->update();
+	auto f = Sprite::getSpriteFrame();
+	if (f != nullptr)
+	{
+		CCLOG("%s", f->getPolygonInfo().filename.c_str());
+	}
+	
 }
 
 StateMachine<Hero>* Hero::getStateMachine()

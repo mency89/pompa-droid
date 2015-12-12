@@ -20,6 +20,8 @@ public:
 private:
 	virtual bool init() override;
 
+	virtual void update(float delta) override;
+
 private:
 	cocos2d::EventKeyboard::KeyCode pressed_;
 	cocos2d::EventKeyboard::KeyCode released_;
