@@ -48,7 +48,6 @@ bool GameScene::init()
 	// 创建物理事件
 	world_ = std::make_shared<b2World>(b2Vec2(0, 0));
 	world_->SetAllowSleeping(false);
-	world_->SetContinuousPhysics(true);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
