@@ -293,6 +293,10 @@ bool HeroJump::on_message(Hero *object, const Telegram &msg)
 		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
 		if (IsAttackKey(keyCode))
 		{
+			if (object->getPositionY() >= object->getStateMachine()->userdata().before_he_height + object->getMaxJumpHeight() / 2)
+			{
+				object->getStateMachine()->change_state(HeroJumpingAttack::instance());
+			}		
 			return true;
 		}
 	}
@@ -352,6 +356,129 @@ void HeroRuningAttack::execute(Hero *object)
 }
 
 bool HeroRuningAttack::on_message(Hero *object, const Telegram &msg)
+{
+	return false;
+}
+
+/******英雄跳跃攻击状态******/
+
+void HeroJumpingAttack::enter(Hero *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("hero_jumpattack");
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::hero_jumpattack);
+	object->runAction(animate);
+}
+
+void HeroJumpingAttack::exit(Hero *object)
+{
+	object->stopActionByTag(ActionTags::hero_jumpattack);
+}
+
+void HeroJumpingAttack::execute(Hero *object)
+{
+	if (object->getActionByTag(ActionTags::hero_jumpattack) == nullptr)
+	{
+		object->setPositionY(object->getPositionY() - object->getJumpForce());
+
+		if (object->getPositionY() < object->getStateMachine()->userdata().before_he_height)
+		{
+			object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+			object->getStateMachine()->change_state(HeroIdle::instance());
+		}
+	}
+}
+
+bool HeroJumpingAttack::on_message(Hero *object, const Telegram &msg)
+{
+	return false;
+}
+
+/******英雄受击状态******/
+
+void HeroKnockout::enter(Hero *object)
+{
+	++object->getStateMachine()->userdata().be_continuous_attack;
+	Animation *animation = AnimationManger::instance()->getAnimation("hero_knockout");
+	if (object->getStateMachine()->userdata().be_continuous_attack < 3)
+	{
+		SpriteFrame *frame = nullptr;
+		frame = animation->getFrames().at(object->getStateMachine()->userdata().be_continuous_attack - 1)->getSpriteFrame();
+		object->setSpriteFrame(frame);
+		DelayTime *delay = DelayTime::create(0.2f);
+		delay->setTag(ActionTags::hero_knockout);
+		object->runAction(delay);
+	}
+	else
+	{
+		Vector<AnimationFrame*> frames;
+		Animation *new_animation = animation->clone();
+		for (int i = 2; i < new_animation->getFrames().size(); ++i)
+		{
+			frames.pushBack(new_animation->getFrames().at(i));
+		}
+		new_animation->setFrames(frames);
+		Animate *animate = Animate::create(new_animation);
+		animate->setTag(ActionTags::hero_knockout);
+		object->runAction(animate);
+	}
+}
+
+void HeroKnockout::exit(Hero *object)
+{
+	object->stopActionByTag(ActionTags::hero_knockout);
+}
+
+void HeroKnockout::execute(Hero *object)
+{
+	if (object->getStateMachine()->userdata().be_continuous_attack == 3)
+	{
+		if (object->isFlippedX())
+		{
+			object->setPositionX(object->getPositionX() + object->getRunSpeed());
+		}
+		else
+		{
+			object->setPositionX(object->getPositionX() - object->getRunSpeed());
+		}
+	}
+
+	if (object->getActionByTag(ActionTags::hero_knockout) == nullptr)
+	{
+		object->getStateMachine()->userdata().be_continuous_attack = 0;
+		object->getStateMachine()->change_state(HeroIdle::instance());
+	}
+}
+
+bool HeroKnockout::on_message(Hero *object, const Telegram &msg)
+{
+	return false;
+}
+
+/******英雄起身状态******/
+
+void HeroGetup::enter(Hero *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("hero_getup");
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::hero_getup);
+	object->runAction(animate);
+}
+
+void HeroGetup::exit(Hero *object)
+{
+	object->stopActionByTag(ActionTags::hero_getup);
+}
+
+void HeroGetup::execute(Hero *object)
+{
+	if (object->getActionByTag(ActionTags::hero_getup) == nullptr)
+	{
+		object->getStateMachine()->change_state(HeroIdle::instance());
+	}
+}
+
+bool HeroGetup::on_message(Hero *object, const Telegram &msg)
 {
 	return false;
 }

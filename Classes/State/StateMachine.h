@@ -71,17 +71,17 @@ public:
 		change_state(previous_state_);
 	}
 
-	const State<EntityType>* get_current_state() const
+	State<EntityType>* get_current_state()
 	{
 		return current_state_;
 	}
 
-	const State<EntityType>* get_previous_state() const
+	State<EntityType>* get_previous_state()
 	{
 		return previous_state_;
 	}
 
-	const State<EntityType>* get_global_state() const
+	State<EntityType>* get_global_state()
 	{
 		return global_state_;
 	}
