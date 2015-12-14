@@ -76,25 +76,25 @@ GB2ShapeCache::~GB2ShapeCache()
 void GB2ShapeCache::removeAllShapes()
 {
 	body_shapes_.clear();
-	plist_shapes_.clear();
+	shape_files_.clear();
 }
 
 void GB2ShapeCache::removeShapesWithFile(const std::string &plist)
 {
-	auto itr = plist_shapes_.find(plist);
-	if (itr != plist_shapes_.end())
+	auto itr = shape_files_.find(plist);
+	if (itr != shape_files_.end())
 	{
 		for (const auto &shape_name : itr->second)
 		{
 			body_shapes_.erase(shape_name);
 		}
-		plist_shapes_.erase(itr);
+		shape_files_.erase(itr);
 	}
 }
 
 bool GB2ShapeCache::addShapesWithFile(const std::string &plist)
 {
-	if (plist_shapes_.find(plist) != plist_shapes_.end())
+	if (shape_files_.find(plist) != shape_files_.end())
 	{
 		return true;
 	}
@@ -179,7 +179,7 @@ bool GB2ShapeCache::addShapesWithFile(const std::string &plist)
 		shapes.push_back(iter->first);
 	}
 
-	plist_shapes_.insert(std::make_pair(plist, std::move(shapes)));
+	shape_files_.insert(std::make_pair(plist, std::move(shapes)));
 
 	return true;
 }

@@ -29,7 +29,7 @@ public:
 private:
 	const static float s_PTMRatio_;
 	std::unordered_map<std::string, std::auto_ptr<BodyDef> > body_shapes_;
-	std::unordered_map<std::string, std::vector<std::string> > plist_shapes_;
+	std::unordered_map<std::string, std::vector<std::string> > shape_files_;
 };
 
 #endif

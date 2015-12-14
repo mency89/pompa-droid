@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "TPManager.h"
 #include "VisibleRect.h"
+#include "GB2ShapeCache.h"
 #include "AnimationManger.h"
 using namespace cocos2d;
 
@@ -47,6 +48,8 @@ bool WelcomeScene::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	TPManager::instance()->loadCategory("images");
+	GB2ShapeCache::instance()->addShapesWithFile("shapes/body.plist");
+	GB2ShapeCache::instance()->addShapesWithFile("shapes/weapon.plist");
 	AnimationManger::instance()->addAnimationWithFile("config/animation_group.json");
     
     return true;
