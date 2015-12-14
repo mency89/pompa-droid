@@ -147,6 +147,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AnimationManger.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp" />
+    <ClCompile Include="..\Classes\Entity\Boss.cpp" />
     <ClCompile Include="..\Classes\Entity\Hero.cpp" />
     <ClCompile Include="..\Classes\GameApplication.cpp" />
     <ClCompile Include="..\Classes\GB2ShapeCache.cpp" />
@@ -156,6 +157,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Scene\GameScene.cpp" />
     <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp" />
     <ClCompile Include="..\Classes\Singleton.cpp" />
+    <ClCompile Include="..\Classes\State\BossOwnedStates.cpp" />
     <ClCompile Include="..\Classes\State\HeroOwnedStates.cpp" />
     <ClCompile Include="..\Classes\TPManager.cpp" />
     <ClCompile Include="..\Classes\VisibleRect.cpp" />
@@ -166,6 +168,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AnimationManger.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Entity\BaseGameEntity.h" />
+    <ClInclude Include="..\Classes\Entity\Boss.h" />
     <ClInclude Include="..\Classes\Entity\GameEntityCreator.h" />
     <ClInclude Include="..\Classes\Entity\Hero.h" />
     <ClInclude Include="..\Classes\GameApplication.h" />
@@ -178,6 +181,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Scene\WelcomeScene.h" />
     <ClInclude Include="..\Classes\ShapeCategory.h" />
     <ClInclude Include="..\Classes\Singleton.h" />
+    <ClInclude Include="..\Classes\State\BossOwnedStates.h" />
     <ClInclude Include="..\Classes\State\HeroOwnedStates.h" />
     <ClInclude Include="..\Classes\State\State.h" />
     <ClInclude Include="..\Classes\State\StateMachine.h" />

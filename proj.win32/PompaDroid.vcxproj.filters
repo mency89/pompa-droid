@@ -69,6 +69,12 @@
     <ClCompile Include="..\Classes\GLES-Render.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Boss.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\State\BossOwnedStates.cpp">
+      <Filter>src\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -139,6 +145,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\ShapeCategory.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Boss.h">
+      <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\State\BossOwnedStates.h">
+      <Filter>src\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,6 @@
 #include "ActionTags.h"
 #include "MeesageTypes.h"
 #include "AnimationManger.h"
-#include "GameApplication.h"
 using namespace cocos2d;
 
 namespace
