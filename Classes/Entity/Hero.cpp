@@ -26,6 +26,7 @@ bool Hero::init()
 	setMaxJumpHeight(50);
 
 	state_machine_.reset(new StateMachine<Hero>(this));
+	state_machine_->set_global_state(HeroGlobal::instance());
 	state_machine_->change_state(HeroIdle::instance());
 
 	return true;

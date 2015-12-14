@@ -146,6 +146,23 @@ public:
 /**
  * 英雄受击状态
  */
+class HeroHurt : public State < Hero >, public Singleton < HeroHurt >
+{
+	SINGLETON_DEFAULT(HeroHurt);
+
+public:
+	virtual void enter(Hero *object) override;
+
+	virtual void exit(Hero *object) override;
+
+	virtual void execute(Hero *object) override;
+
+	virtual bool on_message(Hero *object, const Telegram &msg) override;
+};
+
+/**
+ * 英雄倒下状态
+ */
 class HeroKnockout : public State < Hero >, public Singleton < HeroKnockout >
 {
 	SINGLETON_DEFAULT(HeroKnockout);
@@ -166,6 +183,23 @@ public:
 class HeroGetup : public State < Hero >, public Singleton < HeroGetup >
 {
 	SINGLETON_DEFAULT(HeroGetup);
+
+public:
+	virtual void enter(Hero *object) override;
+
+	virtual void exit(Hero *object) override;
+
+	virtual void execute(Hero *object) override;
+
+	virtual bool on_message(Hero *object, const Telegram &msg) override;
+};
+
+/**
+ * 英雄全局状态
+ */
+class HeroGlobal : public State < Hero >, public Singleton < HeroGlobal >
+{
+	SINGLETON_DEFAULT(HeroGlobal);
 
 public:
 	virtual void enter(Hero *object) override;

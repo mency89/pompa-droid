@@ -10,8 +10,9 @@ enum ActionTags
 	hero_attack = 1005,
 	hero_runattack = 1006,
 	hero_jumpattack = 1007,
-	hero_knockout = 1008,
-	hero_getup = 1009,
+	hero_hurt = 1008,
+	hero_knockout = 1009,
+	hero_getup = 1010,
 };
 
 #endif
