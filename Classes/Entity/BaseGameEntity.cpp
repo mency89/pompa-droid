@@ -89,7 +89,6 @@ void BaseGameEntity::move(float speed)
 	}
 }
 
-
 // 获取跑动速度
 float BaseGameEntity::getRunSpeed() const
 {
