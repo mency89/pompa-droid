@@ -52,20 +52,13 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-
-	uint32 flags = 0;
-	flags += b2Draw::e_shapeBit;
-	flags += b2Draw::e_jointBit;
-	flags += b2Draw::e_aabbBit;
-	flags += b2Draw::e_pairBit;
-	flags += b2Draw::e_centerOfMassBit;
-	debug_draw_->SetFlags(flags);
+	debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
 	// 创建玩家
 	hero_ = GameEntityCreator<Hero>().create(world_);
 	hero_->setPosition(VisibleRect::center());
-	addChild(hero_);
+	addChild(hero_, -1);
 
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);
