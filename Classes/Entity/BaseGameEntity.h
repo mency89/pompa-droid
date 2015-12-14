@@ -100,6 +100,27 @@ public:
 	 */
 	void setDirection(Direction direction);
 
+	/**
+	 * 获取命中的目标
+	 */
+	std::vector<BaseGameEntity*> getHitTargets() const;
+
+	/* 重写父类函数 */
+public:
+	virtual void setPositionX(float x) override;
+
+	virtual void setPositionY(float y) override;
+
+	virtual void setPosition(const cocos2d::Vec2 &pos) override;
+
+	virtual void setPosition(float x, float y) override;
+
+protected:
+	/**
+	 * 更新刚体位置
+	 */
+	void updateBodyPosition();
+
 private:
 	int							entity_id_;
 	std::shared_ptr<b2World>	world_;
@@ -109,6 +130,7 @@ private:
 	float						jump_force_;
 	float						jump_height_;
 	Direction					direction_;
+	int							hit_point_;
 	std::string					sprite_frame_name_;
 	static int					s_next_entity_id_;
 };

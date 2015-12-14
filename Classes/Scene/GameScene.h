@@ -6,6 +6,7 @@
 
 class Hero;
 class b2World;
+class GLESDebugDraw;
 
 class GameScene : public cocos2d::Layer
 {
@@ -27,8 +28,18 @@ public:
 	CREATE_FUNC(GameScene);
 
 private:
-	Hero* hero_;
-	std::shared_ptr<b2World> world_;
+	Hero*						hero_;
+	std::shared_ptr<b2World>	world_;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+public:
+	virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags) override;
+protected:
+	void onDraw(const cocos2d::Mat4& transform, uint32_t flags);
+private:
+	cocos2d::CustomCommand custom_cmd_;
+	std::auto_ptr<GLESDebugDraw> debug_draw_;
+#endif
 };
 
 #endif

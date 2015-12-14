@@ -4,6 +4,7 @@
 #include <Box2D/Box2D.h>
 #include "Helper.h"
 #include "GB2ShapeCache.h"
+#include "ShapeCategory.h"
 #include "MessageDispatcher.h"
 using namespace cocos2d;
 
@@ -12,6 +13,7 @@ int BaseGameEntity::s_next_entity_id_ = 0;
 
 BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	: world_(world)
+	, hit_point_(0)
 	, run_speed_(0.0f)
 	, walk_speed_(0.0f)
 	, jump_force_(0.0f)
@@ -77,6 +79,22 @@ void BaseGameEntity::update_collision_body_by_spriteframe()
 			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape);
 			// 添加武器形状
 			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_");
+		}
+
+		// 是否翻转刚体
+		if (isFlippedX())
+		{
+			for (b2Fixture *fixture = collision_body_->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
+			{
+				if (b2Shape::e_polygon == fixture->GetShape()->m_type)
+				{
+					b2PolygonShape *shape = dynamic_cast<b2PolygonShape *>(fixture->GetShape());
+					for (int i = 0; i < shape->GetVertexCount(); ++i)
+					{
+						shape->m_vertices[i].x = -shape->m_vertices[i].x;
+					}
+				}
+			}
 		}
 	}
 }
@@ -184,4 +202,65 @@ void BaseGameEntity::setDirection(Direction direction)
 	{
 		setFlippedX(true);
 	}
+}
+
+// 更新刚体位置
+void BaseGameEntity::updateBodyPosition()
+{
+	if (collision_body_ != nullptr)
+	{
+		const float PTMRatio = GB2ShapeCache::instance()->getPTMRatio();
+		collision_body_->SetTransform(b2Vec2(getPositionX() / PTMRatio, getPositionY() / PTMRatio), collision_body_->GetAngle());
+	}
+}
+
+// 获取命中的目标
+std::vector<BaseGameEntity*> BaseGameEntity::getHitTargets() const
+{
+	std::vector<BaseGameEntity*> targets;
+	if (collision_body_ != nullptr)
+	{
+		b2ContactEdge *contactEdge = collision_body_->GetContactList();
+		while (contactEdge != nullptr)
+		{
+			b2Fixture *fixtureA = contactEdge->contact->GetFixtureA();
+			b2Fixture *fixtureB = contactEdge->contact->GetFixtureB();
+			if (fixtureA->GetBody() == collision_body_ &&
+				fixtureA->GetFilterData().categoryBits == ShapeCategory::shape_hero_weapon)
+			{
+				targets.push_back(reinterpret_cast<BaseGameEntity*>(fixtureB->GetBody()->GetUserData()));
+			}
+			else if (fixtureB->GetBody() == collision_body_ &&
+					 fixtureB->GetFilterData().categoryBits == ShapeCategory::shape_hero_weapon)
+			{
+				targets.push_back(reinterpret_cast<BaseGameEntity*>(fixtureA->GetBody()->GetUserData()));
+			}
+			contactEdge = contactEdge->next;
+		}
+	}
+	return targets;
+}
+
+void BaseGameEntity::setPositionX(float x)
+{
+	Sprite::setPositionX(x);
+	updateBodyPosition();
+}
+
+void BaseGameEntity::setPositionY(float y)
+{
+	Sprite::setPositionY(y);
+	updateBodyPosition();
+}
+
+void BaseGameEntity::setPosition(const Vec2 &pos)
+{
+	Sprite::setPosition(pos);
+	updateBodyPosition();
+}
+
+void BaseGameEntity::setPosition(float x, float y)
+{
+	Sprite::setPosition(x, y);;
+	updateBodyPosition();
 }
