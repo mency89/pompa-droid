@@ -1,28 +1,10 @@
 ﻿#include "TPManager.h"
 
-#include <array>
 #include <sstream>
+#include "Helper.h"
 #include "json/document.h"
 using namespace cocos2d;
 
-namespace
-{
-	std::array<std::string, 2> Splitext(const std::string &filename)
-	{
-		std::array<std::string, 2> text;
-		std::string::size_type pos = filename.rfind('.');
-		if (std::string::npos != pos)
-		{
-			text[1] = filename.substr(pos);
-			text[0] = filename.substr(0, pos);
-		}
-		else
-		{
-			text[0] = filename;
-		}
-		return text;
-	}
-}
 
 TPManager::TPManager()
 	: working_(false)

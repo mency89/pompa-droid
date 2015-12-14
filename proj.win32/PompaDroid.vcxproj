@@ -150,6 +150,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Entity\Hero.cpp" />
     <ClCompile Include="..\Classes\GameApplication.cpp" />
     <ClCompile Include="..\Classes\GB2ShapeCache.cpp" />
+    <ClCompile Include="..\Classes\Helper.cpp" />
     <ClCompile Include="..\Classes\MessageDispatcher.cpp" />
     <ClCompile Include="..\Classes\Scene\GameScene.cpp" />
     <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp" />
@@ -168,6 +169,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Entity\Hero.h" />
     <ClInclude Include="..\Classes\GameApplication.h" />
     <ClInclude Include="..\Classes\GB2ShapeCache.h" />
+    <ClInclude Include="..\Classes\Helper.h" />
     <ClInclude Include="..\Classes\MeesageTypes.h" />
     <ClInclude Include="..\Classes\MessageDispatcher.h" />
     <ClInclude Include="..\Classes\Scene\GameScene.h" />

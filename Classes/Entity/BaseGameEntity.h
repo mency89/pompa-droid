@@ -40,6 +40,11 @@ public:
 	int get_id() const;
 
 	/**
+	 * 获取刚体指针
+	 */
+	b2Body* get_body();
+
+	/**
 	 * 移动
 	 * @param float 移动速度
 	 */
@@ -99,7 +104,6 @@ private:
 	int							entity_id_;
 	std::shared_ptr<b2World>	world_;
 	b2Body*						collision_body_;
-	b2Body*						collision_weapon_;
 	float						run_speed_;
 	float						walk_speed_;
 	float						jump_force_;

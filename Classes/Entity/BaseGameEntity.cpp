@@ -2,6 +2,8 @@
 
 #include <limits>
 #include <Box2D/Box2D.h>
+#include "Helper.h"
+#include "GB2ShapeCache.h"
 #include "MessageDispatcher.h"
 using namespace cocos2d;
 
@@ -15,7 +17,6 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	, jump_force_(0.0f)
 	, jump_height_(0.0f)
 	, collision_body_(nullptr)
-	, collision_weapon_(nullptr)
 	, entity_id_(++s_next_entity_id_)
 {
 	CCAssert(world_ != nullptr, "");
@@ -40,20 +41,43 @@ bool BaseGameEntity::init()
 	setDirection(Direction::Right);
 	MessageDispatcher::instance()->registerEntity(this);
 
+	b2BodyDef def;
+	def.userData = this;
+	def.allowSleep = false;
+	def.type = b2_staticBody;
+	collision_body_ = world_->CreateBody(&def);
+
 	return true;
 }
 
+// 处理消息
 void BaseGameEntity::handleMenssage(const Telegram &msg)
 {
-
 }
 
+// 根据当前显示帧更新碰撞体
 void BaseGameEntity::update_collision_body_by_spriteframe()
 {
 	if (collision_body_ != nullptr)
 	{
-		world_->DestroyBody(collision_body_);
-		collision_body_ = nullptr;
+		// 销毁所有形状
+		b2Fixture *fixture = collision_body_->GetFixtureList();
+		while (fixture != nullptr)
+		{
+			b2Fixture *next_fixture = fixture->GetNext();
+			collision_body_->DestroyFixture(fixture);
+			fixture = next_fixture;
+		}
+
+		// 创建新的形状
+		std::string shape = Splitext(getSpriteFrame()->getPolygonInfo().filename)[0];
+		if (!shape.empty())
+		{
+			// 添加身体形状
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape);
+			// 添加武器形状
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_");
+		}
 	}
 }
 
@@ -66,6 +90,12 @@ void BaseGameEntity::update()
 int BaseGameEntity::get_id() const
 {
 	return entity_id_;
+}
+
+// 获取刚体指针
+b2Body* BaseGameEntity::get_body()
+{
+	return collision_body_;
 }
 
 // 移动
