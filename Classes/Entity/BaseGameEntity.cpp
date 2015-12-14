@@ -78,7 +78,7 @@ void BaseGameEntity::update_collision_body_by_spriteframe()
 			// 添加身体形状
 			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape);
 			// 添加武器形状
-			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_");
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_weapon");
 		}
 
 		// 是否翻转刚体
