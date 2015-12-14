@@ -15,6 +15,7 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	, jump_force_(0.0f)
 	, jump_height_(0.0f)
 	, collision_body_(nullptr)
+	, collision_weapon_(nullptr)
 	, entity_id_(++s_next_entity_id_)
 {
 	CCAssert(world_ != nullptr, "");

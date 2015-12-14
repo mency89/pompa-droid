@@ -99,6 +99,7 @@ private:
 	int							entity_id_;
 	std::shared_ptr<b2World>	world_;
 	b2Body*						collision_body_;
+	b2Body*						collision_weapon_;
 	float						run_speed_;
 	float						walk_speed_;
 	float						jump_force_;
