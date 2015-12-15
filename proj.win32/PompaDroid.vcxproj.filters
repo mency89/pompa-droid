@@ -75,6 +75,9 @@
     <ClCompile Include="..\Classes\State\BossOwnedStates.cpp">
       <Filter>src\State</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\EntityManger.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\State\BossOwnedStates.h">
       <Filter>src\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\EntityManger.h">
+      <Filter>src\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

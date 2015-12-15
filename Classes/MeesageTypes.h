@@ -10,4 +10,29 @@ enum MessageTypes
 	msg_Attack = 2003
 };
 
+struct MSKeyPressed
+{
+
+};
+
+struct MSKeyReleased
+{
+
+};
+
+struct MSEntityMove
+{
+
+};
+
+struct MSEntityHurt
+{
+
+};
+
+struct MSEntityAttack
+{
+
+};
+
 #endif

@@ -148,6 +148,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp" />
     <ClCompile Include="..\Classes\Entity\Boss.cpp" />
+    <ClCompile Include="..\Classes\Entity\EntityManger.cpp" />
     <ClCompile Include="..\Classes\Entity\Hero.cpp" />
     <ClCompile Include="..\Classes\GameApplication.cpp" />
     <ClCompile Include="..\Classes\GB2ShapeCache.cpp" />
@@ -169,6 +170,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Entity\BaseGameEntity.h" />
     <ClInclude Include="..\Classes\Entity\Boss.h" />
+    <ClInclude Include="..\Classes\Entity\EntityManger.h" />
     <ClInclude Include="..\Classes\Entity\GameEntityCreator.h" />
     <ClInclude Include="..\Classes\Entity\Hero.h" />
     <ClInclude Include="..\Classes\GameApplication.h" />

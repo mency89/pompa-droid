@@ -19,15 +19,25 @@ EntityManger::~EntityManger()
 // 创建实例
 BaseGameEntity* EntityManger::create(EntityType type)
 {
+	BaseGameEntity *entity = nullptr;
 	switch (type)
 	{
 		case entity_hero:
-			return GameEntityCreator<Hero>().create(world_);
+			entity = GameEntityCreator<Hero>().create(world_);
+			break;
 		case entity_boss:
-			return GameEntityCreator<Boss>().create(world_);
+			entity = GameEntityCreator<Boss>().create(world_);
+			break;
 		default:
 			return nullptr;
 	}
+
+	if (entity != nullptr)
+	{
+		entitys_.insert(std::make_pair(entity->getID(), entity));
+	}
+
+	return entity;
 }
 
 // 通过id获取实例
