@@ -264,6 +264,92 @@
                     </dict>
 				</array>
 			</dict>
+			<key>boss_attack_01_weapon</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>8</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>1</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>POLYGON</string>
+
+						<key>polygons</key>
+						<array>
+							<array>	
+								<string>{ 30.000,0.000 }</string>	
+								<string>{ 69.000,16.000 }</string>	
+								<string>{ 52.000,29.000 }</string>	
+								<string>{ 31.000,31.000 }</string>
+							</array>
+							<array>	
+								<string>{ 68.000,65.000 }</string>	
+								<string>{ 56.000,48.000 }</string>	
+								<string>{ 65.000,39.000 }</string>	
+								<string>{ 84.000,44.000 }</string>	
+								<string>{ 79.000,56.000 }</string>
+							</array>
+							<array>	
+								<string>{ 84.000,44.000 }</string>	
+								<string>{ 65.000,39.000 }</string>	
+								<string>{ 52.000,29.000 }</string>	
+								<string>{ 69.000,16.000 }</string>
+							</array>
+						</array>
+                    </dict>
+				</array>
+			</dict>
+			<key>boss_attack_02_weapon</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>8</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>1</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>POLYGON</string>
+
+						<key>polygons</key>
+						<array>
+							<array>	
+								<string>{ 65.000,59.000 }</string>	
+								<string>{ 56.000,45.000 }</string>	
+								<string>{ 62.000,38.000 }</string>	
+								<string>{ 80.000,46.000 }</string>	
+								<string>{ 80.000,51.000 }</string>
+							</array>
+							<array>	
+								<string>{ 31.000,31.000 }</string>	
+								<string>{ 30.000,15.000 }</string>	
+								<string>{ 58.000,14.000 }</string>	
+								<string>{ 52.000,29.000 }</string>
+							</array>
+							<array>	
+								<string>{ 52.000,29.000 }</string>	
+								<string>{ 58.000,14.000 }</string>	
+								<string>{ 80.000,46.000 }</string>	
+								<string>{ 62.000,38.000 }</string>
+							</array>
+						</array>
+                    </dict>
+				</array>
+			</dict>
 		</dict>
 	</dict>
 </plist>
