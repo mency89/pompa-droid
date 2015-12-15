@@ -3,6 +3,7 @@
 #include "ActionTags.h"
 #include "MeesageTypes.h"
 #include "AnimationManger.h"
+#include "MessageDispatcher.h"
 using namespace cocos2d;
 
 namespace
@@ -508,6 +509,15 @@ void HeroGlobal::exit(Hero *object)
 
 void HeroGlobal::execute(Hero *object)
 {
+	std::vector<BaseGameEntity*> targets = object->getHitTargets();
+	for (BaseGameEntity *entity : targets)
+	{
+		Telegram msg;
+		msg.sender = object->get_id();
+		msg.receiver = entity->get_id();
+		msg.msg_code = msg_Hurt;
+		MessageDispatcher::instance()->dispatchMessage(msg);
+	}
 }
 
 bool HeroGlobal::on_message(Hero *object, const Telegram &msg)

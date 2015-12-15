@@ -46,7 +46,7 @@ bool BaseGameEntity::init()
 	b2BodyDef def;
 	def.userData = this;
 	def.allowSleep = false;
-	def.type = b2_staticBody;
+	def.type = b2_dynamicBody;
 	collision_body_ = world_->CreateBody(&def);
 
 	return true;

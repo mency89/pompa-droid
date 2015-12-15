@@ -12,6 +12,23 @@ struct StateMachineData < Boss >
 };
 
 /**
+ * Boss待机状态
+ */
+class BossIdle : public State < Boss >, public Singleton < BossIdle >
+{
+	SINGLETON_DEFAULT(BossIdle);
+
+public:
+	virtual void enter(Boss *object) override;
+
+	virtual void exit(Boss *object) override;
+
+	virtual void execute(Boss *object) override;
+
+	virtual bool on_message(Boss *object, const Telegram &msg) override;
+};
+
+/**
  * Boss全局状态
  */
 class BossGlobal : public State < Boss >, public Singleton < BossGlobal >

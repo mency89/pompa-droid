@@ -2,16 +2,16 @@
 
 #include <Box2D/Box2D.h>
 #include "VisibleRect.h"
-#include "Entity/Hero.h"
-
 #include "GLES-Render.h"
 #include "MeesageTypes.h"
+#include "MessageDispatcher.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "GB2ShapeCache.h"
 #endif
 
-#include "MessageDispatcher.h"
+#include "Entity/Boss.h"
+#include "Entity/Hero.h"
 #include "Entity/BaseGameEntity.h"
 using namespace cocos2d;
 
@@ -30,6 +30,8 @@ GameScene::~GameScene()
 
 }
 
+Boss *boss;
+
 Scene* GameScene::createScene()
 {
 	auto scene = Scene::create();
@@ -47,6 +49,7 @@ bool GameScene::init()
 
 	// 创建物理事件
 	world_ = std::make_shared<b2World>(b2Vec2(0, 0));
+	world_->SetContinuousPhysics(true);
 	world_->SetAllowSleeping(false);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -58,6 +61,10 @@ bool GameScene::init()
 	hero_ = GameEntityCreator<Hero>().create(world_);
 	hero_->setPosition(VisibleRect::center());
 	addChild(hero_, -1);
+
+	boss = GameEntityCreator<Boss>().create(world_);
+	boss->setPosition(VisibleRect::center() +  Vec2(150, 0));
+	addChild(boss, -1);
 
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);
@@ -71,12 +78,17 @@ bool GameScene::init()
 
 void GameScene::update(float delta)
 {
+	hero_->update_collision_body_by_spriteframe();
+	boss->update_collision_body_by_spriteframe();
+
 	// 更新物理世界
 	int velocityIterations = 8;
 	int positionIterations = 1;
 	world_->Step(delta, velocityIterations, positionIterations);
 
+
 	hero_->update();
+	boss->update();
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

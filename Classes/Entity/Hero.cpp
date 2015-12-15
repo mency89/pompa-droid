@@ -34,7 +34,6 @@ bool Hero::init()
 
 void Hero::update()
 {
-	BaseGameEntity::update();
 	state_machine_->update();
 }
 

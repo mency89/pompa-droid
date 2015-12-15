@@ -1,4 +1,5 @@
 ﻿#include "Boss.h"
+#include "State/BossOwnedStates.h"
 
 
 Boss::Boss(std::shared_ptr<b2World> world)
@@ -24,16 +25,15 @@ bool Boss::init()
 	setJumpForce(2.5f);
 	setMaxJumpHeight(50);
 
-	/*state_machine_.reset(new StateMachine<Hero>(this));
-	state_machine_->set_global_state(HeroGlobal::instance());
-	state_machine_->change_state(HeroIdle::instance());*/
+	state_machine_.reset(new StateMachine<Boss>(this));
+	state_machine_->set_global_state(BossGlobal::instance());
+	state_machine_->change_state(BossIdle::instance());
 
 	return true;
 }
 
 void Boss::update()
 {
-	BaseGameEntity::update();
 	state_machine_->update();
 }
 
