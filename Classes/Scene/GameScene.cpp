@@ -57,14 +57,14 @@ bool GameScene::init()
 	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
+	boss = GameEntityCreator<Boss>().create(world_);
+	boss->setPosition(VisibleRect::center() +  Vec2(150, 0));
+	addChild(boss, -1);
+
 	// 创建玩家
 	hero_ = GameEntityCreator<Hero>().create(world_);
 	hero_->setPosition(VisibleRect::center());
 	addChild(hero_, -1);
-
-	boss = GameEntityCreator<Boss>().create(world_);
-	boss->setPosition(VisibleRect::center() +  Vec2(150, 0));
-	addChild(boss, -1);
 
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);

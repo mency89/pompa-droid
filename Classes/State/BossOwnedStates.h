@@ -9,7 +9,10 @@
 template <>
 struct StateMachineData < Boss >
 {
+	typedef std::chrono::system_clock::time_point time_point;
+
 	int continuous_hurt;				// 连续受击次数
+	time_point hurt_pressed_time;		// 上次受击时间
 
 	StateMachineData()
 		: continuous_hurt(0)
@@ -40,6 +43,40 @@ public:
 class BossHurt : public State < Boss >, public Singleton < BossHurt >
 {
 	SINGLETON_DEFAULT(BossHurt);
+
+public:
+	virtual void enter(Boss *object) override;
+
+	virtual void exit(Boss *object) override;
+
+	virtual void execute(Boss *object) override;
+
+	virtual bool on_message(Boss *object, const Telegram &msg) override;
+};
+
+/**
+ * Boss倒下状态
+ */
+class BossKnockout : public State < Boss >, public Singleton < BossKnockout >
+{
+	SINGLETON_DEFAULT(BossKnockout);
+
+public:
+	virtual void enter(Boss *object) override;
+
+	virtual void exit(Boss *object) override;
+
+	virtual void execute(Boss *object) override;
+
+	virtual bool on_message(Boss *object, const Telegram &msg) override;
+};
+
+/**
+ * Boss起身状态
+ */
+class BossGetup : public State < Boss >, public Singleton < BossGetup >
+{
+	SINGLETON_DEFAULT(BossGetup);
 
 public:
 	virtual void enter(Boss *object) override;

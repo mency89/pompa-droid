@@ -35,13 +35,26 @@ bool BossIdle::on_message(Boss *object, const Telegram &msg)
 
 void BossHurt::enter(Boss *object)
 {
-	if (++object->getStateMachine()->userdata().continuous_hurt < 3)
+	std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
+	std::chrono::system_clock::time_point direction_key_pressed_time = object->getStateMachine()->userdata().hurt_pressed_time;
+	std::chrono::system_clock::duration duration = current_time - direction_key_pressed_time;
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() < 500)
+	{
+		++object->getStateMachine()->userdata().continuous_hurt;
+	}
+	else
+	{
+		object->getStateMachine()->userdata().continuous_hurt = 1;
+	}
+
+	if (object->getStateMachine()->userdata().continuous_hurt < 3)
 	{
 		Animation *animation = AnimationManger::instance()->getAnimation("boss_hurt");
 		Animate *animate = Animate::create(animation);
 		animate->setTag(ActionTags::boss_hurt);
 		object->runAction(animate);
-	}
+		object->getStateMachine()->userdata().hurt_pressed_time = std::chrono::system_clock::now();
+	}	
 }
 
 void BossHurt::exit(Boss *object)
@@ -53,20 +66,78 @@ void BossHurt::execute(Boss *object)
 {
 	if (object->getStateMachine()->userdata().continuous_hurt >= 3)
 	{
-		object->getStateMachine();
-		/*	object->getStateMachine()->change_state(HeroKnockout::instance());
-			object->getStateMachine()->userdata().continuous_hurt = 0;*/
+		object->getStateMachine()->change_state(BossKnockout::instance());
 	}
 	else if (object->getActionByTag(ActionTags::boss_hurt) == nullptr)
 	{
 		object->getStateMachine()->change_state(BossIdle::instance());
-		object->getStateMachine()->userdata().continuous_hurt = 0;
 	}
 }
 
 bool BossHurt::on_message(Boss *object, const Telegram &msg)
 {
 	return false;
+}
+
+/******Boss倒下状态******/
+
+void BossKnockout::enter(Boss *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("boss_knockout");
+	animation->setRestoreOriginalFrame(false);
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::boss_knockout);
+	object->runAction(animate);
+}
+
+void BossKnockout::exit(Boss *object)
+{
+	object->stopActionByTag(ActionTags::boss_knockout);
+}
+
+void BossKnockout::execute(Boss *object)
+{
+	if (object->getActionByTag(ActionTags::boss_knockout) == nullptr)
+	{
+		object->getStateMachine()->change_state(BossGetup::instance());
+	}
+}
+
+bool BossKnockout::on_message(Boss *object, const Telegram &msg)
+{
+	// 吞噬受击消息
+	return msg.msg_code == msg_Hurt;
+}
+
+/******Boss起身状态******/
+
+void BossGetup::enter(Boss *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("boss_getup");
+	//animation->setDelayPerUnit(0.5f);
+	animation->setRestoreOriginalFrame(false);
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::boss_getup);
+	object->runAction(animate);
+}
+
+void BossGetup::exit(Boss *object)
+{
+	object->stopActionByTag(ActionTags::boss_getup);
+}
+
+void BossGetup::execute(Boss *object)
+{
+	if (object->getActionByTag(ActionTags::boss_getup) == nullptr)
+	{
+		object->getStateMachine()->change_state(BossIdle::instance());
+	}
+}
+
+bool BossGetup::on_message(Boss *object, const Telegram &msg)
+{
+	// 吞噬受击消息
+	return msg.msg_code == msg_Hurt;
 }
 
 /******Boss全局状态******/
