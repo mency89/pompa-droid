@@ -76,25 +76,9 @@ void BaseGameEntity::update_collision_body_by_spriteframe()
 		if (!shape.empty())
 		{
 			// 添加身体形状
-			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape);
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape, isFlippedX());
 			// 添加武器形状
-			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_weapon");
-		}
-
-		// 是否翻转刚体
-		if (isFlippedX())
-		{
-			for (b2Fixture *fixture = collision_body_->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
-			{
-				if (b2Shape::e_polygon == fixture->GetShape()->m_type)
-				{
-					b2PolygonShape *shape = dynamic_cast<b2PolygonShape *>(fixture->GetShape());
-					for (int i = 0; i < shape->GetVertexCount(); ++i)
-					{
-						shape->m_vertices[i].x = -shape->m_vertices[i].x;
-					}
-				}
-			}
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_weapon", isFlippedX());
 		}
 	}
 }

@@ -8,6 +8,7 @@ using namespace cocos2d;
 
 namespace
 {
+	// 是否是开放的按键
 	bool IsOpenKeyCode(EventKeyboard::KeyCode keyCode)
 	{
 		return keyCode == EventKeyboard::KeyCode::KEY_W ||
@@ -18,6 +19,7 @@ namespace
 			keyCode == EventKeyboard::KeyCode::KEY_SPACE;
 	}
 
+	// 是否是方向键
 	bool IsDirectionKey(EventKeyboard::KeyCode keyCode)
 	{
 		return keyCode == EventKeyboard::KeyCode::KEY_W ||
@@ -26,16 +28,19 @@ namespace
 			keyCode == EventKeyboard::KeyCode::KEY_D;
 	}
 
+	// 是否是攻击键
 	bool IsAttackKey(EventKeyboard::KeyCode keyCode)
 	{
 		return keyCode == EventKeyboard::KeyCode::KEY_J;
 	}
 
+	// 是否是跳跃键
 	bool IsJumpKey(EventKeyboard::KeyCode keyCode)
 	{
 		return keyCode == EventKeyboard::KeyCode::KEY_SPACE;
 	}
 
+	// 转换方向键为英雄方向
 	BaseGameEntity::Direction ConvertDirectionKeyToHeroDirection(EventKeyboard::KeyCode keyCode)
 	{
 		CCAssert(IsDirectionKey(keyCode), "");
@@ -55,6 +60,12 @@ namespace
 		{
 			return BaseGameEntity::Direction::Right;
 		}
+	}
+
+	// 是否处理攻击状态
+	bool IsAttackState(State<Hero> *state)
+	{
+		return state == HeroAttack::instance() || state == HeroRuningAttack::instance() || state == HeroJumpingAttack::instance();
 	}
 }
 
@@ -398,7 +409,7 @@ bool HeroJumpingAttack::on_message(Hero *object, const Telegram &msg)
 
 void HeroHurt::enter(Hero *object)
 {
-	if (++object->getStateMachine()->userdata().be_continuous_attack < 3)
+	if (++object->getStateMachine()->userdata().continuous_hurt < 3)
 	{
 		object->stopActionByTag(ActionTags::hero_hurt);
 		Animation *animation = AnimationManger::instance()->getAnimation("hero_hurt");
@@ -415,15 +426,15 @@ void HeroHurt::exit(Hero *object)
 
 void HeroHurt::execute(Hero *object)
 {
-	if (object->getStateMachine()->userdata().be_continuous_attack >= 3)
+	if (object->getStateMachine()->userdata().continuous_hurt >= 3)
 	{
 		object->getStateMachine()->change_state(HeroKnockout::instance());
-		object->getStateMachine()->userdata().be_continuous_attack = 0;
+		object->getStateMachine()->userdata().continuous_hurt = 0;
 	}
 	else if (object->getActionByTag(ActionTags::hero_hurt) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
-		object->getStateMachine()->userdata().be_continuous_attack = 0;
+		object->getStateMachine()->userdata().continuous_hurt = 0;
 	}
 }
 
@@ -509,18 +520,34 @@ void HeroGlobal::exit(Hero *object)
 
 void HeroGlobal::execute(Hero *object)
 {
-	std::vector<BaseGameEntity*> targets = object->getHitTargets();
-	for (BaseGameEntity *entity : targets)
+	// 判断是否攻击到目标
+	if (IsAttackState(object->getStateMachine()->get_current_state()))
 	{
-		Telegram msg;
-		msg.sender = object->get_id();
-		msg.receiver = entity->get_id();
-		msg.msg_code = msg_Hurt;
-		MessageDispatcher::instance()->dispatchMessage(msg);
+		if (!object->getStateMachine()->userdata().is_attacked)
+		{
+			std::vector<BaseGameEntity*> targets = object->getHitTargets();
+			for (BaseGameEntity *entity : targets)
+			{
+				Telegram msg;
+				msg.sender = object->get_id();
+				msg.receiver = entity->get_id();
+				msg.msg_code = msg_Hurt;
+				MessageDispatcher::instance()->dispatchMessage(msg);
+			}
+			object->getStateMachine()->userdata().is_attacked = !targets.empty();
+		}
+	}
+	else
+	{
+		object->getStateMachine()->userdata().is_attacked = false;
 	}
 }
 
 bool HeroGlobal::on_message(Hero *object, const Telegram &msg)
 {
+	// 受击处理
+	/*
+		...
+	*/
 	return false;
 }

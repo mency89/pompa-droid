@@ -13,7 +13,8 @@ enum ActionTags
 	hero_hurt = 1008,
 	hero_knockout = 1009,
 	hero_getup = 1010,
-	boos_idle = 1011,
+	boss_idle = 1011,
+	boss_hurt = 1012,
 };
 
 #endif

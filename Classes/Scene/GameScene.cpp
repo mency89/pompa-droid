@@ -54,7 +54,7 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	debug_draw_->SetFlags(b2Draw::e_shapeBit);
+	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
 	// 创建玩家
@@ -85,7 +85,6 @@ void GameScene::update(float delta)
 	int velocityIterations = 8;
 	int positionIterations = 1;
 	world_->Step(delta, velocityIterations, positionIterations);
-
 
 	hero_->update();
 	boss->update();

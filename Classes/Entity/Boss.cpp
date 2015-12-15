@@ -24,6 +24,7 @@ bool Boss::init()
 	setRunSpeed(getWalkSpeed() * 3);
 	setJumpForce(2.5f);
 	setMaxJumpHeight(50);
+	setDirection(Left);
 
 	state_machine_.reset(new StateMachine<Boss>(this));
 	state_machine_->set_global_state(BossGlobal::instance());

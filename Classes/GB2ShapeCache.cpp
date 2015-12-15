@@ -184,7 +184,7 @@ bool GB2ShapeCache::addShapesWithFile(const std::string &plist)
 	return true;
 }
 
-bool GB2ShapeCache::addFixturesToBody(b2Body *body, const std::string &shape)
+bool GB2ShapeCache::addFixturesToBody(b2Body *body, const std::string &shape, bool flipped)
 {
 	CCAssert(body, "nullptr");
 
@@ -209,6 +209,15 @@ bool GB2ShapeCache::addFixturesToBody(b2Body *body, const std::string &shape)
 			{
 				for (auto vertexs : fixture_item.polygons)
 				{
+					// 翻转
+					if (flipped)
+					{
+						for (size_t i = 0; i < vertexs.size(); ++i)
+						{
+							vertexs[i].x = -vertexs[i].x;
+						}
+					}
+
 					b2PolygonShape polygon;
 					polygon.Set(&vertexs[0], vertexs.size());
 					fixture.shape = &polygon;

@@ -19,7 +19,7 @@ public:
 
 	bool addShapesWithFile(const std::string &plist);
 
-	bool addFixturesToBody(b2Body *body, const std::string &shape);
+	bool addFixturesToBody(b2Body *body, const std::string &shape, bool flipped = false);
 
 	bool anchorPointForShape(const std::string &shape, cocos2d::Vec2 &anchor_point);
 
