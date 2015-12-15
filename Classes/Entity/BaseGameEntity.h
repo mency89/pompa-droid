@@ -31,24 +31,27 @@ public:
 
 	virtual void handleMenssage(const Telegram &msg);
 
-	void update_collision_body_by_spriteframe();
-
 public:
 	/**
 	 * 获取唯一id
 	 */
-	int get_id() const;
+	int getID() const;
 
 	/**
-	 * 获取刚体指针
+	 * 获取刚体
 	 */
-	b2Body* get_body();
+	b2Body* getBody();
 
 	/**
-	 * 移动
+	 * 销毁刚体
+	 */
+	void destroyBody();
+
+	/**
+	 * 移动实体
 	 * @param float 移动速度
 	 */
-	void move(float speed);
+	void moveEntity(float speed);
 
 	/**
 	 * 获取跑动速度
@@ -104,6 +107,11 @@ public:
 	 * 获取命中的目标
 	 */
 	std::vector<BaseGameEntity*> getHitTargets() const;
+
+	/**
+	 * 更新碰撞体
+	 */
+	void updateCollisionBodyBySpriteframe();
 
 	/* 重写父类函数 */
 public:

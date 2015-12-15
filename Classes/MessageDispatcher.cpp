@@ -7,7 +7,7 @@ bool MessageDispatcher::registerEntity(BaseGameEntity *entity)
 	CCAssert(entity != nullptr, "");
 	if (entity != nullptr)
 	{
-		entitys_.insert(std::make_pair(entity->get_id(), entity));
+		entitys_.insert(std::make_pair(entity->getID(), entity));
 		return true;
 	}
 	return false;
@@ -18,7 +18,7 @@ bool MessageDispatcher::unregisterEntity(BaseGameEntity *entity)
 	CCAssert(entity != nullptr, "");
 	if (entity != nullptr)
 	{
-		auto result = entitys_.find(entity->get_id());
+		auto result = entitys_.find(entity->getID());
 		if (result != entitys_.end())
 		{
 			entitys_.erase(result);

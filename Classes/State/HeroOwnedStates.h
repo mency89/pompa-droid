@@ -9,14 +9,11 @@
 template <>
 struct StateMachineData < Hero >
 {
-	typedef std::chrono::system_clock::time_point time_point;
-
 	bool jump_up;							// 是否处于上跳状态
-	bool is_attacked;						// 是否已攻击
 	float before_he_height;					// 跳跃前y值
+	bool is_attacked;						// 是否已攻击
 	int continuous_hurt;					// 被连续攻击次数
-	time_point direction_key_pressed_time;	// 上次按下方向键的时间
-
+	std::chrono::system_clock::time_point last_direction_key_pressed_time;
 	StateMachineData()
 		: jump_up(false)
 		, is_attacked(false)

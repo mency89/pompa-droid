@@ -9,13 +9,12 @@
 template <>
 struct StateMachineData < Boss >
 {
-	typedef std::chrono::system_clock::time_point time_point;
-
-	int continuous_hurt;				// 连续受击次数
-	time_point hurt_pressed_time;		// 上次受击时间
-
+	bool is_attacked;										// 是否已攻击
+	int continuous_hurt;									// 连续受击次数
+	std::chrono::system_clock::time_point last_hurt_time;	// 上次受击时间
 	StateMachineData()
-		: continuous_hurt(0)
+		: is_attacked(false)
+		, continuous_hurt(0)
 	{
 	}
 };

@@ -36,9 +36,9 @@ bool BossIdle::on_message(Boss *object, const Telegram &msg)
 void BossHurt::enter(Boss *object)
 {
 	std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
-	std::chrono::system_clock::time_point direction_key_pressed_time = object->getStateMachine()->userdata().hurt_pressed_time;
-	std::chrono::system_clock::duration duration = current_time - direction_key_pressed_time;
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() < 500)
+	std::chrono::system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().last_hurt_time;
+	std::chrono::system_clock::duration duration = current_time - last_hurt_time;
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() < 1000)
 	{
 		++object->getStateMachine()->userdata().continuous_hurt;
 	}
@@ -53,8 +53,12 @@ void BossHurt::enter(Boss *object)
 		Animate *animate = Animate::create(animation);
 		animate->setTag(ActionTags::boss_hurt);
 		object->runAction(animate);
-		object->getStateMachine()->userdata().hurt_pressed_time = std::chrono::system_clock::now();
-	}	
+		object->getStateMachine()->userdata().last_hurt_time = std::chrono::system_clock::now();
+	}
+	else
+	{
+		object->getStateMachine()->change_state(BossKnockout::instance());
+	}
 }
 
 void BossHurt::exit(Boss *object)
@@ -64,11 +68,7 @@ void BossHurt::exit(Boss *object)
 
 void BossHurt::execute(Boss *object)
 {
-	if (object->getStateMachine()->userdata().continuous_hurt >= 3)
-	{
-		object->getStateMachine()->change_state(BossKnockout::instance());
-	}
-	else if (object->getActionByTag(ActionTags::boss_hurt) == nullptr)
+	if (object->getActionByTag(ActionTags::boss_hurt) == nullptr)
 	{
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
@@ -86,8 +86,9 @@ void BossKnockout::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_knockout");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::boss_knockout);
-	object->runAction(animate);
+	Sequence *action = Sequence::create(animate, DelayTime::create(0.1f), nullptr);
+	action->setTag(ActionTags::boss_knockout);
+	object->runAction(action);
 }
 
 void BossKnockout::exit(Boss *object)
@@ -114,7 +115,6 @@ bool BossKnockout::on_message(Boss *object, const Telegram &msg)
 void BossGetup::enter(Boss *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_getup");
-	//animation->setDelayPerUnit(0.5f);
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::boss_getup);

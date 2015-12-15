@@ -114,8 +114,8 @@ bool HeroIdle::on_message(Hero *object, const Telegram &msg)
 				if (direction == object->getDirection() && direction != BaseGameEntity::Up && direction != BaseGameEntity::Down)
 				{
 					std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
-					std::chrono::system_clock::time_point direction_key_pressed_time = object->getStateMachine()->userdata().direction_key_pressed_time;
-					std::chrono::system_clock::duration duration = current_time - direction_key_pressed_time;
+					std::chrono::system_clock::time_point last_direction_key_pressed_time = object->getStateMachine()->userdata().last_direction_key_pressed_time;
+					std::chrono::system_clock::duration duration = current_time - last_direction_key_pressed_time;
 					if (std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() < 250)
 					{
 						object->getStateMachine()->change_state(HeroRun::instance());
@@ -130,7 +130,7 @@ bool HeroIdle::on_message(Hero *object, const Telegram &msg)
 					object->setDirection(direction);
 					object->getStateMachine()->change_state(HeroWalk::instance());
 				}
-				object->getStateMachine()->userdata().direction_key_pressed_time = std::chrono::system_clock::now();
+				object->getStateMachine()->userdata().last_direction_key_pressed_time = std::chrono::system_clock::now();
 				return true;
 			}
 		}
@@ -156,7 +156,7 @@ void HeroWalk::exit(Hero *object)
 
 void HeroWalk::execute(Hero *object)
 {
-	object->move(object->getWalkSpeed());
+	object->moveEntity(object->getWalkSpeed());
 }
 
 bool HeroWalk::on_message(Hero *object, const Telegram &msg)
@@ -207,7 +207,7 @@ void HeroRun::exit(Hero *object)
 
 void HeroRun::execute(Hero *object)
 {
-	object->move(object->getRunSpeed());
+	object->moveEntity(object->getRunSpeed());
 }
 
 bool HeroRun::on_message(Hero *object, const Telegram &msg)
@@ -281,11 +281,11 @@ void HeroJump::execute(Hero *object)
 	{
 		if (previous_state == HeroWalk::instance())
 		{
-			object->move(object->getWalkSpeed());
+			object->moveEntity(object->getWalkSpeed());
 		}
 		else if (previous_state == HeroRun::instance())
 		{
-			object->move(object->getRunSpeed());
+			object->moveEntity(object->getRunSpeed());
 		}
 	}
 
@@ -359,7 +359,7 @@ void HeroRuningAttack::exit(Hero *object)
 
 void HeroRuningAttack::execute(Hero *object)
 {
-	object->move(object->getRunSpeed());
+	object->moveEntity(object->getRunSpeed());
 	if (object->getActionByTag(ActionTags::hero_runattack) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
@@ -477,7 +477,8 @@ void HeroKnockout::execute(Hero *object)
 
 bool HeroKnockout::on_message(Hero *object, const Telegram &msg)
 {
-	return false;
+	// 吞噬受击消息
+	return msg.msg_code == msg_Hurt;
 }
 
 /******英雄起身状态******/
@@ -505,7 +506,8 @@ void HeroGetup::execute(Hero *object)
 
 bool HeroGetup::on_message(Hero *object, const Telegram &msg)
 {
-	return false;
+	// 吞噬受击消息
+	return msg.msg_code == msg_Hurt;
 }
 
 /******英雄全局状态******/
@@ -529,8 +531,8 @@ void HeroGlobal::execute(Hero *object)
 			for (BaseGameEntity *entity : targets)
 			{
 				Telegram msg;
-				msg.sender = object->get_id();
-				msg.receiver = entity->get_id();
+				msg.sender = object->getID();
+				msg.receiver = entity->getID();
 				msg.msg_code = msg_Hurt;
 				MessageDispatcher::instance()->dispatchMessage(msg);
 			}
@@ -545,9 +547,10 @@ void HeroGlobal::execute(Hero *object)
 
 bool HeroGlobal::on_message(Hero *object, const Telegram &msg)
 {
-	// 受击处理
-	/*
-		...
-	*/
+	if (msg.msg_code == msg_Hurt)
+	{
+		object->getStateMachine()->change_state(HeroHurt::instance());
+		return true;
+	}
 	return false;
 }

@@ -30,6 +30,7 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 
 BaseGameEntity::~BaseGameEntity()
 {
+	destroyBody();
 	MessageDispatcher::instance()->unregisterEntity(this);
 }
 
@@ -58,7 +59,7 @@ void BaseGameEntity::handleMenssage(const Telegram &msg)
 }
 
 // 根据当前显示帧更新碰撞体
-void BaseGameEntity::update_collision_body_by_spriteframe()
+void BaseGameEntity::updateCollisionBodyBySpriteframe()
 {
 	if (collision_body_ != nullptr)
 	{
@@ -85,23 +86,32 @@ void BaseGameEntity::update_collision_body_by_spriteframe()
 
 void BaseGameEntity::update()
 {
-	update_collision_body_by_spriteframe();
 }
 
 // 获取唯一id
-int BaseGameEntity::get_id() const
+int BaseGameEntity::getID() const
 {
 	return entity_id_;
 }
 
-// 获取刚体指针
-b2Body* BaseGameEntity::get_body()
+// 获取刚体
+b2Body* BaseGameEntity::getBody()
 {
 	return collision_body_;
 }
 
-// 移动
-void BaseGameEntity::move(float speed)
+// 销毁刚体
+void BaseGameEntity::destroyBody()
+{
+	if (collision_body_ != nullptr)
+	{
+		collision_body_->GetWorld()->DestroyBody(collision_body_);
+		collision_body_ = nullptr;
+	}
+}
+
+// 移动实体
+void BaseGameEntity::moveEntity(float speed)
 {
 	if (direction_ == Direction::Up)
 	{

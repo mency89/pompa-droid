@@ -4,9 +4,10 @@
 #include <memory>
 #include "cocos2d.h"
 
-class Hero;
 class b2World;
+class EntityManger;
 class GLESDebugDraw;
+class BaseGameEntity;
 
 class GameScene : public cocos2d::Layer
 {
@@ -28,8 +29,9 @@ public:
 	CREATE_FUNC(GameScene);
 
 private:
-	Hero*						hero_;
+	BaseGameEntity*				hero_;
 	std::shared_ptr<b2World>	world_;
+	std::auto_ptr<EntityManger>	entity_manger_;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 public:

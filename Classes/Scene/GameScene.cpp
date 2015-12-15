@@ -10,8 +10,7 @@
 #include "GB2ShapeCache.h"
 #endif
 
-#include "Entity/Boss.h"
-#include "Entity/Hero.h"
+#include "Entity/EntityManger.h"
 #include "Entity/BaseGameEntity.h"
 using namespace cocos2d;
 
@@ -29,8 +28,6 @@ GameScene::~GameScene()
 {
 
 }
-
-Boss *boss;
 
 Scene* GameScene::createScene()
 {
@@ -54,15 +51,12 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
+	debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
-	boss = GameEntityCreator<Boss>().create(world_);
-	boss->setPosition(VisibleRect::center() +  Vec2(150, 0));
-	addChild(boss, -1);
-
 	// 创建玩家
-	hero_ = GameEntityCreator<Hero>().create(world_);
+	entity_manger_.reset(new EntityManger(world_));
+	hero_ = entity_manger_->create(entity_hero);
 	hero_->setPosition(VisibleRect::center());
 	addChild(hero_, -1);
 
@@ -78,16 +72,13 @@ bool GameScene::init()
 
 void GameScene::update(float delta)
 {
-	hero_->update_collision_body_by_spriteframe();
-	boss->update_collision_body_by_spriteframe();
-
 	// 更新物理世界
 	int velocityIterations = 8;
 	int positionIterations = 1;
 	world_->Step(delta, velocityIterations, positionIterations);
 
-	hero_->update();
-	boss->update();
+	// 更新游戏实体
+	entity_manger_->update();
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -117,7 +108,7 @@ void GameScene::onDraw(const Mat4 &transform, uint32_t flags)
 void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	Telegram msg;
-	msg.receiver = hero_->get_id();
+	msg.receiver = hero_->getID();
 	msg.msg_code = MessageTypes::msg_KeyPressed;
 	msg.extra_info = &keyCode;
 	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
@@ -127,7 +118,7 @@ void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	Telegram msg;
-	msg.receiver = hero_->get_id();
+	msg.receiver = hero_->getID();
 	msg.msg_code = MessageTypes::msg_KeyReleased;
 	msg.extra_info = &keyCode;
 	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
