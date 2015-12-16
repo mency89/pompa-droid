@@ -523,23 +523,24 @@ void HeroGlobal::execute(Hero *object)
 	// 判断是否攻击到目标
 	if (IsAttackState(object->getStateMachine()->get_current_state()))
 	{
-		if (!object->getStateMachine()->userdata().is_attacked)
+		std::vector<BaseGameEntity*> targets = object->getHitTargets();
+		for (BaseGameEntity *entity : targets)
 		{
-			std::vector<BaseGameEntity*> targets = object->getHitTargets();
-			for (BaseGameEntity *entity : targets)
+			auto result = object->getStateMachine()->userdata().hit_targets.find(entity->getID());
+			if (result == object->getStateMachine()->userdata().hit_targets.end())
 			{
 				Telegram msg;
 				msg.sender = object->getID();
 				msg.receiver = entity->getID();
 				msg.msg_code = msg_EntityHurt;
 				MessageDispatcher::instance()->dispatchMessage(msg);
-			}
-			object->getStateMachine()->userdata().is_attacked = !targets.empty();
+				object->getStateMachine()->userdata().hit_targets.insert(entity->getID());
+			}	
 		}
 	}
 	else
 	{
-		object->getStateMachine()->userdata().is_attacked = false;
+		object->getStateMachine()->userdata().hit_targets.clear();
 	}
 }
 
