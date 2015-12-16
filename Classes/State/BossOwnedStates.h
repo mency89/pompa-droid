@@ -37,6 +37,23 @@ public:
 };
 
 /**
+ * Boss行走状态
+ */
+class BossWalk : public State < Boss >, public Singleton < BossWalk >
+{
+	SINGLETON_DEFAULT(BossWalk);
+
+public:
+	virtual void enter(Boss *object) override;
+
+	virtual void exit(Boss *object) override;
+
+	virtual void execute(Boss *object) override;
+
+	virtual bool on_message(Boss *object, const Telegram &msg) override;
+};
+
+/**
  * Boss受击状态
  */
 class BossHurt : public State < Boss >, public Singleton < BossHurt >

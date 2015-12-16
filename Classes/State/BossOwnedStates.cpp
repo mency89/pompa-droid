@@ -32,6 +32,36 @@ bool BossIdle::on_message(Boss *object, const Telegram &msg)
 	return false;
 }
 
+/******Boss行走状态******/
+
+void BossWalk::enter(Boss *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("boss_walk");
+	animation->setLoops(-1);
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::boss_walk);
+	object->runAction(animate);
+}
+
+void BossWalk::exit(Boss *object)
+{
+	object->stopActionByTag(ActionTags::boss_walk);
+}
+
+void BossWalk::execute(Boss *object)
+{
+	object->moveEntity(object->getWalkSpeed());
+	if (object->getActionByTag(ActionTags::boss_walk) == nullptr)
+	{
+		object->getStateMachine()->change_state(BossIdle::instance());
+	}
+}
+
+bool BossWalk::on_message(Boss *object, const Telegram &msg)
+{
+	return false;
+}
+
 /******Boss受击状态******/
 
 void BossHurt::enter(Boss *object)

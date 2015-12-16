@@ -75,6 +75,12 @@ void EntityManger::destroyAllEntity()
 // 用于更新实例状态
 void EntityManger::update()
 {
+	// 更新状态
+	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
+	{
+		itr->second->update();
+	}
+
 	// 删除实例
 	for (int id : destroy_set_)
 	{
@@ -87,12 +93,6 @@ void EntityManger::update()
 		}
 	}
 	destroy_set_.clear();
-
-	// 更新状态
-	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
-	{
-		itr->second->update();
-	}
 
 	// 更新形状和位置
 	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)

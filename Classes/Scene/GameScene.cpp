@@ -15,6 +15,29 @@
 using namespace cocos2d;
 
 
+class  MyContactListener : public  b2ContactListener
+{
+public:
+	void  BeginContact(b2Contact*  contact)
+	{
+
+	}
+	void  EndContact(b2Contact*  contact)
+	{
+
+	}
+
+	void  PreSolve(b2Contact*  contact, const b2Manifold*  oldManifold)
+	{
+
+	}
+
+	void  PostSolve(b2Contact*  contact, const b2ContactImpulse*  impulse)
+	{
+
+	}
+};
+
 GameScene::GameScene()
 	: hero_(nullptr)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -51,7 +74,8 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	debug_draw_->SetFlags(b2Draw::e_shapeBit);
+	world_->SetContactListener(new MyContactListener);
+	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
 	// 创建玩家
