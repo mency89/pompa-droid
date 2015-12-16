@@ -95,22 +95,22 @@ bool HeroIdle::on_message(Hero *object, const Telegram &msg)
 {
 	if (MessageTypes::msg_KeyPressed == msg.msg_code)
 	{
-		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
-		if (IsOpenKeyCode(keyCode))
+		MSKeyPressed extra_info = *reinterpret_cast<const MSKeyPressed*>(msg.extra_info);
+		if (IsOpenKeyCode(extra_info.key_code))
 		{
-			if (IsJumpKey(keyCode))
+			if (IsJumpKey(extra_info.key_code))
 			{
 				object->getStateMachine()->change_state(HeroJump::instance());
 				return true;
 			}
-			else if (IsAttackKey(keyCode))
+			else if (IsAttackKey(extra_info.key_code))
 			{
 				object->getStateMachine()->change_state(HeroAttack::instance());
 				return true;
 			}
-			else if (IsDirectionKey(keyCode))
+			else if (IsDirectionKey(extra_info.key_code))
 			{
-				BaseGameEntity::Direction direction = ConvertDirectionKeyToHeroDirection(keyCode);
+				BaseGameEntity::Direction direction = ConvertDirectionKeyToHeroDirection(extra_info.key_code);
 				if (direction == object->getDirection() && direction != BaseGameEntity::Up && direction != BaseGameEntity::Down)
 				{
 					std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
@@ -163,23 +163,22 @@ bool HeroWalk::on_message(Hero *object, const Telegram &msg)
 {
 	if (MessageTypes::msg_KeyPressed == msg.msg_code)
 	{
-		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
-		if (IsJumpKey(keyCode))
+		MSKeyPressed extra_info = *reinterpret_cast<const MSKeyPressed *>(msg.extra_info);
+		if (IsJumpKey(extra_info.key_code))
 		{
 			object->getStateMachine()->change_state(HeroJump::instance());
 			return true;
 		}
-		else if (IsAttackKey(keyCode))
+		else if (IsAttackKey(extra_info.key_code))
 		{
 			object->getStateMachine()->change_state(HeroAttack::instance());
 			return true;
 		}
 	}
-
-	if (MessageTypes::msg_KeyReleased == msg.msg_code)
+	else if (MessageTypes::msg_KeyReleased == msg.msg_code)
 	{
-		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
-		if (IsDirectionKey(keyCode))
+		MSKeyReleased extra_info = *reinterpret_cast<const MSKeyReleased *>(msg.extra_info);
+		if (IsDirectionKey(extra_info.key_code))
 		{
 			object->getStateMachine()->change_state(HeroIdle::instance());
 			return true;
@@ -214,23 +213,22 @@ bool HeroRun::on_message(Hero *object, const Telegram &msg)
 {
 	if (MessageTypes::msg_KeyPressed == msg.msg_code)
 	{
-		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
-		if (IsJumpKey(keyCode))
+		MSKeyPressed extra_info = *reinterpret_cast<const MSKeyPressed *>(msg.extra_info);
+		if (IsJumpKey(extra_info.key_code))
 		{
 			object->getStateMachine()->change_state(HeroJump::instance());
 			return true;
 		}
-		else if (IsAttackKey(keyCode))
+		else if (IsAttackKey(extra_info.key_code))
 		{
 			object->getStateMachine()->change_state(HeroRuningAttack::instance());
 			return true;
 		}
 	}
-
-	if (MessageTypes::msg_KeyReleased == msg.msg_code)
+	else if (MessageTypes::msg_KeyReleased == msg.msg_code)
 	{
-		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
-		if (IsDirectionKey(keyCode))
+		MSKeyReleased extra_info = *reinterpret_cast<const MSKeyReleased *>(msg.extra_info);
+		if (IsDirectionKey(extra_info.key_code))
 		{
 			object->getStateMachine()->change_state(HeroIdle::instance());
 			return true;
@@ -301,8 +299,8 @@ bool HeroJump::on_message(Hero *object, const Telegram &msg)
 {
 	if (MessageTypes::msg_KeyPressed == msg.msg_code)
 	{
-		EventKeyboard::KeyCode keyCode = *reinterpret_cast<const EventKeyboard::KeyCode *>(msg.extra_info);
-		if (IsAttackKey(keyCode))
+		MSKeyPressed extra_info = *reinterpret_cast<const MSKeyPressed *>(msg.extra_info);
+		if (IsAttackKey(extra_info.key_code))
 		{
 			if (object->getPositionY() >= object->getStateMachine()->userdata().before_he_height + object->getMaxJumpHeight() / 2)
 			{
@@ -478,7 +476,7 @@ void HeroKnockout::execute(Hero *object)
 bool HeroKnockout::on_message(Hero *object, const Telegram &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_Hurt;
+	return msg.msg_code == msg_EntityHurt;
 }
 
 /******英雄起身状态******/
@@ -507,7 +505,7 @@ void HeroGetup::execute(Hero *object)
 bool HeroGetup::on_message(Hero *object, const Telegram &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_Hurt;
+	return msg.msg_code == msg_EntityHurt;
 }
 
 /******英雄全局状态******/
@@ -533,7 +531,7 @@ void HeroGlobal::execute(Hero *object)
 				Telegram msg;
 				msg.sender = object->getID();
 				msg.receiver = entity->getID();
-				msg.msg_code = msg_Hurt;
+				msg.msg_code = msg_EntityHurt;
 				MessageDispatcher::instance()->dispatchMessage(msg);
 			}
 			object->getStateMachine()->userdata().is_attacked = !targets.empty();
@@ -547,7 +545,7 @@ void HeroGlobal::execute(Hero *object)
 
 bool HeroGlobal::on_message(Hero *object, const Telegram &msg)
 {
-	if (msg.msg_code == msg_Hurt)
+	if (msg.msg_code == msg_EntityHurt)
 	{
 		object->getStateMachine()->change_state(HeroHurt::instance());
 		return true;

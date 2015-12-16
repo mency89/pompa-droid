@@ -1,38 +1,25 @@
 ﻿#ifndef __MESSAGETYPES_H__
 #define __MESSAGETYPES_H__
 
+#include "base/CCEventKeyboard.h"
+
 enum MessageTypes
 {
 	msg_KeyPressed = 1000,
 	msg_KeyReleased = 1001,
-	msg_Move = 2001,
-	msg_Hurt = 2002,
-	msg_Attack = 2003
+	msg_EntityMove = 2001,
+	msg_EntityHurt = 2002,
+	msg_EntityAttack = 2003
 };
 
 struct MSKeyPressed
 {
-
+	cocos2d::EventKeyboard::KeyCode key_code;
 };
 
 struct MSKeyReleased
 {
-
-};
-
-struct MSEntityMove
-{
-
-};
-
-struct MSEntityHurt
-{
-
-};
-
-struct MSEntityAttack
-{
-
+	cocos2d::EventKeyboard::KeyCode key_code;
 };
 
 #endif

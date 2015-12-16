@@ -86,9 +86,8 @@ void BossKnockout::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_knockout");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	Sequence *action = Sequence::create(animate, DelayTime::create(0.1f), nullptr);
-	action->setTag(ActionTags::boss_knockout);
-	object->runAction(action);
+	animate->setTag(ActionTags::boss_knockout);
+	object->runAction(animate);
 }
 
 void BossKnockout::exit(Boss *object)
@@ -107,7 +106,7 @@ void BossKnockout::execute(Boss *object)
 bool BossKnockout::on_message(Boss *object, const Telegram &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_Hurt;
+	return msg.msg_code == msg_EntityHurt;
 }
 
 /******Boss起身状态******/
@@ -137,7 +136,7 @@ void BossGetup::execute(Boss *object)
 bool BossGetup::on_message(Boss *object, const Telegram &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_Hurt;
+	return msg.msg_code == msg_EntityHurt;
 }
 
 /******Boss全局状态******/
@@ -156,7 +155,7 @@ void BossGlobal::execute(Boss *object)
 
 bool BossGlobal::on_message(Boss *object, const Telegram &msg)
 {
-	if (msg.msg_code == msg_Hurt)
+	if (msg.msg_code == msg_EntityHurt)
 	{
 		object->getStateMachine()->change_state(BossHurt::instance());
 		return true;

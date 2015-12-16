@@ -60,6 +60,11 @@ bool GameScene::init()
 	hero_->setPosition(VisibleRect::center());
 	addChild(hero_, -1);
 
+	// 创建Boss
+	BaseGameEntity *boss = entity_manger_->create(entity_boss);
+	boss->setPosition(VisibleRect::center() + Vec2(100, 0));
+	addChild(boss, -1);
+
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);
 	listener->onKeyReleased = CC_CALLBACK_2(GameScene::onKeyReleased, this);
@@ -108,19 +113,23 @@ void GameScene::onDraw(const Mat4 &transform, uint32_t flags)
 void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	Telegram msg;
+	MSKeyPressed extra_info;
+	extra_info.key_code = keyCode;
 	msg.receiver = hero_->getID();
 	msg.msg_code = MessageTypes::msg_KeyPressed;
-	msg.extra_info = &keyCode;
-	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
+	msg.extra_info = &extra_info;
+	msg.extra_info_size = sizeof(MSKeyPressed);
 	MessageDispatcher::instance()->dispatchMessage(msg);
 }
 
 void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	Telegram msg;
+	MSKeyReleased extra_info;
+	extra_info.key_code = keyCode;
 	msg.receiver = hero_->getID();
 	msg.msg_code = MessageTypes::msg_KeyReleased;
-	msg.extra_info = &keyCode;
-	msg.extra_info_size = sizeof(EventKeyboard::KeyCode);
+	msg.extra_info = &extra_info;
+	msg.extra_info_size = sizeof(MSKeyReleased);
 	MessageDispatcher::instance()->dispatchMessage(msg);
 }
