@@ -9,10 +9,12 @@
 template <>
 struct StateMachineData < Boss >
 {
+	int hurt_source;										// 伤害来源
 	int continuous_hurt;									// 连续受击次数
 	std::chrono::system_clock::time_point last_hurt_time;	// 上次受击时间
 	StateMachineData()
-		: continuous_hurt(0)
+		: hurt_source(0)
+		, continuous_hurt(0)
 	{
 	}
 };

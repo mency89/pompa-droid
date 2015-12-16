@@ -458,15 +458,6 @@ void HeroKnockout::exit(Hero *object)
 
 void HeroKnockout::execute(Hero *object)
 {
-	if (object->isFlippedX())
-	{
-		object->setPositionX(object->getPositionX() + object->getRunSpeed());
-	}
-	else
-	{
-		object->setPositionX(object->getPositionX() - object->getRunSpeed());
-	}
-
 	if (object->getActionByTag(ActionTags::hero_knockout) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroGetup::instance());

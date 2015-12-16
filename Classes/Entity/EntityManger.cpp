@@ -35,6 +35,7 @@ BaseGameEntity* EntityManger::create(EntityType type)
 	if (entity != nullptr)
 	{
 		entitys_.insert(std::make_pair(entity->getID(), entity));
+		entity->setEntityManger(this);
 	}
 
 	return entity;

@@ -8,9 +8,12 @@
 
 class b2Body;
 class b2World;
+class EntityManger;
 
 class BaseGameEntity : public cocos2d::Sprite
 {
+	friend class EntityManger;
+
 public:
 	enum Direction
 	{
@@ -41,6 +44,11 @@ public:
 	 * 获取刚体
 	 */
 	b2Body* getBody();
+
+	/**
+	 * 获取管理器
+	 */
+	EntityManger* getEntityManger();
 
 	/**
 	 * 销毁刚体
@@ -99,6 +107,11 @@ public:
 	Direction getDirection() const;
 
 	/**
+	 * 获取面对的方向
+	 */
+	Direction getLookDirection() const;
+
+	/**
 	 * 设置方向
 	 */
 	void setDirection(Direction direction);
@@ -130,8 +143,13 @@ protected:
 	void updateBodyPosition();
 
 private:
+	// 设置管理器
+	void setEntityManger(EntityManger *manager);
+
+private:
 	int							entity_id_;
 	std::shared_ptr<b2World>	world_;
+	EntityManger*				manager_;
 	b2Body*						collision_body_;
 	float						run_speed_;
 	float						walk_speed_;
@@ -139,7 +157,6 @@ private:
 	float						jump_height_;
 	Direction					direction_;
 	int							hit_point_;
-	std::string					sprite_frame_name_;
 	static int					s_next_entity_id_;
 };
 

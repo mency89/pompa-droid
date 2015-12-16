@@ -18,6 +18,7 @@ BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	, walk_speed_(0.0f)
 	, jump_force_(0.0f)
 	, jump_height_(0.0f)
+	, manager_(nullptr)
 	, collision_body_(nullptr)
 	, entity_id_(++s_next_entity_id_)
 {
@@ -110,6 +111,18 @@ void BaseGameEntity::destroyBody()
 	}
 }
 
+// 获取管理器
+EntityManger* BaseGameEntity::getEntityManger()
+{
+	return manager_;
+}
+
+// 设置管理器
+void BaseGameEntity::setEntityManger(EntityManger *manager)
+{
+	manager_ = manager;
+}
+
 // 移动实体
 void BaseGameEntity::moveEntity(float speed)
 {
@@ -184,6 +197,13 @@ BaseGameEntity::Direction BaseGameEntity::getDirection() const
 {
 	return direction_;
 }
+
+// 获取面对的方向
+BaseGameEntity::Direction BaseGameEntity::getLookDirection() const
+{
+	return isFlippedX() ? BaseGameEntity::Direction::Left : BaseGameEntity::Direction::Right;
+}
+
 // 设置方向
 void BaseGameEntity::setDirection(Direction direction)
 {
@@ -235,6 +255,7 @@ std::vector<BaseGameEntity*> BaseGameEntity::getHitTargets() const
 	return targets;
 }
 
+/** 父类函数重写 **/
 void BaseGameEntity::setPositionX(float x)
 {
 	Sprite::setPositionX(x);

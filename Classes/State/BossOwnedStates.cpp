@@ -3,6 +3,7 @@
 #include "ActionTags.h"
 #include "MeesageTypes.h"
 #include "AnimationManger.h"
+#include "Entity/EntityManger.h"
 using namespace cocos2d;
 
 
@@ -99,6 +100,20 @@ void BossKnockout::execute(Boss *object)
 {
 	if (object->getActionByTag(ActionTags::boss_knockout) == nullptr)
 	{
+		// 面向对你造成伤害者
+		int entity_id = object->getStateMachine()->userdata().hurt_source;
+		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
+		if (entity != nullptr)
+		{
+			if (entity->getPositionX() < object->getPositionX())
+			{
+				object->setDirection(BaseGameEntity::Left);
+			}
+			else
+			{
+				object->setDirection(BaseGameEntity::Right);
+			}
+		}
 		object->getStateMachine()->change_state(BossGetup::instance());
 	}
 }
@@ -157,6 +172,7 @@ bool BossGlobal::on_message(Boss *object, const Telegram &msg)
 {
 	if (msg.msg_code == msg_EntityHurt)
 	{
+		object->getStateMachine()->userdata().hurt_source = msg.sender;
 		object->getStateMachine()->change_state(BossHurt::instance());
 		return true;
 	}
