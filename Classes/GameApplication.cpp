@@ -1,5 +1,4 @@
 ﻿#include "GameApplication.h"
-
 #include "MessageDispatcher.h"
 using namespace cocos2d;
 

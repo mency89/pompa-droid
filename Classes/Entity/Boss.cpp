@@ -1,4 +1,5 @@
 ﻿#include "Boss.h"
+#include "ShapeCategory.h"
 #include "State/BossOwnedStates.h"
 
 
@@ -36,6 +37,11 @@ bool Boss::init()
 void Boss::update()
 {
 	state_machine_->update();
+}
+
+int Boss::weaponCategoryBits() const
+{
+	return ShapeCategory::shape_enemy_weapon;
 }
 
 void Boss::handleMenssage(const Telegram &msg)

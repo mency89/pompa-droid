@@ -17,6 +17,8 @@ public:
 
 	virtual void update() override;
 
+	virtual int weaponCategoryBits() const override;
+
 	virtual void handleMenssage(const Telegram &msg) override;
 
 public:

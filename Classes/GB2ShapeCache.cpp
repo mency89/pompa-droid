@@ -28,27 +28,9 @@ struct FixtureData
 	std::string id;
 	FixtureType type;
 
-	union
-	{
-		struct
-		{
-			float radius;
-			b2Vec2 position;
-		};
-
-		struct
-		{
-			std::vector<Vertexs> polygons;
-		};
-	};
-
-	~FixtureData()
-	{
-		if (FixtureType::POLYGON != type)
-		{
-			memset(&polygons, 0, sizeof(std::vector<Vertexs>));
-		}
-	}
+	float radius;
+	b2Vec2 position;
+	std::vector<Vertexs> polygons;
 };
 
 struct BodyDef
@@ -229,6 +211,10 @@ bool GB2ShapeCache::addFixturesToBody(b2Body *body, const std::string &shape, bo
 				b2CircleShape circle;
 				circle.m_p = fixture_item.position;
 				circle.m_radius = fixture_item.radius;
+				if (flipped)
+				{
+					circle.m_p.x = -circle.m_p.x;
+				}
 				fixture.shape = &circle;
 				body->CreateFixture(&fixture);
 			}

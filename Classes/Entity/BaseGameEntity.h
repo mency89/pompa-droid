@@ -8,6 +8,7 @@
 
 class b2Body;
 class b2World;
+class b2CircleShape;
 class EntityManger;
 
 class BaseGameEntity : public cocos2d::Sprite
@@ -23,6 +24,16 @@ public:
 		Right
 	};
 
+	struct Collision
+	{
+		BaseGameEntity* entity;
+		cocos2d::Vec2 collision_pos;
+		Collision()
+			: entity(nullptr)
+		{
+		}
+	};
+
 public:
 	BaseGameEntity(std::shared_ptr<b2World> world);
 
@@ -31,6 +42,8 @@ public:
 	virtual bool init() override;
 
 	virtual void update();
+
+	virtual int weaponCategoryBits() const = 0;
 
 	virtual void handleMenssage(const Telegram &msg);
 
@@ -119,7 +132,7 @@ public:
 	/**
 	 * 获取命中的目标
 	 */
-	std::vector<BaseGameEntity*> getHitTargets() const;
+	std::vector<Collision> getHitTargets() const;
 
 	/**
 	 * 更新碰撞体
@@ -143,8 +156,15 @@ protected:
 	void updateBodyPosition();
 
 private:
-	// 设置管理器
+	/**
+	 * 设置管理器
+	 */
 	void setEntityManger(EntityManger *manager);
+	
+	/**
+	 * 获取碰撞位置
+	 */
+	cocos2d::Vec2 getCollisionPosition(b2CircleShape *source, b2CircleShape *target) const;
 
 private:
 	int							entity_id_;

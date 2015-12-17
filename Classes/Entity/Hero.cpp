@@ -1,4 +1,5 @@
 ﻿#include "Hero.h"
+#include "ShapeCategory.h"
 #include "State/HeroOwnedStates.h"
 
 
@@ -35,6 +36,11 @@ bool Hero::init()
 void Hero::update()
 {
 	state_machine_->update();
+}
+
+int Hero::weaponCategoryBits() const
+{
+	return ShapeCategory::shape_hero_weapon;
 }
 
 void Hero::handleMenssage(const Telegram &msg)

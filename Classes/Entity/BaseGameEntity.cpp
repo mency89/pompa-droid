@@ -4,7 +4,6 @@
 #include <Box2D/Box2D.h>
 #include "Helper.h"
 #include "GB2ShapeCache.h"
-#include "ShapeCategory.h"
 #include "MessageDispatcher.h"
 using namespace cocos2d;
 
@@ -85,6 +84,7 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 	}
 }
 
+// 更新
 void BaseGameEntity::update()
 {
 }
@@ -228,10 +228,22 @@ void BaseGameEntity::updateBodyPosition()
 	}
 }
 
-// 获取命中的目标
-std::vector<BaseGameEntity*> BaseGameEntity::getHitTargets() const
+// 获取碰撞位置
+Vec2 BaseGameEntity::getCollisionPosition(b2CircleShape *source, b2CircleShape *target) const
 {
-	std::vector<BaseGameEntity*> targets;
+	b2Vec2 point = target->m_p - source->m_p;
+	point.Normalize();
+	point.x = source->m_p.x + point.x * source->m_radius;
+	point.y = source->m_p.y + point.y * source->m_radius;
+	point += collision_body_->GetPosition();
+	const float PTMRatio = GB2ShapeCache::instance()->getPTMRatio();
+	return Vec2(point.x * PTMRatio, point.y * PTMRatio);
+}
+
+// 获取命中的目标
+std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
+{
+	std::vector<Collision> targets;
 	if (collision_body_ != nullptr)
 	{
 		b2ContactEdge *contactEdge = collision_body_->GetContactList();
@@ -239,15 +251,27 @@ std::vector<BaseGameEntity*> BaseGameEntity::getHitTargets() const
 		{
 			b2Fixture *fixtureA = contactEdge->contact->GetFixtureA();
 			b2Fixture *fixtureB = contactEdge->contact->GetFixtureB();
-			if (fixtureA->GetBody() == collision_body_ &&
-				fixtureA->GetFilterData().categoryBits == ShapeCategory::shape_hero_weapon)
+			if (fixtureA->GetShape()->GetType() == b2Shape::e_circle &&
+				fixtureB->GetShape()->GetType() == b2Shape::e_circle)
 			{
-				targets.push_back(reinterpret_cast<BaseGameEntity*>(fixtureB->GetBody()->GetUserData()));
-			}
-			else if (fixtureB->GetBody() == collision_body_ &&
-					 fixtureB->GetFilterData().categoryBits == ShapeCategory::shape_hero_weapon)
-			{
-				targets.push_back(reinterpret_cast<BaseGameEntity*>(fixtureA->GetBody()->GetUserData()));
+				if (fixtureA->GetBody() == collision_body_ &&
+					fixtureA->GetFilterData().categoryBits == weaponCategoryBits())
+				{
+					b2CircleShape *shapeA = dynamic_cast<b2CircleShape *>(fixtureA->GetShape());
+					b2CircleShape *shapeB = dynamic_cast<b2CircleShape *>(fixtureB->GetShape());
+					targets.resize(targets.size() + 1);
+					targets.back().collision_pos = getCollisionPosition(shapeA, shapeB);
+					targets.back().entity = reinterpret_cast<BaseGameEntity*>(fixtureB->GetBody()->GetUserData());
+				}
+				else if (fixtureB->GetBody() == collision_body_ &&
+						 fixtureB->GetFilterData().categoryBits == weaponCategoryBits())
+				{
+					b2CircleShape *shapeA = dynamic_cast<b2CircleShape *>(fixtureA->GetShape());
+					b2CircleShape *shapeB = dynamic_cast<b2CircleShape *>(fixtureB->GetShape());
+					targets.resize(targets.size() + 1);
+					targets.back().collision_pos = getCollisionPosition(shapeB, shapeA);
+					targets.back().entity = reinterpret_cast<BaseGameEntity*>(fixtureA->GetBody()->GetUserData());
+				}
 			}
 			contactEdge = contactEdge->next;
 		}

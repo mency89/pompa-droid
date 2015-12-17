@@ -15,29 +15,6 @@
 using namespace cocos2d;
 
 
-class  MyContactListener : public  b2ContactListener
-{
-public:
-	void  BeginContact(b2Contact*  contact)
-	{
-
-	}
-	void  EndContact(b2Contact*  contact)
-	{
-
-	}
-
-	void  PreSolve(b2Contact*  contact, const b2Manifold*  oldManifold)
-	{
-
-	}
-
-	void  PostSolve(b2Contact*  contact, const b2ContactImpulse*  impulse)
-	{
-
-	}
-};
-
 GameScene::GameScene()
 	: hero_(nullptr)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -60,6 +37,8 @@ Scene* GameScene::createScene()
 	return scene;
 }
 
+#include "GameApplication.h"
+
 bool GameScene::init()
 {
 	if (!Layer::init())
@@ -74,20 +53,20 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	world_->SetContactListener(new MyContactListener);
 	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
-	// 创建玩家
 	entity_manger_.reset(new EntityManger(world_));
-	hero_ = entity_manger_->create(entity_hero);
-	hero_->setPosition(VisibleRect::center());
-	addChild(hero_, -1);
 
 	// 创建Boss
 	BaseGameEntity *boss = entity_manger_->create(entity_boss);
 	boss->setPosition(VisibleRect::center() + Vec2(100, 0));
 	addChild(boss, -1);
+
+	// 创建玩家
+	hero_ = entity_manger_->create(entity_hero);
+	hero_->setPosition(VisibleRect::center());
+	addChild(hero_, -1);
 
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);
