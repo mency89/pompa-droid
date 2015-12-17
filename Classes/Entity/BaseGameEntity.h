@@ -176,7 +176,7 @@ private:
 	/**
 	 * 获取碰撞位置
 	 */
-	cocos2d::Vec2 getCollisionPosition(b2CircleShape *source, b2CircleShape *target) const;
+	cocos2d::Vec2 getCollisionPosition(b2CircleShape *source, b2CircleShape *target, b2Body *target_body) const;
 
 private:
 	int							entity_id_;

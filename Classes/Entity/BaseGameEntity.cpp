@@ -245,15 +245,21 @@ void BaseGameEntity::updateBodyPosition()
 }
 
 // 获取碰撞位置
-Vec2 BaseGameEntity::getCollisionPosition(b2CircleShape *source, b2CircleShape *target) const
+Vec2 BaseGameEntity::getCollisionPosition(b2CircleShape *source, b2CircleShape *target, b2Body *target_body) const
 {
-	b2Vec2 point = target->m_p - source->m_p;
-	point.Normalize();
-	point.x = source->m_p.x + point.x * source->m_radius;
-	point.y = source->m_p.y + point.y * source->m_radius;
-	point += collision_body_->GetPosition();
 	const float PTMRatio = GB2ShapeCache::instance()->getPTMRatio();
-	return Vec2(point.x * PTMRatio, point.y * PTMRatio);
+
+	// 转换世界坐标
+	b2Vec2 source_pos = collision_body_->GetPosition() + source->m_p;
+	b2Vec2 target_pos = target_body->GetPosition() + target->m_p;
+
+	// 计算碰撞位置
+	b2Vec2 collision = target_pos - source_pos;
+	collision.Normalize();
+	collision.x = collision.x * source->m_radius;
+	collision.y = collision.y * source->m_radius;
+	collision += source_pos;
+	return Vec2(collision.x * PTMRatio, collision.y * PTMRatio);
 }
 
 // 获取命中的目标
@@ -276,7 +282,7 @@ std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
 					b2CircleShape *shapeA = dynamic_cast<b2CircleShape *>(fixtureA->GetShape());
 					b2CircleShape *shapeB = dynamic_cast<b2CircleShape *>(fixtureB->GetShape());
 					targets.resize(targets.size() + 1);
-					targets.back().collision_pos = getCollisionPosition(shapeA, shapeB);
+					targets.back().collision_pos = getCollisionPosition(shapeA, shapeB, fixtureB->GetBody());
 					targets.back().entity = reinterpret_cast<BaseGameEntity*>(fixtureB->GetBody()->GetUserData());
 				}
 				else if (fixtureB->GetBody() == collision_body_ &&
@@ -285,7 +291,7 @@ std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
 					b2CircleShape *shapeA = dynamic_cast<b2CircleShape *>(fixtureA->GetShape());
 					b2CircleShape *shapeB = dynamic_cast<b2CircleShape *>(fixtureB->GetShape());
 					targets.resize(targets.size() + 1);
-					targets.back().collision_pos = getCollisionPosition(shapeB, shapeA);
+					targets.back().collision_pos = getCollisionPosition(shapeB, shapeA, fixtureA->GetBody());
 					targets.back().entity = reinterpret_cast<BaseGameEntity*>(fixtureA->GetBody()->GetUserData());
 				}
 			}
