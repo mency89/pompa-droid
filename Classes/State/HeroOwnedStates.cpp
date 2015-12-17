@@ -4,6 +4,7 @@
 #include "MeesageTypes.h"
 #include "AnimationManger.h"
 #include "MessageDispatcher.h"
+#include "Entity/EntityManger.h"
 using namespace cocos2d;
 
 namespace
@@ -489,6 +490,20 @@ void HeroGetup::execute(Hero *object)
 {
 	if (object->getActionByTag(ActionTags::hero_getup) == nullptr)
 	{
+		// 面向对你造成伤害者
+		int entity_id = object->getStateMachine()->userdata().hurt_source;
+		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
+		if (entity != nullptr)
+		{
+			if (entity->getPositionX() < object->getPositionX())
+			{
+				object->setDirection(BaseGameEntity::Left);
+			}
+			else
+			{
+				object->setDirection(BaseGameEntity::Right);
+			}
+		}
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
 }
@@ -524,6 +539,12 @@ void HeroGlobal::execute(Hero *object)
 				msg.sender = object->getID();
 				msg.receiver = collision.entity->getID();
 				msg.msg_code = msg_EntityHurt;
+
+				MSEntityHurt extra_info;
+				extra_info.pos = collision.collision_pos;
+				msg.extra_info = &extra_info;
+				msg.extra_info_size = sizeof(MSEntityHurt);
+
 				MessageDispatcher::instance()->dispatchMessage(msg);
 				object->getStateMachine()->userdata().hit_targets.insert(collision.entity->getID());
 			}	
@@ -539,6 +560,9 @@ bool HeroGlobal::on_message(Hero *object, const Telegram &msg)
 {
 	if (msg.msg_code == msg_EntityHurt)
 	{
+		MSEntityHurt extra_info = *reinterpret_cast<const MSEntityHurt*>(msg.extra_info);
+		object->getStateMachine()->userdata().hurt_source = msg.sender;
+		object->onHurt(extra_info.pos);
 		object->getStateMachine()->change_state(HeroHurt::instance());
 		return true;
 	}

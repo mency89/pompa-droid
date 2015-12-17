@@ -12,11 +12,13 @@ struct StateMachineData < Hero >
 {
 	bool jump_up;							// 是否处于上跳状态
 	float before_he_height;					// 跳跃前y值
+	int hurt_source;						// 伤害来源
 	int continuous_hurt;					// 被连续攻击次数
 	std::set<int> hit_targets;				// 击中的目标集合
 	std::chrono::system_clock::time_point last_direction_key_pressed_time;
 	StateMachineData()
 		: jump_up(false)
+		, hurt_source(0)
 		, continuous_hurt(0)
 		, before_he_height(0.0f)
 	{

@@ -3,6 +3,7 @@
 #include "ActionTags.h"
 #include "MeesageTypes.h"
 #include "AnimationManger.h"
+#include "MessageDispatcher.h"
 #include "Entity/EntityManger.h"
 using namespace cocos2d;
 
@@ -202,7 +203,9 @@ bool BossGlobal::on_message(Boss *object, const Telegram &msg)
 {
 	if (msg.msg_code == msg_EntityHurt)
 	{
+		MSEntityHurt extra_info = *reinterpret_cast<const MSEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
+		object->onHurt(extra_info.pos);
 		object->getStateMachine()->change_state(BossHurt::instance());
 		return true;
 	}

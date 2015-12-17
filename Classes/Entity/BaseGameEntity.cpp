@@ -4,6 +4,7 @@
 #include <Box2D/Box2D.h>
 #include "Helper.h"
 #include "GB2ShapeCache.h"
+#include "AnimationManger.h"
 #include "MessageDispatcher.h"
 using namespace cocos2d;
 
@@ -51,6 +52,21 @@ bool BaseGameEntity::init()
 	collision_body_ = world_->CreateBody(&def);
 
 	return true;
+}
+
+// 受击
+void BaseGameEntity::onHurt(const cocos2d::Vec2 &pos)
+{
+	auto player = Sprite::create();
+	player->setPosition(convertToNodeSpace(pos));
+	addChild(player);
+
+	Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
+	Animate *animate = Animate::create(animation);
+	player->runAction(Sequence::create(animate, CallFunc::create([=]()
+	{
+		player->removeFromParentAndCleanup(true);
+	}), nullptr));
 }
 
 // 处理消息

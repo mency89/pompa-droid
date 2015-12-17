@@ -43,8 +43,20 @@ public:
 
 	virtual void update();
 
+	/**
+	 * 武器位标识
+	 */
 	virtual int weaponCategoryBits() const = 0;
 
+	/**
+	 * 受击
+	 * @param cocos2d::Vec2 受击位置
+	 */
+	virtual void onHurt(const cocos2d::Vec2 &pos);
+
+	/**
+	 * 处理消息
+	 */
 	virtual void handleMenssage(const Telegram &msg);
 
 public:
