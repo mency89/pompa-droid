@@ -4,6 +4,7 @@
 #include "VisibleRect.h"
 #include "GLES-Render.h"
 #include "MeesageTypes.h"
+#include "GameApplication.h"
 #include "MessageDispatcher.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -26,7 +27,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-
+	GameApplication::instance()->setGameScene(nullptr);
 }
 
 Scene* GameScene::createScene()
@@ -37,8 +38,6 @@ Scene* GameScene::createScene()
 	return scene;
 }
 
-#include "GameApplication.h"
-
 bool GameScene::init()
 {
 	if (!Layer::init())
@@ -46,7 +45,7 @@ bool GameScene::init()
 		return false;
 	}
 
-	// 创建物理事件
+	// 创建物理世界
 	world_ = std::make_shared<b2World>(b2Vec2(0, 0));
 	world_->SetContinuousPhysics(true);
 	world_->SetAllowSleeping(false);
@@ -55,6 +54,10 @@ bool GameScene::init()
 	world_->SetDebugDraw(debug_draw_.get());
 	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
+
+	// 注册游戏场景
+	GameApplication::instance()->setGameScene(this);
+
 
 	entity_manger_.reset(new EntityManger(world_));
 

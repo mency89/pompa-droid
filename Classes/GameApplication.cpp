@@ -4,6 +4,7 @@ using namespace cocos2d;
 
 
 GameApplication::GameApplication()
+	: scene_(nullptr)
 {
 	init();
 	onEnter();
@@ -24,4 +25,14 @@ bool GameApplication::init()
 void GameApplication::update(float delta)
 {
 	MessageDispatcher::instance()->update(delta);
+}
+
+GameScene* GameApplication::getGameScene()
+{
+	return scene_;
+}
+
+void GameApplication::setGameScene(GameScene *scene)
+{
+	scene_ = scene;
 }
