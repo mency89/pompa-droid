@@ -7,7 +7,7 @@
 #include "cocos2d.h"
 #include "Singleton.h"
 
-class TPManager : public Singleton < TPManager >
+class TexturePacker : public Singleton < TexturePacker >
 {
 	typedef std::function<void(size_t idx, size_t total)> asyncLoadCallback;
 
@@ -17,7 +17,7 @@ class TPManager : public Singleton < TPManager >
 		std::vector<std::string>	filelist;
 	};
 
-	SINGLETON(TPManager);
+	SINGLETON(TexturePacker);
 
 public:
 	/**

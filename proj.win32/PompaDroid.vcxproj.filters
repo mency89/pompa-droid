@@ -39,9 +39,6 @@
     <ClCompile Include="..\Classes\AnimationManger.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TPManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp">
       <Filter>src\Entity</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     <ClCompile Include="..\Classes\Entity\EntityManger.cpp">
       <Filter>src\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\TexturePacker.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -102,9 +102,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\AnimationManger.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\TPManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\BaseGameEntity.h">
@@ -157,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\EntityManger.h">
       <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TexturePacker.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

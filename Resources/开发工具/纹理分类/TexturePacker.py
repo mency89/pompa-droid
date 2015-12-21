@@ -16,7 +16,7 @@ def main():
                     json_map[key] = filearray
                     filearray.append("".join((key, '/', filename)))
     if len(json_map) > 0:
-        file_handle = open("texture_packer.json", "w")
+        file_handle = open("TexturePacker.json", "w")
         file_handle.write(json.dumps(json_map))
 
 if __name__ == "__main__":

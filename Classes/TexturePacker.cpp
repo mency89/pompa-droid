@@ -1,4 +1,4 @@
-﻿#include "TPManager.h"
+﻿#include "TexturePacker.h"
 
 #include <sstream>
 #include "Helper.h"
@@ -6,19 +6,19 @@
 using namespace cocos2d;
 
 
-TPManager::TPManager()
+TexturePacker::TexturePacker()
 	: working_(false)
 {
-	loadCategoryConfigFile("config/texture_packer.json");
+	loadCategoryConfigFile("config/TexturePacker.json");
 }
 
-TPManager::~TPManager()
+TexturePacker::~TexturePacker()
 {
 
 }
 
 // 读取分类配置
-void TPManager::loadCategoryConfigFile(const std::string &file_path)
+void TexturePacker::loadCategoryConfigFile(const std::string &file_path)
 {
 	Data data = FileUtils::getInstance()->getDataFromFile(file_path);
 	if (!data.isNull())
@@ -43,7 +43,7 @@ void TPManager::loadCategoryConfigFile(const std::string &file_path)
 }
 
 // 获取目录下文件
-void TPManager::getListDirFiles(const std::string category, std::vector<std::string> &out)
+void TexturePacker::getListDirFiles(const std::string category, std::vector<std::string> &out)
 {
 	std::set<std::string> files;
 	for (auto &pair : category_)
@@ -59,7 +59,7 @@ void TPManager::getListDirFiles(const std::string category, std::vector<std::str
 }
 
 // 加载
-void TPManager::loadCategory(const std::string &category)
+void TexturePacker::loadCategory(const std::string &category)
 {
 	std::vector<std::string> files;
 	getListDirFiles(category, files);
@@ -81,7 +81,7 @@ void TPManager::loadCategory(const std::string &category)
 }
 
 // 加载
-void TPManager::loadCategory(const std::vector<std::string> &category)
+void TexturePacker::loadCategory(const std::vector<std::string> &category)
 {
 	std::vector<std::string> files;
 
@@ -107,7 +107,7 @@ void TPManager::loadCategory(const std::vector<std::string> &category)
 }
 
 // 异步加载
-void TPManager::loadCategoryAsync(const std::string &category, const asyncLoadCallback &callback)
+void TexturePacker::loadCategoryAsync(const std::string &category, const asyncLoadCallback &callback)
 {
 	Task task;
 	task.callback = callback;
@@ -120,7 +120,7 @@ void TPManager::loadCategoryAsync(const std::string &category, const asyncLoadCa
 }
 
 // 异步加载
-void TPManager::loadCategoryAsync(const std::vector<std::string> &category, const asyncLoadCallback &callback)
+void TexturePacker::loadCategoryAsync(const std::vector<std::string> &category, const asyncLoadCallback &callback)
 {
 	Task task;
 	task.callback = callback;
@@ -138,7 +138,7 @@ void TPManager::loadCategoryAsync(const std::vector<std::string> &category, cons
 }
 
 // 卸载
-void TPManager::unloadCategory(const std::string &category)
+void TexturePacker::unloadCategory(const std::string &category)
 {
 	std::vector<std::string> files;
 	getListDirFiles(category, files);
@@ -151,7 +151,7 @@ void TPManager::unloadCategory(const std::string &category)
 }
 
 // 卸载
-void TPManager::unloadCategory(const std::vector<std::string> &category)
+void TexturePacker::unloadCategory(const std::vector<std::string> &category)
 {
 	std::vector<std::string> files;
 
@@ -168,7 +168,7 @@ void TPManager::unloadCategory(const std::vector<std::string> &category)
 }
 
 // 加载图片
-void TPManager::loadImage()
+void TexturePacker::loadImage()
 {
 	if (!working_ && !task_queue_.empty())
 	{

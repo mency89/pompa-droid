@@ -4,7 +4,7 @@ import os
 import sys
 import json
 
-def animation_grouping(): # 动画分组
+def animationGrouping(): # 动画分组
     dictionary = {}
     for filename in os.listdir(os.curdir):
         result = re.match("(\w+)_(\d{2}).png", filename)
@@ -22,9 +22,9 @@ def animation_grouping(): # 动画分组
     return dictionary
 
 def main():
-    dictionary = animation_grouping()
+    dictionary = animationGrouping()
     json_string = json.dumps(dictionary)
-    with open("animation_group.json", "w") as handle:
+    with open("Animation.json", "w") as handle:
         handle.write(json_string)
         handle.close()
 

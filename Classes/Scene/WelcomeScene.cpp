@@ -1,7 +1,7 @@
 ﻿#include "WelcomeScene.h"
 
 #include "GameScene.h"
-#include "TPManager.h"
+#include "TexturePacker.h"
 #include "VisibleRect.h"
 #include "GB2ShapeCache.h"
 #include "AnimationManger.h"
@@ -47,10 +47,10 @@ bool WelcomeScene::init()
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	TPManager::instance()->loadCategory("images");
+	TexturePacker::instance()->loadCategory("images");
 	GB2ShapeCache::instance()->addShapesWithFile("shapes/body.plist");
 	GB2ShapeCache::instance()->addShapesWithFile("shapes/weapon.plist");
-	AnimationManger::instance()->addAnimationWithFile("config/animation_group.json");
+	AnimationManger::instance()->addAnimationWithFile("config/Animation.json");
     
     return true;
 }

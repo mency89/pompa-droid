@@ -160,7 +160,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Singleton.cpp" />
     <ClCompile Include="..\Classes\State\BossOwnedStates.cpp" />
     <ClCompile Include="..\Classes\State\HeroOwnedStates.cpp" />
-    <ClCompile Include="..\Classes\TPManager.cpp" />
+    <ClCompile Include="..\Classes\TexturePacker.cpp" />
     <ClCompile Include="..\Classes\VisibleRect.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -188,7 +188,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\State\State.h" />
     <ClInclude Include="..\Classes\State\StateMachine.h" />
     <ClInclude Include="..\Classes\Telegram.h" />
-    <ClInclude Include="..\Classes\TPManager.h" />
+    <ClInclude Include="..\Classes\TexturePacker.h" />
     <ClInclude Include="..\Classes\VisibleRect.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
