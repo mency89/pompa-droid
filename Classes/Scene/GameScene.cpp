@@ -58,13 +58,12 @@ bool GameScene::init()
 	// 注册游戏场景
 	GameApplication::instance()->setGameScene(this);
 
-
 	entity_manger_.reset(new EntityManger(world_));
 
 	// 创建Boss
-	BaseGameEntity *boss = entity_manger_->create(entity_boss);
+	/*BaseGameEntity *boss = entity_manger_->create(entity_boss);
 	boss->setPosition(VisibleRect::center() + Vec2(100, 0));
-	addChild(boss, -1);
+	addChild(boss, -1);*/
 
 	// 创建玩家
 	hero_ = entity_manger_->create(entity_hero);

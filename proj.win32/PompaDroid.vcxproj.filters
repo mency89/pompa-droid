@@ -78,6 +78,9 @@
     <ClCompile Include="..\Classes\TexturePacker.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Scene\LevelLayer.cpp">
+      <Filter>src\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\TexturePacker.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\LevelLayer.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
