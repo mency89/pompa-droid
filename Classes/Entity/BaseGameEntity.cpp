@@ -237,10 +237,11 @@ void BaseGameEntity::setDirection(Direction direction)
 // 更新刚体位置
 void BaseGameEntity::updateBodyPosition()
 {
-	if (collision_body_ != nullptr)
+	if (collision_body_ != nullptr && getParent() != nullptr)
 	{
 		const float PTMRatio = GB2ShapeCache::instance()->getPTMRatio();
-		collision_body_->SetTransform(b2Vec2(getPositionX() / PTMRatio, getPositionY() / PTMRatio), collision_body_->GetAngle());
+		Vec2 world_pos = getParent()->convertToWorldSpace(getPosition());
+		collision_body_->SetTransform(b2Vec2(world_pos.x / PTMRatio, world_pos.y / PTMRatio), collision_body_->GetAngle());
 	}
 }
 
