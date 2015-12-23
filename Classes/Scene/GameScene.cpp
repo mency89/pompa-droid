@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 
 #include <Box2D/Box2D.h>
+#include "LevelLayer.h"
 #include "VisibleRect.h"
 #include "GLES-Render.h"
 #include "MeesageTypes.h"
@@ -52,24 +53,24 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
+	debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
+
+	// 创建关卡
+	auto layer = LevelLayer::create("level/map_level1.tmx");
+	addChild(layer, -1);
+
+	// 创建玩家
+	entity_manger_.reset(new EntityManger(world_));
+	hero_ = entity_manger_->create(entity_hero);
+	hero_->setPosition(VisibleRect::center());
+	addChild(hero_, -1);
+	layer->setFollowTarget(hero_);
 
 	// 注册游戏场景
 	GameApplication::instance()->setGameScene(this);
 
-	entity_manger_.reset(new EntityManger(world_));
-
-	// 创建Boss
-	/*BaseGameEntity *boss = entity_manger_->create(entity_boss);
-	boss->setPosition(VisibleRect::center() + Vec2(100, 0));
-	addChild(boss, -1);*/
-
-	// 创建玩家
-	hero_ = entity_manger_->create(entity_hero);
-	hero_->setPosition(VisibleRect::center());
-	addChild(hero_, -1);
-
+	// 注册触摸事件
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScene::onKeyPressed, this);
 	listener->onKeyReleased = CC_CALLBACK_2(GameScene::onKeyReleased, this);

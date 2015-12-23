@@ -39,6 +39,8 @@ bool LevelLayer::init()
 	tmx_layer_ = TMXTiledMap::create(current_level_);
 	addChild(tmx_layer_);
 
+	scheduleUpdate();
+
 	return true;
 }
 
@@ -46,10 +48,10 @@ void LevelLayer::update(float delta)
 {
 	if (follow_target_ != nullptr)
 	{
-		float localx = follow_target_->getPositionX();
+		float localx = tmx_layer_->getPositionX() + follow_target_->getPositionX();
 		if (localx < inner_stage_x_)
 		{
-			tmx_layer_->setPositionX(inner_stage_x_ - localx);
+			tmx_layer_->setPositionX(inner_stage_x_ - follow_target_->getPositionX());
 			if (tmx_layer_->getPositionX() > 0)
 			{
 				tmx_layer_->setPositionX(0);
@@ -57,8 +59,8 @@ void LevelLayer::update(float delta)
 		}
 		else if (localx > inner_stage_y_)
 		{
-			tmx_layer_->setPositionX(inner_stage_y_ - localx);
-			if (tmx_layer_->getPositionX() > 0)
+			tmx_layer_->setPositionX(inner_stage_y_ - follow_target_->getPositionX());
+			if (tmx_layer_->getPositionX() < Director::getInstance()->getWinSize().width - tmx_layer_->getContentSize().width)
 			{
 				tmx_layer_->setPositionX(0);
 			}
