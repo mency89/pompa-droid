@@ -3,11 +3,9 @@
 using namespace cocos2d;
 
 LevelLayer::LevelLayer(const std::string &level_name)
-	: current_level_(level_name)
-	, tmx_layer_(nullptr)
-	, follow_target_(nullptr)
-	, inner_stage_x_(VisibleRect::left().x + 100)
-	, inner_stage_y_(VisibleRect::right().x - 100)
+	: follow_target_(nullptr)
+	, innerstage_left_(VisibleRect::left().x + VisibleRect::getVisibleRect().size.width / 5.0f)
+	, inner_stage_right_(VisibleRect::right().x - VisibleRect::getVisibleRect().size.width / 5.0f)
 {
 
 }
@@ -20,9 +18,10 @@ LevelLayer::~LevelLayer()
 LevelLayer* LevelLayer::create(const std::string &level_name)
 {
 	LevelLayer *ret = new (std::nothrow) LevelLayer(level_name);
-	if (ret != nullptr && ret->init())
+	if (ret != nullptr && ret->initWithTMXFile(level_name))
 	{
 		ret->autorelease();
+		ret->init();
 		return ret;
 	}
 	delete ret;
@@ -31,14 +30,6 @@ LevelLayer* LevelLayer::create(const std::string &level_name)
 
 bool LevelLayer::init()
 {
-	if (!Layer::init())
-	{
-		return false;
-	}
-
-	tmx_layer_ = TMXTiledMap::create(current_level_);
-	addChild(tmx_layer_);
-
 	scheduleUpdate();
 
 	return true;
@@ -48,21 +39,21 @@ void LevelLayer::update(float delta)
 {
 	if (follow_target_ != nullptr)
 	{
-		float localx = tmx_layer_->getPositionX() + follow_target_->getPositionX();
-		if (localx < inner_stage_x_)
+		float localx = getPositionX() + follow_target_->getPositionX();
+		if (localx < innerstage_left_)
 		{
-			tmx_layer_->setPositionX(inner_stage_x_ - follow_target_->getPositionX());
-			if (tmx_layer_->getPositionX() > 0)
+			setPositionX(innerstage_left_ - follow_target_->getPositionX());
+			if (getPositionX() > 0)
 			{
-				tmx_layer_->setPositionX(0);
+				setPositionX(0);
 			}
 		}
-		else if (localx > inner_stage_y_)
+		else if (localx > inner_stage_right_)
 		{
-			tmx_layer_->setPositionX(inner_stage_y_ - follow_target_->getPositionX());
-			if (tmx_layer_->getPositionX() < Director::getInstance()->getWinSize().width - tmx_layer_->getContentSize().width)
+			setPositionX(inner_stage_right_ - follow_target_->getPositionX());
+			if (getPositionX() < Director::getInstance()->getWinSize().width - getContentSize().width)
 			{
-				tmx_layer_->setPositionX(0);
+				setPositionX(Director::getInstance()->getWinSize().width - getContentSize().width);
 			}
 		}
 	}
@@ -77,21 +68,18 @@ void LevelLayer::setFollowTarget(cocos2d::Node *target)
 // 载入关卡
 void LevelLayer::loadLevel(const std::string &level_name)
 {
-	CCAssert(tmx_layer_ != nullptr, "");
-	tmx_layer_->initWithTMXFile(level_name);
-	current_level_ = level_name;
+	initWithTMXFile(level_name);
+	setPosition(Vec2::ZERO);
+	setAnchorPoint(Vec2::ZERO);
 }
 
 // 获取地板宽度
 int LevelLayer::getFloorWidth() const
 {
-	if (tmx_layer_ == nullptr)
+	auto floor_layer = getLayer("floor");
+	if (floor_layer != nullptr)
 	{
-		auto floor_layer = tmx_layer_->getLayer("floor");
-		if (floor_layer != nullptr)
-		{
-			return floor_layer->getLayerSize().width;
-		}
+		return floor_layer->getLayerSize().width;
 	}
 	return 0;
 }
@@ -99,31 +87,28 @@ int LevelLayer::getFloorWidth() const
 // 获取地板高度
 int LevelLayer::getFloorHeight() const
 {
-	if (tmx_layer_ == nullptr)
+	auto floor_layer = getLayer("floor");
+	if (floor_layer != nullptr)
 	{
-		auto floor_layer = tmx_layer_->getLayer("floor");
-		if (floor_layer != nullptr)
+		int max_height = 0;
+		const int width = floor_layer->getLayerSize().width;
+		const int height = floor_layer->getLayerSize().height;
+		for (int column = 0; column < width; ++column)
 		{
-			int max_height = 0;
-			const int width = floor_layer->getLayerSize().width;
-			const int height = floor_layer->getLayerSize().height;
-			for (int column = 0; column < width; ++column)
+			for (int row = 0; row < height; ++row)
 			{
-				for (int row = 0; row < height; ++row)
+				int idx = row * width + column;
+				if (floor_layer->getTiles()[idx] != 0)
 				{
-					int idx = row * width + column;
-					if (floor_layer->getTiles()[idx] != 0)
+					if (height - row > max_height)
 					{
-						if (height - row > max_height)
-						{
-							max_height = height - row;
-						}
-						break;
+						max_height = height - row;
 					}
+					break;
 				}
 			}
-			return max_height;
 		}
+		return max_height;
 	}
 	return 0;
 }

@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-class LevelLayer : public cocos2d::Layer
+class LevelLayer : public cocos2d::TMXTiledMap
 {
 public:
 	LevelLayer(const std::string &level_name);
@@ -39,11 +39,10 @@ public:
 	void setFollowTarget(cocos2d::Node *target);
 
 private:
-	std::string current_level_;
-	const float inner_stage_x_;
-	const float inner_stage_y_;
+	const float innerstage_left_;
+	const float inner_stage_right_;
 	cocos2d::Node* follow_target_;
-	cocos2d::TMXTiledMap* tmx_layer_;
+	
 };
 
 #endif

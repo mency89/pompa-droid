@@ -64,7 +64,7 @@ bool GameScene::init()
 	entity_manger_.reset(new EntityManger(world_));
 	hero_ = entity_manger_->create(entity_hero);
 	hero_->setPosition(VisibleRect::center());
-	addChild(hero_, -1);
+	layer->addChild(hero_, 10);
 	layer->setFollowTarget(hero_);
 
 	// 注册游戏场景
