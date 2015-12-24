@@ -5,7 +5,7 @@
 #include "cocos2d.h"
 
 class b2World;
-class EntityManger;
+class LevelLayer;
 class GLESDebugDraw;
 class BaseGameEntity;
 
@@ -28,10 +28,12 @@ public:
 
 	CREATE_FUNC(GameScene);
 
+public:
+	BaseGameEntity* getHeroEntity();
+
 private:
-	BaseGameEntity*				hero_;
+	LevelLayer*					level_;
 	std::shared_ptr<b2World>	world_;
-	std::auto_ptr<EntityManger>	entity_manger_;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 public:

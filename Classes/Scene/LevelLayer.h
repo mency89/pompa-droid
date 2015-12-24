@@ -1,12 +1,17 @@
 ﻿#ifndef __LEVELLAYER_H__
 #define __LEVELLAYER_H__
 
+#include <memory>
 #include "cocos2d.h"
+
+class b2World;
+class EntityManger;
+class BaseGameEntity;
 
 class LevelLayer : public cocos2d::TMXTiledMap
 {
 public:
-	LevelLayer(const std::string &level_name);
+	LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name);
 
 	~LevelLayer();
 
@@ -14,7 +19,7 @@ public:
 
 	virtual void update(float delta) override;
 
-	static LevelLayer* create(const std::string &level_name);
+	static LevelLayer* create(std::shared_ptr<b2World> world, const std::string &level_name);
 
 public:
 	/**
@@ -34,14 +39,27 @@ public:
 	int getFloorHeight() const;
 
 	/**
-	 * 设置跟随目标
+	 * 获取主角实例
 	 */
-	void setFollowTarget(cocos2d::Node *target);
+	BaseGameEntity* getHeroEntity();
+
+	/**
+	 * 设置跟随主角
+	 */
+	void setFollowHero(bool follow);
+
+	/**
+	 * 目标是否在屏幕中
+	 */
+	bool isInInsideOfStage(cocos2d::Node *target);
 
 private:
-	const float innerstage_left_;
-	const float inner_stage_right_;
-	cocos2d::Node* follow_target_;
+	bool						follow_;
+	BaseGameEntity*				hero_;
+	const float					innerstage_left_;
+	const float					inner_stage_right_;
+	std::shared_ptr<b2World>	world_;
+	std::auto_ptr<EntityManger>	entity_manger_;
 	
 };
 

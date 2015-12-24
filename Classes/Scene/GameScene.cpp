@@ -7,18 +7,16 @@
 #include "MeesageTypes.h"
 #include "GameApplication.h"
 #include "MessageDispatcher.h"
+#include "Entity/BaseGameEntity.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "GB2ShapeCache.h"
 #endif
-
-#include "Entity/EntityManger.h"
-#include "Entity/BaseGameEntity.h"
 using namespace cocos2d;
 
 
 GameScene::GameScene()
-	: hero_(nullptr)
+	: level_(nullptr)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	, debug_draw_(new GLESDebugDraw(GB2ShapeCache::instance()->getPTMRatio()))
 #endif
@@ -57,15 +55,8 @@ bool GameScene::init()
 #endif
 
 	// 创建关卡
-	auto layer = LevelLayer::create("level/map_level1.tmx");
-	addChild(layer, -1);
-
-	// 创建玩家
-	entity_manger_.reset(new EntityManger(world_));
-	hero_ = entity_manger_->create(entity_hero);
-	hero_->setPosition(VisibleRect::center());
-	layer->addChild(hero_, 10);
-	layer->setFollowTarget(hero_);
+	level_ = LevelLayer::create(world_, "level/map_level1.tmx");
+	addChild(level_, -1);
 
 	// 注册游戏场景
 	GameApplication::instance()->setGameScene(this);
@@ -88,8 +79,8 @@ void GameScene::update(float delta)
 	int positionIterations = 1;
 	world_->Step(delta, velocityIterations, positionIterations);
 
-	// 更新游戏实体
-	entity_manger_->update();
+	// 更新关卡环境
+	level_->update(delta);
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
@@ -116,26 +107,37 @@ void GameScene::onDraw(const Mat4 &transform, uint32_t flags)
 }
 #endif
 
+BaseGameEntity* GameScene::getHeroEntity()
+{
+	return level_->getHeroEntity();
+}
+
 void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	Telegram msg;
-	MSKeyPressed extra_info;
-	extra_info.key_code = keyCode;
-	msg.receiver = hero_->getID();
-	msg.msg_code = MessageTypes::msg_KeyPressed;
-	msg.extra_info = &extra_info;
-	msg.extra_info_size = sizeof(MSKeyPressed);
-	MessageDispatcher::instance()->dispatchMessage(msg);
+	if (getHeroEntity() != nullptr)
+	{
+		Telegram msg;
+		MSKeyPressed extra_info;
+		extra_info.key_code = keyCode;
+		msg.receiver = getHeroEntity()->getID();
+		msg.msg_code = MessageTypes::msg_KeyPressed;
+		msg.extra_info = &extra_info;
+		msg.extra_info_size = sizeof(MSKeyPressed);
+		MessageDispatcher::instance()->dispatchMessage(msg);
+	}
 }
 
 void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	Telegram msg;
-	MSKeyReleased extra_info;
-	extra_info.key_code = keyCode;
-	msg.receiver = hero_->getID();
-	msg.msg_code = MessageTypes::msg_KeyReleased;
-	msg.extra_info = &extra_info;
-	msg.extra_info_size = sizeof(MSKeyReleased);
-	MessageDispatcher::instance()->dispatchMessage(msg);
+	if (getHeroEntity() != nullptr)
+	{
+		Telegram msg;
+		MSKeyReleased extra_info;
+		extra_info.key_code = keyCode;
+		msg.receiver = getHeroEntity()->getID();
+		msg.msg_code = MessageTypes::msg_KeyReleased;
+		msg.extra_info = &extra_info;
+		msg.extra_info_size = sizeof(MSKeyReleased);
+		MessageDispatcher::instance()->dispatchMessage(msg);
+	}
 }
