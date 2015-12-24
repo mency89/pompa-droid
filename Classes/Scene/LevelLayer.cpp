@@ -46,8 +46,10 @@ bool LevelLayer::init()
 
 void LevelLayer::update(float delta)
 {
+	// 更新演员
 	entity_manger_->update();
 
+	// 镜头跟随
 	if (follow_)
 	{
 		BaseGameEntity *follow_target = getHeroEntity();
@@ -72,6 +74,12 @@ void LevelLayer::update(float delta)
 			}
 		}
 	}
+
+	// 保证主角始终在舞台中
+	if (!isInInsideOfStage(getHeroEntity()))
+	{
+
+	}
 }
 
 // 设置跟随主角
@@ -85,9 +93,14 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 {
 	if (hero_ == nullptr)
 	{
-		/*hero_ = entity_manger_->create(entity_hero);
-		hero_->setPosition(VisibleRect::center());
-		addChild(hero_, 10);*/
+		auto objects = getObjectGroup("objects");
+		if (objects != nullptr)
+		{
+			ValueMap data = objects->getObject("Hero");
+			hero_ = entity_manger_->create(entity_hero);
+			hero_->setPosition(Vec2(data["x"].asFloat(), data["y"].asFloat()));
+			addChild(hero_, 10);
+		}
 	}
 	return hero_;
 }
