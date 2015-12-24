@@ -54,6 +54,17 @@ bool BaseGameEntity::init()
 	return true;
 }
 
+void BaseGameEntity::setParent(cocos2d::Node* parent)
+{
+	Node::setParent(parent);
+	updateBodyPosition();
+}
+
+// 每帧更新
+void BaseGameEntity::update()
+{
+}
+
 // 受击
 void BaseGameEntity::onHurt(const cocos2d::Vec2 &pos)
 {
@@ -100,10 +111,6 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 	}
 }
 
-// 更新
-void BaseGameEntity::update()
-{
-}
 
 // 获取唯一id
 int BaseGameEntity::getID() const

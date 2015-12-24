@@ -39,8 +39,15 @@ public:
 
 	virtual ~BaseGameEntity();
 
+public:
 	virtual bool init() override;
 
+	virtual void setParent(cocos2d::Node* parent) override;
+
+public:
+	/**
+	 * 每帧更新
+	 */
 	virtual void update();
 
 	/**
