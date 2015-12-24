@@ -100,17 +100,16 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 		}
 
 		// 创建新的形状
-		std::string shape = Splitext(getSpriteFrame()->getPolygonInfo().filename)[0];
-		if (!shape.empty())
+		shape_name_ = Splitext(getSpriteFrame()->getPolygonInfo().filename)[0];
+		if (!shape_name_.empty())
 		{
 			// 添加身体形状
-			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape, isFlippedX());
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape_name_, isFlippedX());
 			// 添加武器形状
-			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape + "_weapon", isFlippedX());
+			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape_name_ + "_weapon", isFlippedX());
 		}
 	}
 }
-
 
 // 获取唯一id
 int BaseGameEntity::getID() const

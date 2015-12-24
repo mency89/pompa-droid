@@ -196,6 +196,7 @@ private:
 	float						jump_height_;
 	Direction					direction_;
 	int							hit_point_;
+	std::string					shape_name_;
 	static int					s_next_entity_id_;
 };
 
