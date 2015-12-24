@@ -22,8 +22,8 @@ bool Hero::init()
 	}
 
 	setWalkSpeed(1.0f);
-	setRunSpeed(getWalkSpeed() * 3);
-	setJumpForce(2.5f);
+	setRunSpeed(getWalkSpeed() * 2);
+	setJumpForce(2.0f);
 	setMaxJumpHeight(50);
 
 	state_machine_.reset(new StateMachine<Hero>(this));

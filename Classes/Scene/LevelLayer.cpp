@@ -1,7 +1,7 @@
 ﻿#include "LevelLayer.h"
 #include "VisibleRect.h"
+#include "Entity/Hero.h"
 #include "Entity/EntityManger.h"
-#include "Entity/BaseGameEntity.h"
 using namespace cocos2d;
 
 LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name)
@@ -44,50 +44,6 @@ bool LevelLayer::init()
 	return true;
 }
 
-void LevelLayer::update(float delta)
-{
-	// 更新演员
-	entity_manger_->update();
-
-	// 镜头跟随
-	if (follow_)
-	{
-		BaseGameEntity *follow_target = getHeroEntity();
-		if (follow_target != nullptr)
-		{
-			float localx = getPositionX() + follow_target->getPositionX();
-			if (localx < innerstage_left_)
-			{
-				setPositionX(innerstage_left_ - follow_target->getPositionX());
-				if (getPositionX() > 0)
-				{
-					setPositionX(0);
-				}
-			}
-			else if (localx > inner_stage_right_)
-			{
-				setPositionX(inner_stage_right_ - follow_target->getPositionX());
-				if (getPositionX() < Director::getInstance()->getWinSize().width - getContentSize().width)
-				{
-					setPositionX(Director::getInstance()->getWinSize().width - getContentSize().width);
-				}
-			}
-		}
-	}
-
-	// 保证主角始终在舞台中
-	if (!isInInsideOfStage(getHeroEntity()))
-	{
-
-	}
-}
-
-// 设置跟随主角
-void LevelLayer::setFollowHero(bool follow)
-{
-	follow_ = follow;
-}
-
 // 获取主角实例
 BaseGameEntity* LevelLayer::getHeroEntity()
 {
@@ -98,21 +54,14 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 		{
 			ValueMap data = objects->getObject("Hero");
 			hero_ = entity_manger_->create(entity_hero);
-			hero_->setPosition(Vec2(data["x"].asFloat(), data["y"].asFloat()));
+			float x = data["x"].asFloat();
+			float y = data["y"].asFloat();
+			hero_->setPosition(Vec2(data["x"].asFloat() + Hero::RealWidth * hero_->getAnchorPoint().x,
+				data["y"].asFloat() + Hero::RealHeight * hero_->getAnchorPoint().y));
 			addChild(hero_, 10);
 		}
 	}
 	return hero_;
-}
-
-// 载入关卡
-void LevelLayer::loadLevel(const std::string &level_name)
-{
-	initWithTMXFile(level_name);
-	hero_ = nullptr;
-	setPosition(Vec2::ZERO);
-	setAnchorPoint(Vec2::ZERO);
-	entity_manger_->destroyAllEntity();
 }
 
 // 获取地板宽度
@@ -155,21 +104,149 @@ int LevelLayer::getFloorHeight() const
 	return 0;
 }
 
-// 目标是否在屏幕中
-bool LevelLayer::isInInsideOfStage(Node *target)
+// 镜头跟随主角
+void LevelLayer::followHeroWithCamera()
 {
-	CCAssert(target != nullptr, "");
-	if (target != nullptr)
+	if (follow_)
 	{
-		Vec2 pos = target->getPosition();
-		auto win_size = Director::getInstance()->getWinSize();
-		if (pos.x >= target->getContentSize().width * target->getAnchorPoint().x &&
-			pos.x <= win_size.width - target->getContentSize().width * (1.0f - target->getAnchorPoint().x) &&
-			pos.y >= target->getContentSize().height * target->getAnchorPoint().y &&
-			pos.y <= win_size.height - target->getContentSize().height * (1.0f - target->getAnchorPoint().y))
+		BaseGameEntity *follow_target = getHeroEntity();
+		if (follow_target != nullptr)
+		{
+			float localx = getPositionX() + follow_target->getPositionX();
+			if (localx < innerstage_left_)
+			{
+				setPositionX(innerstage_left_ - follow_target->getPositionX());
+				if (getPositionX() > 0)
+				{
+					setPositionX(0);
+				}
+			}
+			else if (localx > inner_stage_right_)
+			{
+				setPositionX(inner_stage_right_ - follow_target->getPositionX());
+				if (getPositionX() < Director::getInstance()->getWinSize().width - getContentSize().width)
+				{
+					setPositionX(Director::getInstance()->getWinSize().width - getContentSize().width);
+				}
+			}
+		}
+	}
+}
+
+// 主角是否在屏幕中
+bool LevelLayer::HeroInInsideOfStage() const
+{
+	if (hero_ != nullptr)
+	{
+		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		Size win_size = Director::getInstance()->getWinSize();
+		if (world_pos.x >= Hero::RealWidth * hero_->getAnchorPoint().x &&
+			world_pos.x <= win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x) &&
+			world_pos.y >= Hero::RealHeight * hero_->getAnchorPoint().y &&
+			world_pos.y <= getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))
 		{
 			return true;
 		}
 	}
 	return false;
+}
+
+// 自动调整主角位置
+void LevelLayer::adjustmentHeroPosition()
+{
+	if (hero_ != nullptr && !HeroInInsideOfStage())
+	{
+		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		Size win_size = Director::getInstance()->getWinSize();
+		if (world_pos.x < Hero::RealWidth * hero_->getAnchorPoint().x)
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(Hero::RealWidth * hero_->getAnchorPoint().x,
+				world_pos.y)));
+		}
+
+		if (world_pos.x > win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x))
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x),
+				world_pos.y)));
+		}
+
+		if (world_pos.y < Hero::RealHeight * hero_->getAnchorPoint().y)
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
+				Hero::RealHeight * hero_->getAnchorPoint().y)));
+		}
+
+		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
+				getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))));
+		}
+	}
+}
+
+void LevelLayer::adjustmentHeroPositionX()
+{
+	if (hero_ != nullptr && !HeroInInsideOfStage())
+	{
+		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		Size win_size = Director::getInstance()->getWinSize();
+
+		if (world_pos.x < Hero::RealWidth * hero_->getAnchorPoint().x)
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(Hero::RealWidth * hero_->getAnchorPoint().x,
+				world_pos.y)));
+		}
+
+		if (world_pos.x > win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x))
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x),
+				world_pos.y)));
+		}
+	}
+}
+
+void LevelLayer::adjustmentHeroPositionY()
+{
+	if (hero_ != nullptr && !HeroInInsideOfStage())
+	{
+		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		Size win_size = Director::getInstance()->getWinSize();
+
+		if (world_pos.y < Hero::RealHeight * hero_->getAnchorPoint().y)
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
+				Hero::RealHeight * hero_->getAnchorPoint().y)));
+		}
+
+		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))
+		{
+			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
+				getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))));
+		}
+	}
+}
+
+// 设置跟随主角
+void LevelLayer::setFollowHero(bool follow)
+{
+	follow_ = follow;
+}
+
+// 载入关卡
+void LevelLayer::loadLevel(const std::string &level_name)
+{
+	initWithTMXFile(level_name);
+	hero_ = nullptr;
+	setPosition(Vec2::ZERO);
+	setAnchorPoint(Vec2::ZERO);
+	entity_manger_->destroyAllEntity();
+}
+
+void LevelLayer::update(float delta)
+{
+	// 更新演员
+	entity_manger_->update();
+
+	// 镜头跟随
+	followHeroWithCamera();
 }

@@ -49,9 +49,22 @@ public:
 	void setFollowHero(bool follow);
 
 	/**
-	 * 目标是否在屏幕中
+	 * 自动调整主角位置
 	 */
-	bool isInInsideOfStage(cocos2d::Node *target);
+	void adjustmentHeroPosition();
+	void adjustmentHeroPositionX();
+	void adjustmentHeroPositionY();
+
+private:
+	/**
+	 * 镜头跟随主角
+	 */
+	void followHeroWithCamera();
+
+	/**
+	 * 主角是否在屏幕中
+	 */
+	bool HeroInInsideOfStage() const;
 
 private:
 	bool						follow_;

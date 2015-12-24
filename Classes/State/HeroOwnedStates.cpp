@@ -3,8 +3,11 @@
 #include "ActionTags.h"
 #include "MeesageTypes.h"
 #include "AnimationManger.h"
+#include "GameApplication.h"
 #include "MessageDispatcher.h"
 #include "Entity/EntityManger.h"
+#include "Scene/GameScene.h"
+#include "Scene/LevelLayer.h"
 using namespace cocos2d;
 
 namespace
@@ -158,6 +161,7 @@ void HeroWalk::exit(Hero *object)
 void HeroWalk::execute(Hero *object)
 {
 	object->moveEntity(object->getWalkSpeed());
+	GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPosition();
 }
 
 bool HeroWalk::on_message(Hero *object, const Telegram &msg)
@@ -208,6 +212,7 @@ void HeroRun::exit(Hero *object)
 void HeroRun::execute(Hero *object)
 {
 	object->moveEntity(object->getRunSpeed());
+	GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPosition();
 }
 
 bool HeroRun::on_message(Hero *object, const Telegram &msg)
@@ -286,6 +291,7 @@ void HeroJump::execute(Hero *object)
 		{
 			object->moveEntity(object->getRunSpeed());
 		}
+		GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPositionX();
 	}
 
 	if (!object->getStateMachine()->userdata().jump_up &&
@@ -358,7 +364,8 @@ void HeroRuningAttack::exit(Hero *object)
 
 void HeroRuningAttack::execute(Hero *object)
 {
-	object->moveEntity(object->getRunSpeed());
+	object->moveEntity(object->getWalkSpeed());
+	GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPosition();
 	if (object->getActionByTag(ActionTags::hero_runattack) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
@@ -390,7 +397,6 @@ void HeroJumpingAttack::execute(Hero *object)
 	if (object->getActionByTag(ActionTags::hero_jumpattack) == nullptr)
 	{
 		object->setPositionY(object->getPositionY() - object->getJumpForce());
-
 		if (object->getPositionY() < object->getStateMachine()->userdata().before_he_height)
 		{
 			object->setPositionY(object->getStateMachine()->userdata().before_he_height);

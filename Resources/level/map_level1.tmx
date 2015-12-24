@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="12" tilewidth="32" tileheight="32" nextobjectid="5">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="12" tilewidth="32" tileheight="32" nextobjectid="9">
  <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="512" columns="32">
   <image source="tiles.png" width="1024" height="512"/>
  </tileset>
@@ -28,5 +28,6 @@
   <object id="2" type="TrashCan" x="1517" y="339"/>
   <object id="3" type="TrashCan" x="2829" y="371"/>
   <object id="4" type="TrashCan" x="619" y="310"/>
+  <object id="7" name="Hero" type="Hero" x="48" y="336"/>
  </objectgroup>
 </map>

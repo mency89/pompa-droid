@@ -29,7 +29,7 @@ public:
 	CREATE_FUNC(GameScene);
 
 public:
-	BaseGameEntity* getHeroEntity();
+	LevelLayer* getCurrentLevel();
 
 private:
 	LevelLayer*					level_;

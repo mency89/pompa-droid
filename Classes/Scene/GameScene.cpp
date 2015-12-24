@@ -51,7 +51,7 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	debug_draw_->SetFlags(b2Draw::e_shapeBit);
+	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
 	// 创建关卡
@@ -107,19 +107,19 @@ void GameScene::onDraw(const Mat4 &transform, uint32_t flags)
 }
 #endif
 
-BaseGameEntity* GameScene::getHeroEntity()
+LevelLayer* GameScene::getCurrentLevel()
 {
-	return level_->getHeroEntity();
+	return level_;
 }
 
 void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (getHeroEntity() != nullptr)
+	if (level_->getHeroEntity())
 	{
 		Telegram msg;
 		MSKeyPressed extra_info;
 		extra_info.key_code = keyCode;
-		msg.receiver = getHeroEntity()->getID();
+		msg.receiver = level_->getHeroEntity()->getID();
 		msg.msg_code = MessageTypes::msg_KeyPressed;
 		msg.extra_info = &extra_info;
 		msg.extra_info_size = sizeof(MSKeyPressed);
@@ -129,12 +129,12 @@ void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
 void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (getHeroEntity() != nullptr)
+	if (level_->getHeroEntity() != nullptr)
 	{
 		Telegram msg;
 		MSKeyReleased extra_info;
 		extra_info.key_code = keyCode;
-		msg.receiver = getHeroEntity()->getID();
+		msg.receiver = level_->getHeroEntity()->getID();
 		msg.msg_code = MessageTypes::msg_KeyReleased;
 		msg.extra_info = &extra_info;
 		msg.extra_info_size = sizeof(MSKeyReleased);
