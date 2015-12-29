@@ -37,6 +37,9 @@ bool Boss::init()
 	state_machine_->set_global_state(BossGlobal::instance());
 	state_machine_->change_state(BossWalk::instance());
 
+	setAnchorPoint(cocos2d::Vec2(0.5f, 0.0f));
+	setContentSize(cocos2d::Size(realWidth(), realHeight()));
+
 	return true;
 }
 
