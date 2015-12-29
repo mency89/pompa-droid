@@ -19,7 +19,7 @@ public:
 
 	virtual int weaponCategoryBits() const override;
 
-	virtual void handleMenssage(const Telegram &msg) override;
+	virtual void handleMenssage(const Message &msg) override;
 
 public:
 	StateMachine<Boss>* getStateMachine();

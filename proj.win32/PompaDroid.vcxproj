@@ -144,56 +144,56 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Classes\AnimationManger.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp" />
     <ClCompile Include="..\Classes\Entity\Boss.cpp" />
     <ClCompile Include="..\Classes\Entity\EntityManger.cpp" />
     <ClCompile Include="..\Classes\Entity\Hero.cpp" />
-    <ClCompile Include="..\Classes\Entity\message\MessageDispatcher.cpp" />
     <ClCompile Include="..\Classes\GameApplication.cpp" />
-    <ClCompile Include="..\Classes\Misc\AnimationManger.cpp" />
-    <ClCompile Include="..\Classes\Misc\GameEntityConfig.cpp" />
-    <ClCompile Include="..\Classes\Misc\GB2ShapeCache.cpp" />
-    <ClCompile Include="..\Classes\Misc\GLES-Render.cpp" />
-    <ClCompile Include="..\Classes\Misc\Helper.cpp" />
-    <ClCompile Include="..\Classes\Misc\Singleton.cpp" />
-    <ClCompile Include="..\Classes\Misc\TexturePacker.cpp" />
-    <ClCompile Include="..\Classes\Misc\VisibleRect.cpp" />
+    <ClCompile Include="..\Classes\GameEntityConfig.cpp" />
+    <ClCompile Include="..\Classes\GB2ShapeCache.cpp" />
+    <ClCompile Include="..\Classes\GLES-Render.cpp" />
+    <ClCompile Include="..\Classes\Helper.cpp" />
+    <ClCompile Include="..\Classes\Message\MessageDispatcher.cpp" />
     <ClCompile Include="..\Classes\Scene\GameScene.cpp" />
     <ClCompile Include="..\Classes\Scene\LevelLayer.cpp" />
     <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp" />
+    <ClCompile Include="..\Classes\Singleton.cpp" />
     <ClCompile Include="..\Classes\State\BossOwnedStates.cpp" />
     <ClCompile Include="..\Classes\State\HeroOwnedStates.cpp" />
+    <ClCompile Include="..\Classes\TexturePacker.cpp" />
+    <ClCompile Include="..\Classes\VisibleRect.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\AnimationManger.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\Entity\ActionTags.h" />
     <ClInclude Include="..\Classes\Entity\BaseGameEntity.h" />
     <ClInclude Include="..\Classes\Entity\Boss.h" />
-    <ClInclude Include="..\Classes\Entity\Category.h" />
     <ClInclude Include="..\Classes\Entity\EntityManger.h" />
-    <ClInclude Include="..\Classes\Entity\GameEntityCreator.h" />
     <ClInclude Include="..\Classes\Entity\Hero.h" />
-    <ClInclude Include="..\Classes\Entity\message\MeesageTypes.h" />
-    <ClInclude Include="..\Classes\Entity\message\MessageDispatcher.h" />
-    <ClInclude Include="..\Classes\Entity\message\Telegram.h" />
     <ClInclude Include="..\Classes\GameApplication.h" />
-    <ClInclude Include="..\Classes\Misc\AnimationManger.h" />
-    <ClInclude Include="..\Classes\Misc\GameEntityConfig.h" />
-    <ClInclude Include="..\Classes\Misc\GB2ShapeCache.h" />
-    <ClInclude Include="..\Classes\Misc\GLES-Render.h" />
-    <ClInclude Include="..\Classes\Misc\Helper.h" />
-    <ClInclude Include="..\Classes\Misc\Singleton.h" />
-    <ClInclude Include="..\Classes\Misc\TexturePacker.h" />
-    <ClInclude Include="..\Classes\Misc\VisibleRect.h" />
+    <ClInclude Include="..\Classes\GameEntityConfig.h" />
+    <ClInclude Include="..\Classes\GameEntityCreator.h" />
+    <ClInclude Include="..\Classes\GB2ShapeCache.h" />
+    <ClInclude Include="..\Classes\GLES-Render.h" />
+    <ClInclude Include="..\Classes\Helper.h" />
+    <ClInclude Include="..\Classes\Message\MeesageTypes.h" />
+    <ClInclude Include="..\Classes\Message\MessageDispatcher.h" />
+    <ClInclude Include="..\Classes\Message\Message.h" />
     <ClInclude Include="..\Classes\Scene\GameScene.h" />
     <ClInclude Include="..\Classes\Scene\LevelLayer.h" />
     <ClInclude Include="..\Classes\Scene\WelcomeScene.h" />
+    <ClInclude Include="..\Classes\ShapeCategory.h" />
+    <ClInclude Include="..\Classes\Singleton.h" />
+    <ClInclude Include="..\Classes\State\ActionTags.h" />
     <ClInclude Include="..\Classes\State\BossOwnedStates.h" />
     <ClInclude Include="..\Classes\State\HeroOwnedStates.h" />
     <ClInclude Include="..\Classes\State\State.h" />
     <ClInclude Include="..\Classes\State\StateMachine.h" />
+    <ClInclude Include="..\Classes\TexturePacker.h" />
+    <ClInclude Include="..\Classes\VisibleRect.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

@@ -46,7 +46,7 @@ int Hero::weaponCategoryBits() const
 	return ShapeCategory::shape_hero_weapon;
 }
 
-void Hero::handleMenssage(const Telegram &msg)
+void Hero::handleMenssage(const Message &msg)
 {
 	state_machine_->handle_message(msg);
 }

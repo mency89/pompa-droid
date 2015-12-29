@@ -39,7 +39,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -56,7 +56,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -73,7 +73,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -90,7 +90,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -107,7 +107,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -124,7 +124,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -141,7 +141,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -158,7 +158,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -175,7 +175,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -192,7 +192,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 /**
@@ -209,7 +209,7 @@ public:
 
 	virtual void execute(Hero *object) override;
 
-	virtual bool on_message(Hero *object, const Telegram &msg) override;
+	virtual bool on_message(Hero *object, const Message &msg) override;
 };
 
 #endif

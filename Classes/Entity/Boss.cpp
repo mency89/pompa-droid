@@ -44,7 +44,7 @@ int Boss::weaponCategoryBits() const
 	return ShapeCategory::shape_enemy_weapon;
 }
 
-void Boss::handleMenssage(const Telegram &msg)
+void Boss::handleMenssage(const Message &msg)
 {
 	state_machine_->handle_message(msg);
 }

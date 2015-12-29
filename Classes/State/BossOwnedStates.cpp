@@ -1,10 +1,10 @@
 ﻿#include "BossOwnedStates.h"
 
-#include "MeesageTypes.h"
+#include "ActionTags.h"
 #include "AnimationManger.h"
-#include "MessageDispatcher.h"
-#include "Entity/ActionTags.h"
 #include "Entity/EntityManger.h"
+#include "Message/MeesageTypes.h"
+#include "Message/MessageDispatcher.h"
 using namespace cocos2d;
 
 
@@ -28,7 +28,7 @@ void BossIdle::execute(Boss *object)
 {
 }
 
-bool BossIdle::on_message(Boss *object, const Telegram &msg)
+bool BossIdle::on_message(Boss *object, const Message &msg)
 {
 	return false;
 }
@@ -58,7 +58,7 @@ void BossWalk::execute(Boss *object)
 	}
 }
 
-bool BossWalk::on_message(Boss *object, const Telegram &msg)
+bool BossWalk::on_message(Boss *object, const Message &msg)
 {
 	return false;
 }
@@ -106,7 +106,7 @@ void BossHurt::execute(Boss *object)
 	}
 }
 
-bool BossHurt::on_message(Boss *object, const Telegram &msg)
+bool BossHurt::on_message(Boss *object, const Message &msg)
 {
 	return false;
 }
@@ -149,7 +149,7 @@ void BossKnockout::execute(Boss *object)
 	}
 }
 
-bool BossKnockout::on_message(Boss *object, const Telegram &msg)
+bool BossKnockout::on_message(Boss *object, const Message &msg)
 {
 	// 吞噬受击消息
 	return msg.msg_code == msg_EntityHurt;
@@ -179,7 +179,7 @@ void BossGetup::execute(Boss *object)
 	}
 }
 
-bool BossGetup::on_message(Boss *object, const Telegram &msg)
+bool BossGetup::on_message(Boss *object, const Message &msg)
 {
 	// 吞噬受击消息
 	return msg.msg_code == msg_EntityHurt;
@@ -199,11 +199,11 @@ void BossGlobal::execute(Boss *object)
 {
 }
 
-bool BossGlobal::on_message(Boss *object, const Telegram &msg)
+bool BossGlobal::on_message(Boss *object, const Message &msg)
 {
 	if (msg.msg_code == msg_EntityHurt)
 	{
-		MSEntityHurt extra_info = *reinterpret_cast<const MSEntityHurt*>(msg.extra_info);
+		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
 		object->onHurt(extra_info.pos);
 		object->getStateMachine()->change_state(BossHurt::instance());

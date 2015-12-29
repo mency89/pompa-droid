@@ -86,7 +86,7 @@ public:
 		return global_state_;
 	}
 
-	bool handle_message(const Telegram &msg)
+	bool handle_message(const Message &msg)
 	{
 		if (current_state_ != nullptr && current_state_->on_message(owner_, msg))
 		{

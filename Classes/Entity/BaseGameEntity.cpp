@@ -5,7 +5,7 @@
 #include "Helper.h"
 #include "GB2ShapeCache.h"
 #include "AnimationManger.h"
-#include "MessageDispatcher.h"
+#include "Message/MessageDispatcher.h"
 using namespace cocos2d;
 
 
@@ -81,7 +81,7 @@ void BaseGameEntity::onHurt(const cocos2d::Vec2 &pos)
 }
 
 // 处理消息
-void BaseGameEntity::handleMenssage(const Telegram &msg)
+void BaseGameEntity::handleMenssage(const Message &msg)
 {
 }
 

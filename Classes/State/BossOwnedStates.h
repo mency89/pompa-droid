@@ -33,7 +33,7 @@ public:
 
 	virtual void execute(Boss *object) override;
 
-	virtual bool on_message(Boss *object, const Telegram &msg) override;
+	virtual bool on_message(Boss *object, const Message &msg) override;
 };
 
 /**
@@ -50,7 +50,7 @@ public:
 
 	virtual void execute(Boss *object) override;
 
-	virtual bool on_message(Boss *object, const Telegram &msg) override;
+	virtual bool on_message(Boss *object, const Message &msg) override;
 };
 
 /**
@@ -67,7 +67,7 @@ public:
 
 	virtual void execute(Boss *object) override;
 
-	virtual bool on_message(Boss *object, const Telegram &msg) override;
+	virtual bool on_message(Boss *object, const Message &msg) override;
 };
 
 /**
@@ -84,7 +84,7 @@ public:
 
 	virtual void execute(Boss *object) override;
 
-	virtual bool on_message(Boss *object, const Telegram &msg) override;
+	virtual bool on_message(Boss *object, const Message &msg) override;
 };
 
 /**
@@ -101,7 +101,7 @@ public:
 
 	virtual void execute(Boss *object) override;
 
-	virtual bool on_message(Boss *object, const Telegram &msg) override;
+	virtual bool on_message(Boss *object, const Message &msg) override;
 };
 
 /**
@@ -118,7 +118,7 @@ public:
 
 	virtual void execute(Boss *object) override;
 
-	virtual bool on_message(Boss *object, const Telegram &msg) override;
+	virtual bool on_message(Boss *object, const Message &msg) override;
 };
 
 #endif

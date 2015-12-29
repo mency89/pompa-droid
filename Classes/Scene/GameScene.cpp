@@ -4,10 +4,10 @@
 #include "LevelLayer.h"
 #include "VisibleRect.h"
 #include "GLES-Render.h"
-#include "MeesageTypes.h"
 #include "GameApplication.h"
-#include "MessageDispatcher.h"
 #include "Entity/BaseGameEntity.h"
+#include "Message/MeesageTypes.h"
+#include "Message/MessageDispatcher.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 #include "GB2ShapeCache.h"
@@ -116,13 +116,13 @@ void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	if (level_->getHeroEntity())
 	{
-		Telegram msg;
-		MSKeyPressed extra_info;
+		Message msg;
+		STKeyPressed extra_info;
 		extra_info.key_code = keyCode;
 		msg.receiver = level_->getHeroEntity()->getID();
 		msg.msg_code = MessageTypes::msg_KeyPressed;
 		msg.extra_info = &extra_info;
-		msg.extra_info_size = sizeof(MSKeyPressed);
+		msg.extra_info_size = sizeof(STKeyPressed);
 		MessageDispatcher::instance()->dispatchMessage(msg);
 	}
 }
@@ -131,13 +131,13 @@ void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	if (level_->getHeroEntity() != nullptr)
 	{
-		Telegram msg;
-		MSKeyReleased extra_info;
+		Message msg;
+		STKeyReleased extra_info;
 		extra_info.key_code = keyCode;
 		msg.receiver = level_->getHeroEntity()->getID();
 		msg.msg_code = MessageTypes::msg_KeyReleased;
 		msg.extra_info = &extra_info;
-		msg.extra_info_size = sizeof(MSKeyReleased);
+		msg.extra_info_size = sizeof(STKeyReleased);
 		MessageDispatcher::instance()->dispatchMessage(msg);
 	}
 }

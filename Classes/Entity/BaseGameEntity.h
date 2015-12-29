@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "cocos2d.h"
-#include "message/Telegram.h"
+#include "Message/Message.h"
 #include "GameEntityCreator.h"
 
 class b2Body;
@@ -64,7 +64,7 @@ public:
 	/**
 	 * 处理消息
 	 */
-	virtual void handleMenssage(const Telegram &msg);
+	virtual void handleMenssage(const Message &msg);
 
 public:
 	/**
