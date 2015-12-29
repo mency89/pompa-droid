@@ -107,6 +107,8 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape_name_, isFlippedX());
 			// 添加武器形状
 			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape_name_ + "_weapon", isFlippedX());
+			// 更新位置
+			updateBodyPosition();
 		}
 	}
 	else
