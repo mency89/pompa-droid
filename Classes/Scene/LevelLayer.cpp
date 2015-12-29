@@ -56,8 +56,8 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 			hero_ = entity_manger_->create(entity_hero);
 			float x = data["x"].asFloat();
 			float y = data["y"].asFloat();
-			hero_->setPosition(Vec2(data["x"].asFloat() + Hero::RealWidth * hero_->getAnchorPoint().x,
-				data["y"].asFloat() + Hero::RealHeight * hero_->getAnchorPoint().y));
+			hero_->setPosition(Vec2(data["x"].asFloat() + Hero::realWidth() * hero_->getAnchorPoint().x,
+				data["y"].asFloat() + Hero::realHeight() * hero_->getAnchorPoint().y));
 			addChild(hero_, 10);
 		}
 	}
@@ -140,10 +140,10 @@ bool LevelLayer::HeroInInsideOfStage() const
 	{
 		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
 		Size win_size = Director::getInstance()->getWinSize();
-		if (world_pos.x >= Hero::RealWidth * hero_->getAnchorPoint().x &&
-			world_pos.x <= win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x) &&
-			world_pos.y >= Hero::RealHeight * hero_->getAnchorPoint().y &&
-			world_pos.y <= getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))
+		if (world_pos.x >= Hero::realWidth() * hero_->getAnchorPoint().x &&
+			world_pos.x <= win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x) &&
+			world_pos.y >= Hero::realHeight() * hero_->getAnchorPoint().y &&
+			world_pos.y <= getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))
 		{
 			return true;
 		}
@@ -158,28 +158,28 @@ void LevelLayer::adjustmentHeroPosition()
 	{
 		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
 		Size win_size = Director::getInstance()->getWinSize();
-		if (world_pos.x < Hero::RealWidth * hero_->getAnchorPoint().x)
+		if (world_pos.x < Hero::realWidth() * hero_->getAnchorPoint().x)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(Hero::RealWidth * hero_->getAnchorPoint().x,
+			hero_->setPosition(convertToNodeSpace(Vec2(Hero::realWidth() * hero_->getAnchorPoint().x,
 				world_pos.y)));
 		}
 
-		if (world_pos.x > win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x))
+		if (world_pos.x > win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x))
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x),
+			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x),
 				world_pos.y)));
 		}
 
-		if (world_pos.y < Hero::RealHeight * hero_->getAnchorPoint().y)
+		if (world_pos.y < Hero::realWidth() * hero_->getAnchorPoint().y)
 		{
 			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				Hero::RealHeight * hero_->getAnchorPoint().y)));
+				Hero::realHeight() * hero_->getAnchorPoint().y)));
 		}
 
-		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))
+		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))
 		{
 			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))));
+				getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))));
 		}
 	}
 }
@@ -191,15 +191,15 @@ void LevelLayer::adjustmentHeroPositionX()
 		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
 		Size win_size = Director::getInstance()->getWinSize();
 
-		if (world_pos.x < Hero::RealWidth * hero_->getAnchorPoint().x)
+		if (world_pos.x < Hero::realWidth() * hero_->getAnchorPoint().x)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(Hero::RealWidth * hero_->getAnchorPoint().x,
+			hero_->setPosition(convertToNodeSpace(Vec2(Hero::realWidth() * hero_->getAnchorPoint().x,
 				world_pos.y)));
 		}
 
-		if (world_pos.x > win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x))
+		if (world_pos.x > win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x))
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::RealWidth * (1.0f - hero_->getAnchorPoint().x),
+			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x),
 				world_pos.y)));
 		}
 	}
@@ -212,16 +212,16 @@ void LevelLayer::adjustmentHeroPositionY()
 		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
 		Size win_size = Director::getInstance()->getWinSize();
 
-		if (world_pos.y < Hero::RealHeight * hero_->getAnchorPoint().y)
+		if (world_pos.y < Hero::realHeight() * hero_->getAnchorPoint().y)
 		{
 			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				Hero::RealHeight * hero_->getAnchorPoint().y)));
+				Hero::realHeight() * hero_->getAnchorPoint().y)));
 		}
 
-		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))
+		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))
 		{
 			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				getTileSize().height * getFloorHeight() + Hero::RealHeight * (1.0f - hero_->getAnchorPoint().y))));
+				getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))));
 		}
 	}
 }

@@ -9,10 +9,6 @@ class Hero : public BaseGameEntity
 	typedef std::auto_ptr<StateMachine<Hero> > HeroStateMachine;
 
 public:
-	const static int RealWidth = 45;		// 英雄宽度
-	const static int RealHeight = 78;		// 英雄高度
-
-public:
 	Hero(std::shared_ptr<b2World> world);
 
 	~Hero();
@@ -26,6 +22,19 @@ public:
 	virtual void handleMenssage(const Message &msg) override;
 
 public:
+	/**
+	 * 获取实际宽度
+	 */
+	static float realWidth();
+
+	/**
+	 * 获取实际高度
+	 */
+	static float realHeight();
+
+	/**
+	 * 获取有限状态机
+	 */
 	StateMachine<Hero>* getStateMachine();
 
 private:

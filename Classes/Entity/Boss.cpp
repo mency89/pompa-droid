@@ -1,5 +1,6 @@
 ﻿#include "Boss.h"
 #include "ShapeCategory.h"
+#include "GameEntityConfig.h"
 #include "State/BossOwnedStates.h"
 
 
@@ -21,10 +22,15 @@ bool Boss::init()
 		return false;
 	}
 
-	setWalkSpeed(1.0f);
-	setRunSpeed(getWalkSpeed() * 3);
-	setJumpForce(2.5f);
-	setMaxJumpHeight(50);
+	EntityAttribute attribute;
+	if (GameEntityConfig::instance()->getEntityAttribute("Boss", &attribute))
+	{
+		setWalkSpeed(attribute.walk_speed);
+		setRunSpeed(attribute.run_speed);
+		setJumpForce(attribute.jump_force);
+		setMaxJumpHeight(attribute.max_jump_height);
+	}
+
 	setDirection(Left);
 
 	state_machine_.reset(new StateMachine<Boss>(this));
@@ -49,6 +55,29 @@ void Boss::handleMenssage(const Message &msg)
 	state_machine_->handle_message(msg);
 }
 
+// 获取实际宽度
+float Boss::realWidth()
+{
+	EntityAttribute attribute;
+	if (GameEntityConfig::instance()->getEntityAttribute("Boss", &attribute))
+	{
+		return attribute.width;
+	}
+	return 0;
+}
+
+// 获取实际高度
+float Boss::realHeight()
+{
+	EntityAttribute attribute;
+	if (GameEntityConfig::instance()->getEntityAttribute("Boss", &attribute))
+	{
+		return attribute.height;
+	}
+	return 0;
+}
+
+// 获取有限状态机
 StateMachine<Boss>* Boss::getStateMachine()
 {
 	return state_machine_.get();
