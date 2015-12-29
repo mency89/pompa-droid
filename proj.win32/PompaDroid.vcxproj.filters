@@ -161,9 +161,6 @@
     <ClInclude Include="..\Classes\State\ActionTags.h">
       <Filter>src\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ShapeCategory.h">
-      <Filter>src\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Message\MeesageTypes.h">
       <Filter>src\Message</Filter>
     </ClInclude>
@@ -172,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Message\Message.h">
       <Filter>src\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\ShapeCategory.h">
+      <Filter>src\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

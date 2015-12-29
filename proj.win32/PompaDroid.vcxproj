@@ -173,6 +173,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Entity\Boss.h" />
     <ClInclude Include="..\Classes\Entity\EntityManger.h" />
     <ClInclude Include="..\Classes\Entity\Hero.h" />
+    <ClInclude Include="..\Classes\Entity\ShapeCategory.h" />
     <ClInclude Include="..\Classes\GameApplication.h" />
     <ClInclude Include="..\Classes\GameEntityConfig.h" />
     <ClInclude Include="..\Classes\GameEntityCreator.h" />
@@ -185,7 +186,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Scene\GameScene.h" />
     <ClInclude Include="..\Classes\Scene\LevelLayer.h" />
     <ClInclude Include="..\Classes\Scene\WelcomeScene.h" />
-    <ClInclude Include="..\Classes\ShapeCategory.h" />
     <ClInclude Include="..\Classes\Singleton.h" />
     <ClInclude Include="..\Classes\State\ActionTags.h" />
     <ClInclude Include="..\Classes\State\BossOwnedStates.h" />
