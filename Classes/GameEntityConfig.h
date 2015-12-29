@@ -1,6 +1,8 @@
 ﻿#ifndef __GAMEENTITYCONFIG_H__
 #define __GAMEENTITYCONFIG_H__
 
+#include <map>
+#include <string>
 #include "Singleton.h"
 
 struct EntityAttribute
@@ -23,12 +25,18 @@ struct EntityAttribute
 	}
 };
 
-class GameEntityConfig : Singleton < GameEntityConfig >
+class GameEntityConfig : public Singleton < GameEntityConfig >
 {
 	SINGLETON(GameEntityConfig);
 
+public:
+	bool getEntityAttribute(const std::string &name, EntityAttribute *ret);
+
 private:
 	void loadConfigFile(const std::string &filename);
+
+private:
+	std::map<std::string, EntityAttribute> entitys_;
 };
 
 #endif

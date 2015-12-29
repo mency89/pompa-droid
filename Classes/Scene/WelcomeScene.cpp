@@ -1,10 +1,11 @@
 ﻿#include "WelcomeScene.h"
 
 #include "GameScene.h"
-#include "TexturePacker.h"
 #include "VisibleRect.h"
 #include "GB2ShapeCache.h"
+#include "TexturePacker.h"
 #include "AnimationManger.h"
+#include "GameEntityConfig.h"
 using namespace cocos2d;
 
 Scene* WelcomeScene::createScene()
@@ -47,6 +48,7 @@ bool WelcomeScene::init()
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+	GameEntityConfig::instance();
 	TexturePacker::instance()->loadCategory("images");
 	GB2ShapeCache::instance()->addShapesWithFile("shapes/body.plist");
 	GB2ShapeCache::instance()->addShapesWithFile("shapes/weapon.plist");

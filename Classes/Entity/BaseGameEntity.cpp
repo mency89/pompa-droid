@@ -8,7 +8,6 @@
 #include "Message/MessageDispatcher.h"
 using namespace cocos2d;
 
-
 int BaseGameEntity::s_next_entity_id_ = 0;
 
 BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
@@ -257,7 +256,7 @@ void BaseGameEntity::updateBodyPosition()
 		if (!shape_name_.empty() && GB2ShapeCache::instance()->anchorPointForShape(shape_name_, shape_anchor))
 		{
 			const Size size = getContentSize();
-			Vec2 origin = getPosition() - Vec2(getAnchorPoint().x * size.width, getAnchorPoint().y * size.height);
+			Vec2 origin = world_pos - Vec2(getAnchorPoint().x * size.width, getAnchorPoint().y * size.height);
 			world_pos.x = origin.x + shape_anchor.x * size.width;
 			world_pos.y = origin.y + shape_anchor.y * size.height;
 		}
