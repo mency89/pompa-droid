@@ -109,6 +109,10 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 			GB2ShapeCache::instance()->addFixturesToBody(collision_body_, shape_name_ + "_weapon", isFlippedX());
 		}
 	}
+	else
+	{
+		shape_name_.clear();
+	}
 }
 
 // 获取唯一id
@@ -245,8 +249,16 @@ void BaseGameEntity::updateBodyPosition()
 {
 	if (collision_body_ != nullptr && getParent() != nullptr)
 	{
+		Vec2 shape_anchor;
 		const float PTMRatio = GB2ShapeCache::instance()->getPTMRatio();
 		Vec2 world_pos = getParent()->convertToWorldSpace(getPosition());
+		if (!shape_name_.empty() && GB2ShapeCache::instance()->anchorPointForShape(shape_name_, shape_anchor))
+		{
+			const Size size = getContentSize();
+			Vec2 origin = getPosition() - Vec2(getAnchorPoint().x * size.width, getAnchorPoint().y * size.height);
+			world_pos.x = origin.x + shape_anchor.x * size.width;
+			world_pos.y = origin.y + shape_anchor.y * size.height;
+		}
 		collision_body_->SetTransform(b2Vec2(world_pos.x / PTMRatio, world_pos.y / PTMRatio), collision_body_->GetAngle());
 	}
 }

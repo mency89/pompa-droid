@@ -1,0 +1,26 @@
+{
+    "Hero": {
+        "width": 45, 
+        "height": 78, 
+        "walk_speed": 1, 
+        "run_speed": 2, 
+        "jump_force": 2, 
+        "jump_height": 50
+    }, 
+    "Robot": {
+        "width": 45, 
+        "height": 78, 
+        "walk_speed": 1, 
+        "run_speed": 2, 
+        "jump_force": 2, 
+        "jump_height": 50
+    }, 
+    "Boss": {
+        "width": 45, 
+        "height": 78, 
+        "walk_speed": 1, 
+        "run_speed": 2, 
+        "jump_force": 2, 
+        "jump_height": 50
+    }
+}

@@ -30,6 +30,9 @@ bool Hero::init()
 	state_machine_->set_global_state(HeroGlobal::instance());
 	state_machine_->change_state(HeroIdle::instance());
 
+	setAnchorPoint(cocos2d::Vec2(0.5f, 0.0f));
+	setContentSize(cocos2d::Size(RealWidth, RealHeight));
+
 	return true;
 }
 
