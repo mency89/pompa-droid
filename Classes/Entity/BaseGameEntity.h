@@ -3,7 +3,7 @@
 
 #include <memory>
 #include "cocos2d.h"
-#include "Telegram.h"
+#include "message/Telegram.h"
 #include "GameEntityCreator.h"
 
 class b2Body;

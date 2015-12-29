@@ -5,7 +5,7 @@
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
-        "jump_height": 50
+        "max_jump_height": 50
     }, 
     "Robot": {
         "width": 45, 
@@ -13,7 +13,7 @@
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
-        "jump_height": 50
+        "max_jump_height": 50
     }, 
     "Boss": {
         "width": 45, 
@@ -21,6 +21,6 @@
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
-        "jump_height": 50
+        "max_jump_height": 50
     }
 }

@@ -19,34 +19,19 @@
     <Filter Include="src\Scene">
       <UniqueIdentifier>{efa58daa-e16b-4e4c-955d-1c9d75b2a566}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Entity\message">
+      <UniqueIdentifier>{80bd9f35-ed1c-40e3-8e66-33cb0997aa09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Misc">
+      <UniqueIdentifier>{319f98aa-c1a6-418d-aec6-61a9dae05a62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\VisibleRect.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\State\HeroOwnedStates.cpp">
       <Filter>src\State</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Singleton.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\AnimationManger.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp">
-      <Filter>src\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Entity\Hero.cpp">
-      <Filter>src\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GB2ShapeCache.cpp">
-      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Scene\GameScene.cpp">
       <Filter>src\Scene</Filter>
@@ -54,43 +39,61 @@
     <ClCompile Include="..\Classes\Scene\WelcomeScene.cpp">
       <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\GameApplication.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\State\BossOwnedStates.cpp">
+      <Filter>src\State</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\MessageDispatcher.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Scene\LevelLayer.cpp">
+      <Filter>src\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Helper.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Entity\message\MessageDispatcher.cpp">
+      <Filter>src\Entity\message</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\GLES-Render.cpp">
-      <Filter>src</Filter>
+    <ClCompile Include="..\Classes\Entity\BaseGameEntity.cpp">
+      <Filter>src\Entity</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Entity\Boss.cpp">
       <Filter>src\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\State\BossOwnedStates.cpp">
-      <Filter>src\State</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Entity\EntityManger.cpp">
       <Filter>src\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\TexturePacker.cpp">
+    <ClCompile Include="..\Classes\Entity\Hero.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Scene\LevelLayer.cpp">
-      <Filter>src\Scene</Filter>
+    <ClCompile Include="..\Classes\GameApplication.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\AnimationManger.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\GameEntityConfig.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\GB2ShapeCache.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\GLES-Render.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\Helper.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\Singleton.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\TexturePacker.cpp">
+      <Filter>src\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Misc\VisibleRect.cpp">
+      <Filter>src\Misc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\VisibleRect.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\State\HeroOwnedStates.h">
       <Filter>src\State</Filter>
@@ -101,13 +104,40 @@
     <ClInclude Include="..\Classes\State\StateMachine.h">
       <Filter>src\State</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Singleton.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Scene\GameScene.h">
+      <Filter>src\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AnimationManger.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Scene\WelcomeScene.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\State\BossOwnedStates.h">
+      <Filter>src\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Scene\LevelLayer.h">
+      <Filter>src\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\message\MeesageTypes.h">
+      <Filter>src\Entity\message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\message\MessageDispatcher.h">
+      <Filter>src\Entity\message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\message\Telegram.h">
+      <Filter>src\Entity\message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\ActionTags.h">
+      <Filter>src\Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\BaseGameEntity.h">
+      <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Boss.h">
+      <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Category.h">
+      <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\EntityManger.h">
       <Filter>src\Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\GameEntityCreator.h">
@@ -116,53 +146,35 @@
     <ClInclude Include="..\Classes\Entity\Hero.h">
       <Filter>src\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\GB2ShapeCache.h">
+    <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ActionTags.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Scene\GameScene.h">
-      <Filter>src\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Scene\WelcomeScene.h">
-      <Filter>src\Scene</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameApplication.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\MeesageTypes.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Misc\AnimationManger.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\MessageDispatcher.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Misc\GameEntityConfig.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Telegram.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Misc\GB2ShapeCache.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Helper.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Misc\GLES-Render.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\GLES-Render.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Misc\Helper.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ShapeCategory.h">
-      <Filter>src</Filter>
+    <ClInclude Include="..\Classes\Misc\Singleton.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Entity\Boss.h">
-      <Filter>src\Entity</Filter>
+    <ClInclude Include="..\Classes\Misc\TexturePacker.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\State\BossOwnedStates.h">
-      <Filter>src\State</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity\EntityManger.h">
-      <Filter>src\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\TexturePacker.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Scene\LevelLayer.h">
-      <Filter>src\Scene</Filter>
+    <ClInclude Include="..\Classes\Misc\VisibleRect.h">
+      <Filter>src\Misc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

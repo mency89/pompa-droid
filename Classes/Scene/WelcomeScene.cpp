@@ -1,10 +1,11 @@
 ﻿#include "WelcomeScene.h"
 
 #include "GameScene.h"
-#include "TexturePacker.h"
 #include "VisibleRect.h"
 #include "GB2ShapeCache.h"
+#include "TexturePacker.h"
 #include "AnimationManger.h"
+#include "GameEntityConfig.h"
 using namespace cocos2d;
 
 Scene* WelcomeScene::createScene()

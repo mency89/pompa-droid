@@ -4,8 +4,9 @@
 #include <list>
 #include <vector>
 #include <unordered_map>
+
 #include "Telegram.h"
-#include "Singleton.h"
+#include "Misc/Singleton.h"
 
 class BaseGameEntity;
 
