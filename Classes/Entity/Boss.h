@@ -17,6 +17,8 @@ public:
 
 	virtual void update() override;
 
+	virtual std::string name() const override;
+
 	virtual int weaponCategoryBits() const override;
 
 	virtual void handleMenssage(const Message &msg) override;

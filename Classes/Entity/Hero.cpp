@@ -22,15 +22,6 @@ bool Hero::init()
 		return false;
 	}
 
-	EntityAttribute attribute;
-	if (GameEntityConfig::instance()->getEntityAttribute("Hero", &attribute))
-	{
-		setWalkSpeed(attribute.walk_speed);
-		setRunSpeed(attribute.run_speed);
-		setJumpForce(attribute.jump_force);
-		setMaxJumpHeight(attribute.max_jump_height);
-	}
-
 	state_machine_.reset(new StateMachine<Hero>(this));
 	state_machine_->set_global_state(HeroGlobal::instance());
 	state_machine_->change_state(HeroIdle::instance());
@@ -44,6 +35,11 @@ bool Hero::init()
 void Hero::update()
 {
 	state_machine_->update();
+}
+
+std::string Hero::name() const
+{
+	return "Hero";
 }
 
 int Hero::weaponCategoryBits() const

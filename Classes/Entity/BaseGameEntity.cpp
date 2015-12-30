@@ -2,9 +2,11 @@
 
 #include <limits>
 #include <Box2D/Box2D.h>
+
 #include "Helper.h"
 #include "GB2ShapeCache.h"
 #include "AnimationManger.h"
+#include "GameEntityConfig.h"
 #include "Message/MessageDispatcher.h"
 using namespace cocos2d;
 
@@ -41,14 +43,28 @@ bool BaseGameEntity::init()
 		return false;
 	}
 
-	setDirection(Direction::Right);
-	MessageDispatcher::instance()->registerEntity(this);
-
+	// 创建刚体
 	b2BodyDef def;
 	def.userData = this;
 	def.allowSleep = false;
 	def.type = b2_dynamicBody;
 	collision_body_ = world_->CreateBody(&def);
+
+	// 设置方向
+	setDirection(Direction::Right);
+
+	// 设置属性
+	EntityAttribute attribute;
+	if (GameEntityConfig::instance()->getEntityAttribute(name(), &attribute))
+	{
+		setWalkSpeed(attribute.walk_speed);
+		setRunSpeed(attribute.run_speed);
+		setJumpForce(attribute.jump_force);
+		setMaxJumpHeight(attribute.max_jump_height);
+	}
+
+	// 注册消息事件
+	MessageDispatcher::instance()->registerEntity(this);
 
 	return true;
 }

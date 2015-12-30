@@ -22,15 +22,6 @@ bool Boss::init()
 		return false;
 	}
 
-	EntityAttribute attribute;
-	if (GameEntityConfig::instance()->getEntityAttribute("Boss", &attribute))
-	{
-		setWalkSpeed(attribute.walk_speed);
-		setRunSpeed(attribute.run_speed);
-		setJumpForce(attribute.jump_force);
-		setMaxJumpHeight(attribute.max_jump_height);
-	}
-
 	setDirection(Left);
 
 	state_machine_.reset(new StateMachine<Boss>(this));
@@ -46,6 +37,11 @@ bool Boss::init()
 void Boss::update()
 {
 	state_machine_->update();
+}
+
+std::string Boss::name() const
+{
+	return "Boss";
 }
 
 int Boss::weaponCategoryBits() const

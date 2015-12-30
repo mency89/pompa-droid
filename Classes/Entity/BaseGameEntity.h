@@ -51,6 +51,11 @@ public:
 	virtual void update();
 
 	/**
+	 * 实例名称
+	 */
+	virtual std::string name() const = 0;
+
+	/**
 	 * 武器位标识
 	 */
 	virtual int weaponCategoryBits() const = 0;
