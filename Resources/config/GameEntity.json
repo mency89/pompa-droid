@@ -1,7 +1,7 @@
 {
     "Hero": {
-        "width": 45, 
-        "height": 78, 
+        "width": 52, 
+        "height": 80, 
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
