@@ -54,13 +54,13 @@ bool BaseGameEntity::init()
 	setDirection(Direction::Right);
 
 	// 设置属性
-	EntityAttribute attribute;
-	if (GameEntityConfig::instance()->getEntityAttribute(name(), &attribute))
+	const EntityAttribute *attribute = nullptr;
+	if (GameEntityConfig::instance()->getEntityAttribute(name(), attribute))
 	{
-		setWalkSpeed(attribute.walk_speed);
-		setRunSpeed(attribute.run_speed);
-		setJumpForce(attribute.jump_force);
-		setMaxJumpHeight(attribute.max_jump_height);
+		setWalkSpeed(attribute->walk_speed);
+		setRunSpeed(attribute->run_speed);
+		setJumpForce(attribute->jump_force);
+		setMaxJumpHeight(attribute->max_jump_height);
 	}
 
 	// 注册消息事件
@@ -130,6 +130,50 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 	{
 		shape_name_.clear();
 	}
+}
+
+// 全宽
+float BaseGameEntity::fullWidth() const
+{
+	const EntityAttribute *attribute = nullptr;
+	if (GameEntityConfig::instance()->getEntityAttribute(name(), attribute))
+	{
+		return attribute->size.width;
+	}
+	return 0;
+}
+
+// 全高
+float BaseGameEntity::fullHeight() const
+{
+	const EntityAttribute *attribute = nullptr;
+	if (GameEntityConfig::instance()->getEntityAttribute(name(), attribute))
+	{
+		return attribute->size.height;
+	}
+	return 0;
+}
+
+// 实际宽度
+float BaseGameEntity::realWidth() const
+{
+	const EntityAttribute *attribute = nullptr;
+	if (GameEntityConfig::instance()->getEntityAttribute(name(), attribute))
+	{
+		return attribute->real_size.width;
+	}
+	return 0;
+}
+
+// 实际高度
+float BaseGameEntity::realHeight() const
+{
+	const EntityAttribute *attribute = nullptr;
+	if (GameEntityConfig::instance()->getEntityAttribute(name(), attribute))
+	{
+		return attribute->real_size.height;
+	}
+	return 0;
 }
 
 // 获取唯一id

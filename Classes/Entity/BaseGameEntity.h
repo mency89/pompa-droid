@@ -73,9 +73,29 @@ public:
 
 public:
 	/**
-	 * 获取唯一id
+	 * 唯一id
 	 */
 	int getID() const;
+
+	/**
+	 * 全宽
+	 */
+	float fullWidth() const;
+
+	/**
+	 * 全高
+	 */
+	float fullHeight() const;
+
+	/**
+	 * 实际宽度
+	 */
+	float realWidth() const;
+
+	/**
+	 * 实际高度
+	 */
+	float realHeight() const;
 
 	/**
 	 * 获取刚体

@@ -1,26 +1,26 @@
 {
     "Hero": {
-        "width": 52, 
-        "height": 80, 
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
-        "max_jump_height": 50
+        "max_jump_height": 50, 
+        "size": "280,150", 
+        "real_size": "52,80"
     }, 
     "Robot": {
-        "width": 45, 
-        "height": 78, 
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
-        "max_jump_height": 50
+        "max_jump_height": 50, 
+        "size": "280,150", 
+        "real_size": "52,80"
     }, 
     "Boss": {
-        "width": 45, 
-        "height": 78, 
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
-        "max_jump_height": 50
+        "max_jump_height": 50, 
+        "size": "280,150", 
+        "real_size": "52,80"
     }
 }

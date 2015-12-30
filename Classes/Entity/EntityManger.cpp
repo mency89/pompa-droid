@@ -35,6 +35,7 @@ BaseGameEntity* EntityManger::create(EntityType type)
 	if (entity != nullptr)
 	{
 		entitys_.insert(std::make_pair(entity->getID(), entity));
+		entity->retain();
 		entity->setEntityManger(this);
 	}
 
@@ -67,6 +68,7 @@ void EntityManger::destroyAllEntity()
 	{
 		itr->second->destroyBody();
 		itr->second->removeFromParentAndCleanup(true);
+		itr->second->release();
 		itr = entitys_.erase(itr);
 	}
 	destroy_set_.clear();
@@ -89,6 +91,7 @@ void EntityManger::update()
 		{
 			result->second->destroyBody();
 			result->second->removeFromParentAndCleanup(true);
+			result->second->release();
 			entitys_.erase(result);
 		}
 	}

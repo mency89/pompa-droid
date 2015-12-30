@@ -25,16 +25,6 @@ public:
 
 public:
 	/**
-	 * 获取实际宽度
-	 */
-	static float realWidth();
-
-	/**
-	 * 获取实际高度
-	 */
-	static float realHeight();
-
-	/**
 	 * 获取有限状态机
 	 */
 	StateMachine<Boss>* getStateMachine();

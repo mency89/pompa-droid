@@ -53,12 +53,16 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 		if (objects != nullptr)
 		{
 			ValueMap data = objects->getObject("Hero");
-			hero_ = entity_manger_->create(entity_hero);
 			float x = data["x"].asFloat();
 			float y = data["y"].asFloat();
-			hero_->setPosition(Vec2(data["x"].asFloat() + Hero::realWidth() * hero_->getAnchorPoint().x,
-				data["y"].asFloat() + Hero::realHeight() * hero_->getAnchorPoint().y));
-			addChild(hero_, 10);
+			hero_ = entity_manger_->create(entity_hero);
+			if (hero_ != nullptr)
+			{
+				hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
+				Vec2 offset = calculBornPositionOffset("Hero", hero_);
+				hero_->setPosition(Vec2(x + offset.x, y + offset.y));
+				addChild(hero_, layerCount());
+			}
 		}
 	}
 	return hero_;
@@ -104,6 +108,54 @@ int LevelLayer::getFloorHeight() const
 	return 0;
 }
 
+
+// 计算出生位置偏移
+Vec2 LevelLayer::calculBornPositionOffset(const std::string &object_name, BaseGameEntity *entity) const
+{
+	if (entity != nullptr)
+	{
+		const Size size(entity->fullWidth(), entity->fullHeight());
+		const Size real_size(entity->realWidth(), entity->realHeight());
+		Vec2 origin = Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
+		Vec2 offset = Vec2(real_size.width * entity->getAnchorPoint().x, real_size.height * entity->getAnchorPoint().y);
+		Vec2 node_pos = Vec2(size.width * entity->getAnchorPoint().x, size.height * entity->getAnchorPoint().y);
+		return node_pos - (origin + offset);
+	}
+	return Vec2::ZERO;
+}
+
+// 图层数量
+int LevelLayer::layerCount() const
+{
+	int count = 0;
+	for (auto &child : getChildren())
+	{
+		TMXLayer *layer = dynamic_cast<TMXLayer *>(child);
+		if (layer != nullptr)
+		{
+			++count;
+		}
+	}
+	return count;
+}
+
+// 获取真实矩形框
+Rect LevelLayer::getEntityRealRect(BaseGameEntity *entity) const
+{
+	Rect ret;
+	if (entity != nullptr)
+	{
+		CCAssert(entity->getParent() == this, "");
+		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		const Size size(hero_->fullWidth(), hero_->fullHeight());
+		const Size real_size(hero_->realWidth(), hero_->realHeight());
+		Vec2 origin = world_pos - Vec2(size.width * hero_->getAnchorPoint().x, size.height * hero_->getAnchorPoint().y);
+		Vec2 real_origin = origin + Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
+		ret.setRect(real_origin.x, real_origin.y, real_size.width, real_size.height);
+	}
+	return ret;
+}
+
 // 镜头跟随主角
 void LevelLayer::followHeroWithCamera()
 {
@@ -133,17 +185,17 @@ void LevelLayer::followHeroWithCamera()
 	}
 }
 
-// 主角是否在屏幕中
-bool LevelLayer::HeroInInsideOfStage() const
+// 是否在地板内
+bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
 {
-	if (hero_ != nullptr)
+	if (entity != nullptr)
 	{
-		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		const Rect rect = getEntityRealRect(entity);
 		Size win_size = Director::getInstance()->getWinSize();
-		if (world_pos.x >= Hero::realWidth() * hero_->getAnchorPoint().x &&
-			world_pos.x <= win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x) &&
-			world_pos.y >= Hero::realHeight() * hero_->getAnchorPoint().y &&
-			world_pos.y <= getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))
+		if (rect.getMinX() >= 0 &&
+			rect.getMinY() >= 0 &&
+			rect.getMaxX() <= win_size.width &&
+			rect.getMinY() <= getTileSize().height * getFloorHeight())
 		{
 			return true;
 		}
@@ -154,39 +206,40 @@ bool LevelLayer::HeroInInsideOfStage() const
 // 自动调整主角位置
 void LevelLayer::adjustmentHeroPosition()
 {
-	if (hero_ != nullptr && !HeroInInsideOfStage())
+	if (hero_ != nullptr && !insideOfFloor(hero_))
 	{
-		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		const int floor_height = getFloorHeight();
+		const Rect rect = getEntityRealRect(hero_);
 		Size win_size = Director::getInstance()->getWinSize();
-		if (world_pos.x < Hero::realWidth() * hero_->getAnchorPoint().x)
+		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
+		const Size size(hero_->fullWidth(), hero_->fullHeight());
+		const Size real_size(hero_->realWidth(), hero_->realHeight());
+
+		if (rect.getMinX() < 0)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(Hero::realWidth() * hero_->getAnchorPoint().x,
-				world_pos.y)));
+
 		}
 
-		if (world_pos.x > win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x))
+		if (rect.getMaxX() > win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x))
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x),
-				world_pos.y)));
+
 		}
 
-		if (world_pos.y < Hero::realWidth() * hero_->getAnchorPoint().y)
+		if (rect.getMinY() < 0)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				Hero::realHeight() * hero_->getAnchorPoint().y)));
+
 		}
 
-		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))
+		if (rect.getMaxY() > getTileSize().height * floor_height + real_size.height * (1.0f - hero_->getAnchorPoint().y))
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))));
+
 		}
 	}
 }
 
 void LevelLayer::adjustmentHeroPositionX()
 {
-	if (hero_ != nullptr && !HeroInInsideOfStage())
+	/*if (hero_ != nullptr && !HeroInInsideOfStage())
 	{
 		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
 		Size win_size = Director::getInstance()->getWinSize();
@@ -202,12 +255,12 @@ void LevelLayer::adjustmentHeroPositionX()
 			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x),
 				world_pos.y)));
 		}
-	}
+	}*/
 }
 
 void LevelLayer::adjustmentHeroPositionY()
 {
-	if (hero_ != nullptr && !HeroInInsideOfStage())
+	/*if (hero_ != nullptr && !HeroInInsideOfStage())
 	{
 		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
 		Size win_size = Director::getInstance()->getWinSize();
@@ -223,7 +276,7 @@ void LevelLayer::adjustmentHeroPositionY()
 			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
 				getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))));
 		}
-	}
+	}*/
 }
 
 // 设置跟随主角

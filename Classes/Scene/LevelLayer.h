@@ -57,14 +57,29 @@ public:
 
 private:
 	/**
+	 * 图层数量
+	 */
+	int layerCount() const;
+
+	/**
 	 * 镜头跟随主角
 	 */
 	void followHeroWithCamera();
 
 	/**
-	 * 主角是否在屏幕中
+	 * 是否在地板内
 	 */
-	bool HeroInInsideOfStage() const;
+	bool insideOfFloor(BaseGameEntity *entity) const;
+
+	/**
+	 * 获取真实矩形框
+	 */
+	cocos2d::Rect getEntityRealRect(BaseGameEntity *entity) const;
+
+	/**
+	 * 计算出生位置偏移
+	 */
+	cocos2d::Vec2 calculBornPositionOffset(const std::string &object_name, BaseGameEntity *entity) const;
 
 private:
 	bool						follow_;

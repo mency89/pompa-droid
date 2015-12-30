@@ -1,6 +1,6 @@
 ﻿#include "GameEntityConfig.h"
 
-#include "cocos2d.h"
+#include "Helper.h"
 #include "json/document.h"
 using namespace cocos2d;
 
@@ -30,24 +30,29 @@ void GameEntityConfig::loadConfigFile(const std::string &filename)
 				EntityAttribute attrubute;
 				const rapidjson::Value &object = itr->value;
 				const std::string name = itr->name.GetString();
-				attrubute.width = object["width"].GetDouble();
-				attrubute.height = object["height"].GetDouble();
 				attrubute.walk_speed = object["walk_speed"].GetDouble();
 				attrubute.run_speed = object["run_speed"].GetDouble();
 				attrubute.jump_force = object["jump_force"].GetDouble();
 				attrubute.max_jump_height = object["max_jump_height"].GetDouble();
+				
+				auto size = Split(object["size"].GetString(), ",");
+				auto real_size = Split(object["real_size"].GetString(), ",");
+				CCAssert(size.size() == 2 && real_size.size() == 2, "");
+				attrubute.size = Size(atoi(size[0].c_str()), atoi(size[1].c_str()));
+				attrubute.real_size = Size(atoi(real_size[0].c_str()), atoi(real_size[1].c_str()));
+
 				entitys_.insert(std::make_pair(name, attrubute));
 			}
 		}
 	}
 }
 
-bool GameEntityConfig::getEntityAttribute(const std::string &name, EntityAttribute *ret)
+bool GameEntityConfig::getEntityAttribute(const std::string &name, const EntityAttribute *&ret)
 {
 	auto itr = entitys_.find(name);
 	if (itr != entitys_.end())
 	{
-		*ret = itr->second;
+		ret = &itr->second;
 		return true;
 	}
 	return false;
