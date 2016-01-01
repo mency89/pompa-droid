@@ -4,10 +4,13 @@
 #include "Entity/EntityManger.h"
 using namespace cocos2d;
 
+#define HERO_MAX_Y_CORRECTION 10
+
 LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name)
 	: world_(world)
 	, hero_(nullptr)
 	, follow_(false)
+	, floor_height_(0)
 	, innerstage_left_(VisibleRect::left().x + VisibleRect::getVisibleRect().size.width / 5.0f)
 	, inner_stage_right_(VisibleRect::right().x - VisibleRect::getVisibleRect().size.width / 5.0f)
 {
@@ -34,6 +37,9 @@ LevelLayer* LevelLayer::create(std::shared_ptr<b2World> world, const std::string
 
 bool LevelLayer::init()
 {
+	// 获取地板高度
+	floor_height_ = getFloorHeight();
+
 	// 创建游戏实例
 	entity_manger_.reset(new EntityManger(world_));
 	hero_ = getHeroEntity();
@@ -42,21 +48,6 @@ bool LevelLayer::init()
 	scheduleUpdate();
 
 	return true;
-}
-
-// 计算出生位置偏移
-Vec2 LevelLayer::calculBornPositionOffset(const std::string &object_name, BaseGameEntity *entity) const
-{
-	if (entity != nullptr)
-	{
-		const Size size(entity->fullWidth(), entity->fullHeight());
-		const Size real_size(entity->realWidth(), entity->realHeight());
-		Vec2 origin = Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
-		Vec2 offset = Vec2(real_size.width * entity->getAnchorPoint().x, real_size.height * entity->getAnchorPoint().y);
-		Vec2 node_pos = Vec2(size.width * entity->getAnchorPoint().x, size.height * entity->getAnchorPoint().y);
-		return node_pos - (origin + offset);
-	}
-	return Vec2::ZERO;
 }
 
 // 获取主角实例
@@ -74,9 +65,8 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 			if (hero_ != nullptr)
 			{
 				hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
-				Vec2 offset = calculBornPositionOffset("Hero", hero_);
-				hero_->setPosition(Vec2(x + offset.x, y + offset.y));
 				addChild(hero_, layerCount());
+				setRealEntityPosition(hero_, Vec2(x, y));
 			}
 		}
 	}
@@ -138,17 +128,61 @@ int LevelLayer::layerCount() const
 	return count;
 }
 
-// 获取真实矩形框
-Rect LevelLayer::getEntityRealRect(BaseGameEntity *entity) const
+// 获取非透明区域在世界中的坐标
+Vec2 LevelLayer::getRealEntityPosition(BaseGameEntity *entity) const
+{
+	CCAssert(entity != nullptr && entity->getParent() == this, "");
+	const Size size(entity->fullWidth(), entity->fullHeight());
+	const Size real_size(entity->realWidth(), entity->realHeight());
+	Vec2 origin = entity->getPosition() - Vec2(size.width * entity->getAnchorPoint().x,
+		size.height * entity->getAnchorPoint().y);
+	Vec2 real_origin = origin + Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
+	Vec2 real_pos(real_origin.x + real_size.width * entity->getAnchorPoint().x,
+		real_origin.y + real_size.height * entity->getAnchorPoint().y);
+	return convertToWorldSpace(real_pos);
+}
+
+// 设置非透明区域在世界中的坐标
+void LevelLayer::setRealEntityPosition(BaseGameEntity *entity, const Vec2 &pos)
+{
+	CCAssert(entity != nullptr && entity->getParent() == this, "");
+	Vec2 real_pos = convertToNodeSpace(pos);
+	const Size size(entity->fullWidth(), entity->fullHeight());
+	const Size real_size(entity->realWidth(), entity->realHeight());
+	Vec2 real_origin = real_pos - Vec2(real_size.width * entity->getAnchorPoint().x, real_size.height * entity->getAnchorPoint().y);
+	Vec2 origin = real_origin - Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
+	entity->setPosition(origin + Vec2(size.width * entity->getAnchorPoint().x, size.height * entity->getAnchorPoint().y));
+}
+
+// 获取真实矩形框（去除透明区域的矩形框）
+Rect LevelLayer::getRealEntityRect(BaseGameEntity *entity) const
 {
 	Rect ret;
 	if (entity != nullptr)
 	{
 		CCAssert(entity->getParent() == this, "");
-		ret.intersectsRect(entity->getRealRect());
+		ret = entity->getRealRect();
 		ret.origin = convertToWorldSpace(ret.origin);
 	}
 	return ret;
+}
+
+// 是否在地板内
+bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
+{
+	if (entity != nullptr)
+	{
+		const Rect rect = getRealEntityRect(entity);
+		Size win_size = Director::getInstance()->getWinSize();
+		if (rect.getMinX() >= 0 &&
+			rect.getMinY() >= 0 &&
+			rect.getMaxX() <= win_size.width &&
+			rect.getMinY() <= getTileSize().height * floor_height_ - HERO_MAX_Y_CORRECTION)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 // 镜头跟随主角
@@ -180,98 +214,81 @@ void LevelLayer::followHeroWithCamera()
 	}
 }
 
-// 是否在地板内
-bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
-{
-	if (entity != nullptr)
-	{
-		const Rect rect = getEntityRealRect(entity);
-		Size win_size = Director::getInstance()->getWinSize();
-		if (rect.getMinX() >= 0 &&
-			rect.getMinY() >= 0 &&
-			rect.getMaxX() <= win_size.width &&
-			rect.getMinY() <= getTileSize().height * getFloorHeight())
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 // 自动调整主角位置
 void LevelLayer::adjustmentHeroPosition()
 {
 	if (hero_ != nullptr && !insideOfFloor(hero_))
 	{
-		const int floor_height = getFloorHeight();
-		const Rect rect = getEntityRealRect(hero_);
-		Size win_size = Director::getInstance()->getWinSize();
-		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
-		const Size size(hero_->fullWidth(), hero_->fullHeight());
+		const Rect rect = getRealEntityRect(hero_);
+		const Vec2 realEntityPos = getRealEntityPosition(hero_);
+		const Size win_size = Director::getInstance()->getWinSize();
 		const Size real_size(hero_->realWidth(), hero_->realHeight());
+		const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
+		const float top_boundary = getTileSize().height * floor_height_ + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
 		if (rect.getMinX() < 0)
 		{
-
+			setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
 		}
 
-		if (rect.getMaxX() > win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x))
+		if (rect.getMaxX() > right_boundary)
 		{
-
+			setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
 		}
 
 		if (rect.getMinY() < 0)
 		{
-
+			setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
 		}
 
-		if (rect.getMaxY() > getTileSize().height * floor_height + real_size.height * (1.0f - hero_->getAnchorPoint().y))
+		if (rect.getMinY() > top_boundary)
 		{
-
+			setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
 		}
 	}
 }
 
 void LevelLayer::adjustmentHeroPositionX()
 {
-	/*if (hero_ != nullptr && !HeroInInsideOfStage())
+	if (hero_ != nullptr && !insideOfFloor(hero_))
 	{
-		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
-		Size win_size = Director::getInstance()->getWinSize();
-
-		if (world_pos.x < Hero::realWidth() * hero_->getAnchorPoint().x)
+		const Rect rect = getRealEntityRect(hero_);
+		const Vec2 realEntityPos = getRealEntityPosition(hero_);
+		const Size win_size = Director::getInstance()->getWinSize();
+		const Size real_size(hero_->realWidth(), hero_->realHeight());
+		const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
+	
+		if (rect.getMinX() < 0)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(Hero::realWidth() * hero_->getAnchorPoint().x,
-				world_pos.y)));
+			setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
 		}
 
-		if (world_pos.x > win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x))
+		if (rect.getMaxX() > right_boundary)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(win_size.width - Hero::realWidth() * (1.0f - hero_->getAnchorPoint().x),
-				world_pos.y)));
+			setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
 		}
-	}*/
+	}
 }
 
 void LevelLayer::adjustmentHeroPositionY()
 {
-	/*if (hero_ != nullptr && !HeroInInsideOfStage())
+	if (hero_ != nullptr && !insideOfFloor(hero_))
 	{
-		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
-		Size win_size = Director::getInstance()->getWinSize();
+		const Rect rect = getRealEntityRect(hero_);
+		const Vec2 realEntityPos = getRealEntityPosition(hero_);
+		const Size real_size(hero_->realWidth(), hero_->realHeight());
+		const float top_boundary = getTileSize().height * floor_height_ + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
-		if (world_pos.y < Hero::realHeight() * hero_->getAnchorPoint().y)
+		if (rect.getMinY() < 0)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				Hero::realHeight() * hero_->getAnchorPoint().y)));
+			setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
 		}
 
-		if (world_pos.y > getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))
+		if (rect.getMinY() > top_boundary)
 		{
-			hero_->setPosition(convertToNodeSpace(Vec2(world_pos.x,
-				getTileSize().height * getFloorHeight() + Hero::realHeight() * (1.0f - hero_->getAnchorPoint().y))));
+			setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
 		}
-	}*/
+	}
 }
 
 // 设置跟随主角
@@ -287,6 +304,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 	hero_ = nullptr;
 	setPosition(Vec2::ZERO);
 	setAnchorPoint(Vec2::ZERO);
+	floor_height_ = getFloorHeight();
 	entity_manger_->destroyAllEntity();
 }
 

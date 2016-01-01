@@ -72,17 +72,23 @@ private:
 	bool insideOfFloor(BaseGameEntity *entity) const;
 
 	/**
-	 * 获取真实矩形框
+	 * 获取真实矩形框（去除透明区域的矩形框）
 	 */
-	cocos2d::Rect getEntityRealRect(BaseGameEntity *entity) const;
+	cocos2d::Rect getRealEntityRect(BaseGameEntity *entity) const;
 
 	/**
-	 * 计算出生位置偏移
+	 * 获取非透明区域在世界中的坐标
 	 */
-	cocos2d::Vec2 calculBornPositionOffset(const std::string &object_name, BaseGameEntity *entity) const;
+	cocos2d::Vec2 getRealEntityPosition(BaseGameEntity *entity) const;
+
+	/**
+	 * 设置非透明区域在世界中的坐标
+	 */
+	void setRealEntityPosition(BaseGameEntity *entity, const cocos2d::Vec2 &pos);
 
 private:
 	bool						follow_;
+	int							floor_height_;
 	BaseGameEntity*				hero_;
 	const float					innerstage_left_;
 	const float					inner_stage_right_;
