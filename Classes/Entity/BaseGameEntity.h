@@ -98,6 +98,11 @@ public:
 	float realHeight() const;
 
 	/**
+	 * 获取实际矩形框
+	 */
+	cocos2d::Rect getRealRect() const;
+
+	/**
 	 * 获取刚体
 	 */
 	b2Body* getBody();

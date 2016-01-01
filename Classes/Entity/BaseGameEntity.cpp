@@ -176,6 +176,17 @@ float BaseGameEntity::realHeight() const
 	return 0;
 }
 
+// 获取实际矩形框
+Rect BaseGameEntity::getRealRect() const
+{
+	const Size size(fullWidth(), fullHeight());
+	const Size real_size(realWidth(), realHeight());
+	Vec2 origin = getPosition() - Vec2(size.width * getAnchorPoint().x, size.height * getAnchorPoint().y);
+	Vec2 real_origin = origin + Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
+	Rect ret(real_origin.x, real_origin.y, real_size.width, real_size.height);
+	return ret;
+}
+
 // 获取唯一id
 int BaseGameEntity::getID() const
 {

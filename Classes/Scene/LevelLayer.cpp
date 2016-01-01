@@ -44,6 +44,21 @@ bool LevelLayer::init()
 	return true;
 }
 
+// 计算出生位置偏移
+Vec2 LevelLayer::calculBornPositionOffset(const std::string &object_name, BaseGameEntity *entity) const
+{
+	if (entity != nullptr)
+	{
+		const Size size(entity->fullWidth(), entity->fullHeight());
+		const Size real_size(entity->realWidth(), entity->realHeight());
+		Vec2 origin = Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
+		Vec2 offset = Vec2(real_size.width * entity->getAnchorPoint().x, real_size.height * entity->getAnchorPoint().y);
+		Vec2 node_pos = Vec2(size.width * entity->getAnchorPoint().x, size.height * entity->getAnchorPoint().y);
+		return node_pos - (origin + offset);
+	}
+	return Vec2::ZERO;
+}
+
 // 获取主角实例
 BaseGameEntity* LevelLayer::getHeroEntity()
 {
@@ -108,22 +123,6 @@ int LevelLayer::getFloorHeight() const
 	return 0;
 }
 
-
-// 计算出生位置偏移
-Vec2 LevelLayer::calculBornPositionOffset(const std::string &object_name, BaseGameEntity *entity) const
-{
-	if (entity != nullptr)
-	{
-		const Size size(entity->fullWidth(), entity->fullHeight());
-		const Size real_size(entity->realWidth(), entity->realHeight());
-		Vec2 origin = Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
-		Vec2 offset = Vec2(real_size.width * entity->getAnchorPoint().x, real_size.height * entity->getAnchorPoint().y);
-		Vec2 node_pos = Vec2(size.width * entity->getAnchorPoint().x, size.height * entity->getAnchorPoint().y);
-		return node_pos - (origin + offset);
-	}
-	return Vec2::ZERO;
-}
-
 // 图层数量
 int LevelLayer::layerCount() const
 {
@@ -146,12 +145,8 @@ Rect LevelLayer::getEntityRealRect(BaseGameEntity *entity) const
 	if (entity != nullptr)
 	{
 		CCAssert(entity->getParent() == this, "");
-		Vec2 world_pos = convertToWorldSpace(hero_->getPosition());
-		const Size size(hero_->fullWidth(), hero_->fullHeight());
-		const Size real_size(hero_->realWidth(), hero_->realHeight());
-		Vec2 origin = world_pos - Vec2(size.width * hero_->getAnchorPoint().x, size.height * hero_->getAnchorPoint().y);
-		Vec2 real_origin = origin + Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
-		ret.setRect(real_origin.x, real_origin.y, real_size.width, real_size.height);
+		ret.intersectsRect(entity->getRealRect());
+		ret.origin = convertToWorldSpace(ret.origin);
 	}
 	return ret;
 }
