@@ -88,6 +88,7 @@ private:
 
 private:
 	bool						follow_;
+	int							layer_count_;
 	int							floor_height_;
 	BaseGameEntity*				hero_;
 	const float					innerstage_left_;

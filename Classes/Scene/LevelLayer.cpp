@@ -10,6 +10,7 @@ LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_
 	: world_(world)
 	, hero_(nullptr)
 	, follow_(false)
+	, layer_count_(0)
 	, floor_height_(0)
 	, innerstage_left_(VisibleRect::left().x + VisibleRect::getVisibleRect().size.width / 5.0f)
 	, inner_stage_right_(VisibleRect::right().x - VisibleRect::getVisibleRect().size.width / 5.0f)
@@ -37,6 +38,8 @@ LevelLayer* LevelLayer::create(std::shared_ptr<b2World> world, const std::string
 
 bool LevelLayer::init()
 {
+	// 获取图层数量
+	layer_count_ = layerCount();
 	// 获取地板高度
 	floor_height_ = getFloorHeight();
 
@@ -48,6 +51,22 @@ bool LevelLayer::init()
 	scheduleUpdate();
 
 	return true;
+}
+
+// 载入关卡
+void LevelLayer::loadLevel(const std::string &level_name)
+{
+	initWithTMXFile(level_name);
+	hero_ = nullptr;
+	setPosition(Vec2::ZERO);
+	setAnchorPoint(Vec2::ZERO);
+
+	// 获取图层数量
+	layer_count_ = layerCount();
+	// 获取地板高度
+	floor_height_ = getFloorHeight();
+
+	entity_manger_->destroyAllEntity();
 }
 
 // 获取主角实例
@@ -65,7 +84,7 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 			if (hero_ != nullptr)
 			{
 				hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
-				addChild(hero_, layerCount());
+				addChild(hero_, layer_count_);
 				setRealEntityPosition(hero_, Vec2(x, y));
 			}
 		}
@@ -295,17 +314,6 @@ void LevelLayer::adjustmentHeroPositionY()
 void LevelLayer::setFollowHero(bool follow)
 {
 	follow_ = follow;
-}
-
-// 载入关卡
-void LevelLayer::loadLevel(const std::string &level_name)
-{
-	initWithTMXFile(level_name);
-	hero_ = nullptr;
-	setPosition(Vec2::ZERO);
-	setAnchorPoint(Vec2::ZERO);
-	floor_height_ = getFloorHeight();
-	entity_manger_->destroyAllEntity();
 }
 
 void LevelLayer::update(float delta)
