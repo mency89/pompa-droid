@@ -55,7 +55,7 @@ public:
 	void adjustmentHeroPositionX();
 	void adjustmentHeroPositionY();
 
-private:
+public:
 	/**
 	 * 图层数量
 	 */

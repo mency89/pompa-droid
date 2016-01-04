@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 class b2World;
+class LevelLayer;
 class BaseGameEntity;
 
 enum EntityType
@@ -17,7 +18,7 @@ enum EntityType
 class EntityManger
 {
 public:
-	EntityManger(std::shared_ptr<b2World> world);
+	EntityManger(std::shared_ptr<b2World> world, LevelLayer *level);
 
 	~EntityManger();
 
@@ -50,6 +51,11 @@ public:
 	 */
 	void destroyAllEntity();
 
+	/**
+	 * 获取当前关卡
+	 */
+	LevelLayer* getCurrentLevel();
+
 public:
 	/**
 	 * 用于更新实例状态
@@ -57,6 +63,7 @@ public:
 	void update();
 
 private:
+	LevelLayer* current_level_;
 	std::set<int> destroy_set_;
 	std::shared_ptr<b2World> world_;
 	std::unordered_map<int, BaseGameEntity*> entitys_;

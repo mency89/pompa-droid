@@ -3,12 +3,15 @@
 #include <Box2D/Box2D.h>
 #include "Hero.h"
 #include "Boss.h"
+#include "Scene/LevelLayer.h"
 
 
-EntityManger::EntityManger(std::shared_ptr<b2World> world)
+EntityManger::EntityManger(std::shared_ptr<b2World> world, LevelLayer *level)
 	: world_(world)
+	, current_level_(level)
 {
 	CCAssert(world_ != nullptr, "");
+	CCAssert(current_level_ != nullptr, "");
 }
 
 EntityManger::~EntityManger()
@@ -35,8 +38,9 @@ BaseGameEntity* EntityManger::create(EntityType type)
 	if (entity != nullptr)
 	{
 		entitys_.insert(std::make_pair(entity->getID(), entity));
-		entity->retain();
 		entity->setEntityManger(this);
+		current_level_->addChild(entity, current_level_->layerCount());
+		entity->retain();
 	}
 
 	return entity;
@@ -61,13 +65,19 @@ void EntityManger::destroyEntity(BaseGameEntity *entity)
 	destroyEntity(entity->getID());
 }
 
+// 获取当前关卡
+LevelLayer* EntityManger::getCurrentLevel()
+{
+	return current_level_;
+}
+
 // 销毁所有实例
 void EntityManger::destroyAllEntity()
 {
 	for (auto itr = entitys_.begin(); itr != entitys_.end();)
 	{
 		itr->second->destroyBody();
-		itr->second->removeFromParentAndCleanup(true);
+		current_level_->removeChild(itr->second, true);
 		itr->second->release();
 		itr = entitys_.erase(itr);
 	}
@@ -90,7 +100,7 @@ void EntityManger::update()
 		if (result != entitys_.end())
 		{
 			result->second->destroyBody();
-			result->second->removeFromParentAndCleanup(true);
+			current_level_->removeChild(result->second, true);
 			result->second->release();
 			entitys_.erase(result);
 		}

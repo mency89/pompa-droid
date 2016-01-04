@@ -2,8 +2,6 @@
 
 #include "ActionTags.h"
 #include "AnimationManger.h"
-#include "GameApplication.h"
-#include "Scene/GameScene.h"
 #include "Scene/LevelLayer.h"
 #include "Entity/EntityManger.h"
 #include "Message/MeesageTypes.h"
@@ -245,13 +243,13 @@ void BossGlobal::execute(Boss *object)
 	// 决策系统
 	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
 	{
-		GameScene *scene = GameApplication::instance()->getGameScene();
-		BaseGameEntity *hero = scene->getCurrentLevel()->getHeroEntity();
-		if (hero != nullptr)
-		{
-			object->getStateMachine()->userdata().target_pos = hero->getPosition();
-			object->getStateMachine()->change_state(BossBeelineWalk::instance());
-		}
+		/*LevelLayer *level = object->getEntityManger()->getCurrentLevel();
+		Vec2 temp = object->getPosition();
+		Vec2 hero_pos = level->getRealEntityPosition(level->getHeroEntity());
+		level->setRealEntityPosition(object, hero_pos);
+		object->getStateMachine()->userdata().target_pos = level->convertToNodeSpace(level->getRealEntityPosition(object));
+		object->setPosition(temp);
+		object->getStateMachine()->change_state(BossBeelineWalk::instance());*/
 	}
 }
 

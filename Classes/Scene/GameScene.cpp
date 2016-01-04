@@ -51,7 +51,7 @@ bool GameScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	world_->SetDebugDraw(debug_draw_.get());
-	debug_draw_->SetFlags(b2Draw::e_shapeBit);
+	//debug_draw_->SetFlags(b2Draw::e_shapeBit);
 #endif
 
 	// 创建关卡

@@ -24,7 +24,7 @@ bool Boss::init()
 
 	state_machine_.reset(new StateMachine<Boss>(this));
 	state_machine_->set_global_state(BossGlobal::instance());
-	state_machine_->change_state(BossWalk::instance());
+	state_machine_->change_state(BossIdle::instance());
 
 	return true;
 }

@@ -44,7 +44,7 @@ bool LevelLayer::init()
 	floor_height_ = getFloorHeight();
 
 	// 创建游戏实例
-	entity_manger_.reset(new EntityManger(world_));
+	entity_manger_.reset(new EntityManger(world_, this));
 	hero_ = getHeroEntity();
 	setFollowHero(true);
 
@@ -81,12 +81,13 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 			float x = data["x"].asFloat();
 			float y = data["y"].asFloat();
 			hero_ = entity_manger_->create(entity_hero);
-			if (hero_ != nullptr)
-			{
-				hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
-				addChild(hero_, layer_count_);
-				setRealEntityPosition(hero_, Vec2(x, y));
-			}
+			hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
+			setRealEntityPosition(hero_, Vec2(x, y));
+
+
+			auto boss = entity_manger_->create(entity_boss);
+			boss->setAnchorPoint(Vec2(0.5f, 0.0f));
+			setRealEntityPosition(boss, Vec2(x, y));
 		}
 	}
 	return hero_;
