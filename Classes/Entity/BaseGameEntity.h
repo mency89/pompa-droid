@@ -124,6 +124,11 @@ public:
 	void moveEntity(float speed);
 
 	/**
+	 * 移动实体
+	 */
+	void moveEntity(const cocos2d::Vec2 &velocity);
+
+	/**
 	 * 获取跑动速度
 	 */
 	float getRunSpeed() const;

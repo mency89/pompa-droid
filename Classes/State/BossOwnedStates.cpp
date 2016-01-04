@@ -2,11 +2,18 @@
 
 #include "ActionTags.h"
 #include "AnimationManger.h"
+#include "GameApplication.h"
+#include "Scene/GameScene.h"
+#include "Scene/LevelLayer.h"
 #include "Entity/EntityManger.h"
 #include "Message/MeesageTypes.h"
 #include "Message/MessageDispatcher.h"
 using namespace cocos2d;
 
+
+/************************************************************************/
+/* Base layer state                                                     */
+/************************************************************************/
 
 /******Boss待机状态******/
 
@@ -52,10 +59,6 @@ void BossWalk::exit(Boss *object)
 void BossWalk::execute(Boss *object)
 {
 	object->moveEntity(object->getWalkSpeed());
-	if (object->getActionByTag(ActionTags::boss_walk) == nullptr)
-	{
-		object->getStateMachine()->change_state(BossIdle::instance());
-	}
 }
 
 bool BossWalk::on_message(Boss *object, const Message &msg)
@@ -185,6 +188,48 @@ bool BossGetup::on_message(Boss *object, const Message &msg)
 	return msg.msg_code == msg_EntityHurt;
 }
 
+/************************************************************************/
+/* Behavior layer state                                                 */
+/************************************************************************/
+
+/******Boss直线行走状态******/
+
+void BossBeelineWalk::enter(Boss *object)
+{
+	BossWalk::instance()->enter(object);
+}
+
+void BossBeelineWalk::exit(Boss *object)
+{
+	BossWalk::instance()->exit(object);
+}
+
+void BossBeelineWalk::execute(Boss *object)
+{
+	const cocos2d::Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
+	if (target_pos.distance(object->getPosition()) <= object->getWalkSpeed())
+	{
+		object->getStateMachine()->change_state(BossIdle::instance());
+	}
+	else
+	{
+		cocos2d::Vec2 velocity = target_pos - object->getPosition();
+		velocity.normalize();
+		velocity.x *= object->getWalkSpeed();
+		velocity.y *= object->getWalkSpeed();
+		object->moveEntity(velocity);
+	}
+}
+
+bool BossBeelineWalk::on_message(Boss *object, const Message &msg)
+{
+	return false;
+}
+
+/************************************************************************/
+/* Role layer state											            */
+/************************************************************************/
+
 /******Boss全局状态******/
 
 void BossGlobal::enter(Boss *object)
@@ -197,6 +242,17 @@ void BossGlobal::exit(Boss *object)
 
 void BossGlobal::execute(Boss *object)
 {
+	// 决策系统
+	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
+	{
+		GameScene *scene = GameApplication::instance()->getGameScene();
+		BaseGameEntity *hero = scene->getCurrentLevel()->getHeroEntity();
+		if (hero != nullptr)
+		{
+			object->getStateMachine()->userdata().target_pos = hero->getPosition();
+			object->getStateMachine()->change_state(BossBeelineWalk::instance());
+		}
+	}
 }
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)

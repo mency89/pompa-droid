@@ -242,6 +242,20 @@ void BaseGameEntity::moveEntity(float speed)
 	}
 }
 
+// 移动实体
+void BaseGameEntity::moveEntity(const cocos2d::Vec2 &velocity)
+{
+	if (velocity.x > 0.0f)
+	{
+		setDirection(Right);
+	}
+	else if (velocity.x < 0.0f)
+	{
+		setDirection(Left);
+	}
+	setPosition(getPosition() + velocity);
+}
+
 // 获取跑动速度
 float BaseGameEntity::getRunSpeed() const
 {
