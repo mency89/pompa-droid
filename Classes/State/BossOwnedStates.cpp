@@ -243,13 +243,14 @@ void BossGlobal::execute(Boss *object)
 	// 决策系统
 	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
 	{
-		/*LevelLayer *level = object->getEntityManger()->getCurrentLevel();
 		Vec2 temp = object->getPosition();
+		LevelLayer *level = object->getEntityManger()->getCurrentLevel();
 		Vec2 hero_pos = level->getRealEntityPosition(level->getHeroEntity());
-		level->setRealEntityPosition(object, hero_pos);
-		object->getStateMachine()->userdata().target_pos = level->convertToNodeSpace(level->getRealEntityPosition(object));
+		Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
+		level->setRealEntityPosition(object, hero_pos);	
+		target_pos = object->getPosition();
 		object->setPosition(temp);
-		object->getStateMachine()->change_state(BossBeelineWalk::instance());*/
+		object->getStateMachine()->change_state(BossBeelineWalk::instance());
 	}
 }
 
