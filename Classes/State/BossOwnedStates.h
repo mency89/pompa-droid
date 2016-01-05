@@ -9,10 +9,13 @@
 template <>
 struct StateMachineData < Boss >
 {
-	int hurt_source;										// 伤害来源
-	int continuous_hurt;									// 连续受击次数
-	std::chrono::system_clock::time_point last_hurt_time;	// 上次受击时间
-	cocos2d::Vec2 target_pos;								// 目标位置
+	typedef std::chrono::system_clock::time_point time_point;
+
+	int hurt_source;				// 伤害来源
+	int continuous_hurt;			// 连续受击次数
+	time_point last_hurt_time;		// 上次受击时间
+	time_point end_resting_time;	// 结束休息时间
+	cocos2d::Vec2 target_pos;		// 目标位置
 	StateMachineData()
 		: hurt_source(0)
 		, continuous_hurt(0)
@@ -119,6 +122,23 @@ public:
 class BossBeelineWalk : public State < Boss >, public Singleton < BossBeelineWalk >
 {
 	SINGLETON_DEFAULT(BossBeelineWalk);
+
+public:
+	virtual void enter(Boss *object) override;
+
+	virtual void exit(Boss *object) override;
+
+	virtual void execute(Boss *object) override;
+
+	virtual bool on_message(Boss *object, const Message &msg) override;
+};
+
+/**
+ * Boss休息状态
+ */
+class BossIdelDelayTime : public State < Boss >, public Singleton < BossIdelDelayTime >
+{
+	SINGLETON_DEFAULT(BossIdelDelayTime);
 
 public:
 	virtual void enter(Boss *object) override;
