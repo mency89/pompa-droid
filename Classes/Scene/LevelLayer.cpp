@@ -39,7 +39,7 @@ LevelLayer* LevelLayer::create(std::shared_ptr<b2World> world, const std::string
 bool LevelLayer::init()
 {
 	// 获取图层数量
-	layer_count_ = layerCount();
+	layer_count_ = getLayerCount();
 	// 获取地板高度
 	floor_height_ = getFloorHeight();
 
@@ -62,7 +62,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 	setAnchorPoint(Vec2::ZERO);
 
 	// 获取图层数量
-	layer_count_ = layerCount();
+	layer_count_ = getLayerCount();
 	// 获取地板高度
 	floor_height_ = getFloorHeight();
 
@@ -93,8 +93,8 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 	return hero_;
 }
 
-// 获取地板宽度
-int LevelLayer::getFloorWidth() const
+// 地板宽度
+int LevelLayer::floorWidth() const
 {
 	auto floor_layer = getLayer("floor");
 	if (floor_layer != nullptr)
@@ -102,6 +102,12 @@ int LevelLayer::getFloorWidth() const
 		return floor_layer->getLayerSize().width;
 	}
 	return 0;
+}
+
+// 地板高度
+int LevelLayer::floorHeight() const
+{
+	return floor_height_;
 }
 
 // 获取地板高度
@@ -135,6 +141,12 @@ int LevelLayer::getFloorHeight() const
 
 // 图层数量
 int LevelLayer::layerCount() const
+{
+	return layer_count_;
+}
+
+// 获取图层数量
+int LevelLayer::getLayerCount() const
 {
 	int count = 0;
 	for (auto &child : getChildren())
@@ -197,7 +209,7 @@ bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
 		if (rect.getMinX() >= 0 &&
 			rect.getMinY() >= 0 &&
 			rect.getMaxX() <= win_size.width &&
-			rect.getMinY() <= getTileSize().height * floor_height_ - HERO_MAX_Y_CORRECTION)
+			rect.getMinY() <= getTileSize().height * floorHeight() - HERO_MAX_Y_CORRECTION)
 		{
 			return true;
 		}
@@ -209,11 +221,9 @@ bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
 bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
 {
 	CCAssert(a != nullptr && b != nullptr, "");
-
-	// 是否位于同一高度
 	Vec2 pos_a = convertToNodeSpace(getRealEntityPosition(a));
 	Vec2 pos_b = convertToNodeSpace(getRealEntityPosition(b));
-	if (abs(pos_b.y - pos_a.y) <= 1.0f)
+	if (abs(pos_b.y - pos_a.y) <= 50.0f)
 	{
 		return a->getRealRect().intersectsRect(b->getRealRect());
 	}
@@ -259,7 +269,7 @@ void LevelLayer::adjustmentHeroPosition()
 		const Size win_size = Director::getInstance()->getWinSize();
 		const Size real_size(hero_->realWidth(), hero_->realHeight());
 		const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
-		const float top_boundary = getTileSize().height * floor_height_ + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
+		const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
 		if (rect.getMinX() < 0)
 		{
@@ -312,7 +322,7 @@ void LevelLayer::adjustmentHeroPositionY()
 		const Rect rect = getRealEntityRect(hero_);
 		const Vec2 realEntityPos = getRealEntityPosition(hero_);
 		const Size real_size(hero_->realWidth(), hero_->realHeight());
-		const float top_boundary = getTileSize().height * floor_height_ + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
+		const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
 		if (rect.getMinY() < 0)
 		{
@@ -339,4 +349,12 @@ void LevelLayer::update(float delta)
 
 	// 镜头跟随
 	followHeroWithCamera();
+
+	// 更新层级
+	std::vector<BaseGameEntity*> entitys = entity_manger_->getAllEntitys();
+	for (size_t i = 0; i < entitys.size(); ++i)
+	{
+		Size size = Director::getInstance()->getWinSize();
+		entitys[i]->setLocalZOrder(layerCount() + (size.height - getRealEntityPosition(entitys[i]).y));
+	}
 }

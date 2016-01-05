@@ -35,6 +35,11 @@ public:
 	BaseGameEntity* getEntityByID(int id);
 
 	/**
+	 * 获取所有实例
+	 */
+	std::vector<BaseGameEntity*> getAllEntitys();
+
+	/**
 	 * 销毁实例
 	 * @param int 实例id
 	 */

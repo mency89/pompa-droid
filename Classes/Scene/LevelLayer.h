@@ -29,14 +29,14 @@ public:
 	void loadLevel(const std::string &level_name);
 
 	/**
-	 * 获取地板宽度
+	 * 地板宽度
 	 */
-	int getFloorWidth() const;
+	int floorWidth() const;
 
 	/**
-	 * 获取地板高度
+	 * 地板高度
 	 */
-	int getFloorHeight() const;
+	int floorHeight() const;
 
 	/**
 	 * 获取主角实例
@@ -89,6 +89,17 @@ public:
 	 * 设置非透明区域在世界中的坐标
 	 */
 	void setRealEntityPosition(BaseGameEntity *entity, const cocos2d::Vec2 &pos);
+
+private:
+	/**
+	 * 获取图层数量
+	 */
+	int getLayerCount() const;
+
+	/**
+	 * 获取地板高度
+	 */
+	int getFloorHeight() const;
 
 private:
 	bool						follow_;

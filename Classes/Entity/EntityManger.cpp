@@ -53,6 +53,17 @@ BaseGameEntity* EntityManger::getEntityByID(int id)
 	return result != entitys_.end() ? result->second : nullptr;
 }
 
+// 获取所有实例
+std::vector<BaseGameEntity*> EntityManger::getAllEntitys()
+{
+	std::vector<BaseGameEntity*> ret;
+	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
+	{
+		ret.push_back(itr->second);
+	}
+	return ret;
+}
+
 // 销毁实例
 void EntityManger::destroyEntity(int id)
 {

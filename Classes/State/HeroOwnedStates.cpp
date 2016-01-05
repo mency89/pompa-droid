@@ -2,8 +2,6 @@
 
 #include "ActionTags.h"
 #include "AnimationManger.h"
-#include "GameApplication.h"
-#include "Scene/GameScene.h"
 #include "Scene/LevelLayer.h"
 #include "Entity/EntityManger.h"
 #include "Message/MeesageTypes.h"
@@ -161,7 +159,7 @@ void HeroWalk::exit(Hero *object)
 void HeroWalk::execute(Hero *object)
 {
 	object->moveEntity(object->getWalkSpeed());
-	GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPosition();
+	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
 }
 
 bool HeroWalk::on_message(Hero *object, const Message &msg)
@@ -212,7 +210,7 @@ void HeroRun::exit(Hero *object)
 void HeroRun::execute(Hero *object)
 {
 	object->moveEntity(object->getRunSpeed());
-	GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPosition();
+	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
 }
 
 bool HeroRun::on_message(Hero *object, const Message &msg)
@@ -291,7 +289,7 @@ void HeroJump::execute(Hero *object)
 		{
 			object->moveEntity(object->getRunSpeed());
 		}
-		GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPositionX();
+		object->getEntityManger()->getCurrentLevel()->adjustmentHeroPositionX();
 	}
 
 	if (!object->getStateMachine()->userdata().jump_up &&
@@ -365,7 +363,7 @@ void HeroRuningAttack::exit(Hero *object)
 void HeroRuningAttack::execute(Hero *object)
 {
 	object->moveEntity(object->getWalkSpeed());
-	GameApplication::instance()->getGameScene()->getCurrentLevel()->adjustmentHeroPosition();
+	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
 	if (object->getActionByTag(ActionTags::hero_runattack) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
@@ -533,6 +531,7 @@ void HeroGlobal::exit(Hero *object)
 void HeroGlobal::execute(Hero *object)
 {
 	// 判断是否攻击到目标
+	LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
 	if (IsAttackState(object->getStateMachine()->get_current_state()))
 	{
 		auto targets = object->getHitTargets();
@@ -541,18 +540,21 @@ void HeroGlobal::execute(Hero *object)
 			auto result = object->getStateMachine()->userdata().hit_targets.find(collision.entity->getID());
 			if (result == object->getStateMachine()->userdata().hit_targets.end())
 			{
-				Message msg;
-				msg.sender = object->getID();
-				msg.receiver = collision.entity->getID();
-				msg.msg_code = msg_EntityHurt;
+				if (current_level->isAdjacent(object, collision.entity))
+				{
+					Message msg;
+					msg.sender = object->getID();
+					msg.receiver = collision.entity->getID();
+					msg.msg_code = msg_EntityHurt;
 
-				STEntityHurt extra_info;
-				extra_info.pos = collision.collision_pos;
-				msg.extra_info = &extra_info;
-				msg.extra_info_size = sizeof(STEntityHurt);
+					STEntityHurt extra_info;
+					extra_info.pos = collision.collision_pos;
+					msg.extra_info = &extra_info;
+					msg.extra_info_size = sizeof(STEntityHurt);
 
-				MessageDispatcher::instance()->dispatchMessage(msg);
-				object->getStateMachine()->userdata().hit_targets.insert(collision.entity->getID());
+					MessageDispatcher::instance()->dispatchMessage(msg);
+					object->getStateMachine()->userdata().hit_targets.insert(collision.entity->getID());
+				}			
 			}	
 		}
 	}

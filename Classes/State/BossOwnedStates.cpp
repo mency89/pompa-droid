@@ -77,6 +77,7 @@ void BossAttack::enter(Boss *object)
 void BossAttack::exit(Boss *object)
 {
 	object->stopActionByTag(ActionTags::boss_attack);
+	object->getStateMachine()->userdata().hit_hero = false;
 }
 
 void BossAttack::execute(Boss *object)
@@ -293,10 +294,11 @@ void BossGlobal::exit(Boss *object)
 
 void BossGlobal::execute(Boss *object)
 {
+	LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
+
 	// 决策系统
 	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
 	{
-		LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
 		BaseGameEntity *hero = current_level->getHeroEntity();
 		if (current_level->isAdjacent(object, hero))
 		{
@@ -361,24 +363,26 @@ void BossGlobal::execute(Boss *object)
 		auto targets = object->getHitTargets();
 		for (auto &collision : targets)
 		{
-			if (!object->getStateMachine()->userdata().hurt_hero)
+			if (!object->getStateMachine()->userdata().hit_hero)
 			{
-				Message msg;
-				msg.sender = object->getID();
-				msg.receiver = collision.entity->getID();
-				msg.msg_code = msg_EntityHurt;
+				if (current_level->isAdjacent(object, current_level->getHeroEntity()))
+				{
+					Message msg;
+					msg.sender = object->getID();
+					msg.receiver = collision.entity->getID();
+					msg.msg_code = msg_EntityHurt;
 
-				STEntityHurt extra_info;
-				extra_info.pos = collision.collision_pos;
-				msg.extra_info = &extra_info;
-				msg.extra_info_size = sizeof(STEntityHurt);
+					STEntityHurt extra_info;
+					extra_info.pos = collision.collision_pos;
+					msg.extra_info = &extra_info;
+					msg.extra_info_size = sizeof(STEntityHurt);
 
-				MessageDispatcher::instance()->dispatchMessage(msg);
-				object->getStateMachine()->userdata().hurt_hero = true;
+					MessageDispatcher::instance()->dispatchMessage(msg);
+					object->getStateMachine()->userdata().hit_hero = true;
+				}
 			}
 		}
 	}
-	object->getStateMachine()->userdata().hurt_hero = false;
 }
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)
