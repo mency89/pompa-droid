@@ -11,6 +11,7 @@ struct StateMachineData < Boss >
 {
 	typedef std::chrono::system_clock::time_point time_point;
 
+	bool hurt_hero;					// 击中英雄
 	int hurt_source;				// 伤害来源
 	int continuous_hurt;			// 连续受击次数
 	time_point last_hurt_time;		// 上次受击时间
@@ -19,6 +20,7 @@ struct StateMachineData < Boss >
 	StateMachineData()
 		: hurt_source(0)
 		, continuous_hurt(0)
+		, hurt_hero(false)
 	{
 	}
 };
@@ -60,6 +62,24 @@ public:
 
 	virtual bool on_message(Boss *object, const Message &msg) override;
 };
+
+/**
+ * 英雄攻击状态
+ */
+class BossAttack : public State < Boss >, public Singleton < BossAttack >
+{
+	SINGLETON_DEFAULT(BossAttack);
+
+public:
+	virtual void enter(Boss *object) override;
+
+	virtual void exit(Boss *object) override;
+
+	virtual void execute(Boss *object) override;
+
+	virtual bool on_message(Boss *object, const Message &msg) override;
+};
+
 
 /**
  * Boss受击状态

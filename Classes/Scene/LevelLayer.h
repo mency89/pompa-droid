@@ -55,7 +55,6 @@ public:
 	void adjustmentHeroPositionX();
 	void adjustmentHeroPositionY();
 
-public:
 	/**
 	 * 图层数量
 	 */
@@ -70,6 +69,11 @@ public:
 	 * 是否在地板内
 	 */
 	bool insideOfFloor(BaseGameEntity *entity) const;
+
+	/**
+	 * 是否相邻
+	 */
+	bool isAdjacent(BaseGameEntity *a, BaseGameEntity *b);
 
 	/**
 	 * 获取真实矩形框（去除透明区域的矩形框）

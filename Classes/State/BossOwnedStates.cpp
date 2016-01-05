@@ -64,6 +64,34 @@ bool BossWalk::on_message(Boss *object, const Message &msg)
 	return false;
 }
 
+/******Boss攻击状态******/
+
+void BossAttack::enter(Boss *object)
+{
+	Animation *animation = AnimationManger::instance()->getAnimation("boss_attack");
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::boss_attack);
+	object->runAction(animate);
+}
+
+void BossAttack::exit(Boss *object)
+{
+	object->stopActionByTag(ActionTags::boss_attack);
+}
+
+void BossAttack::execute(Boss *object)
+{
+	if (object->getActionByTag(ActionTags::boss_attack) == nullptr)
+	{
+		object->getStateMachine()->change_state(BossIdle::instance());
+	}
+}
+
+bool BossAttack::on_message(Boss *object, const Message &msg)
+{
+	return false;
+}
+
 /******Boss受击状态******/
 
 void BossHurt::enter(Boss *object)
@@ -207,6 +235,7 @@ void BossBeelineWalk::execute(Boss *object)
 	const cocos2d::Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
 	if (target_pos.distance(object->getPosition()) <= object->getWalkSpeed())
 	{
+		object->setPosition(target_pos);
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
 	else
@@ -267,63 +296,89 @@ void BossGlobal::execute(Boss *object)
 	// 决策系统
 	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
 	{
-		LevelLayer *level = object->getEntityManger()->getCurrentLevel();
-
-		// 如果玩家在攻击范围内
-		if (level->getHeroEntity()->getRealRect().intersectsRect(object->getRealRect()))
+		LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
+		BaseGameEntity *hero = current_level->getHeroEntity();
+		if (current_level->isAdjacent(object, hero))
 		{
-			if (rand() % 2 == 0)
+			//// 如果玩家在攻击范围内
+			if (rand() % 3 == 0)
+			{
+				// 休息一会儿
+				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
+					+ std::chrono::milliseconds(rand() % 2000);
+				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
+			}
+			else
 			{
 				// 面向玩家
-				if (level->getHeroEntity()->getPositionX() < object->getPositionX())
+				if (hero->getPositionX() < object->getPositionX())
 				{
 					object->setDirection(BaseGameEntity::Left);
 				}
-				else if (level->getHeroEntity()->getPositionX() > object->getPositionX())
+				else if (hero->getPositionX() > object->getPositionX())
 				{
 					object->setDirection(BaseGameEntity::Right);
 				}
 
 				// 攻击玩家
-			}
-			else
-			{
-				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
-					+ std::chrono::milliseconds(rand() % 1000);
-				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
+				object->getStateMachine()->change_state(BossAttack::instance());
 			}
 		}
 		else
 		{
-			if (rand() % 2 == 0)
-			{
-				// 靠近玩家
-				Vec2 temp = object->getPosition();
-				Vec2 hero_pos = level->getRealEntityPosition(level->getHeroEntity());
-				if (level->getHeroEntity()->getPositionX() < object->getPositionX())
-				{
-					hero_pos.x = hero_pos.x + level->getHeroEntity()->realWidth() / 2 + object->realWidth() / 2;
-				}
-				else
-				{
-					hero_pos.x = hero_pos.x - level->getHeroEntity()->realWidth() / 2 - object->realWidth() / 2;
-				}
-				Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
-				level->setRealEntityPosition(object, hero_pos);
-				target_pos = object->getPosition();
-				object->setPosition(temp);
-				object->getStateMachine()->change_state(BossBeelineWalk::instance());
-			}
-			else
+			if (rand() % 3 == 0)
 			{
 				// 休息一会儿
 				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
 					+ std::chrono::milliseconds(rand() % 1000);
 				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
 			}
+			else
+			{
+				// 靠近玩家
+				Vec2 temp = object->getPosition();
+				Vec2 hero_pos = current_level->getRealEntityPosition(hero);
+				if (hero->getPositionX() < object->getPositionX())
+				{
+					hero_pos.x = hero_pos.x + hero->realWidth() / 2 + object->realWidth() / 2;
+				}
+				else
+				{
+					hero_pos.x = hero_pos.x - hero->realWidth() / 2 - object->realWidth() / 2;
+				}
+				Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
+				current_level->setRealEntityPosition(object, hero_pos);
+				target_pos = object->getPosition();
+				object->setPosition(temp);
+				object->getStateMachine()->change_state(BossBeelineWalk::instance());
+			}
 		}
 	}
+
+	// 判断是否攻击到目标
+	if (object->getStateMachine()->get_current_state() == BossAttack::instance())
+	{
+		auto targets = object->getHitTargets();
+		for (auto &collision : targets)
+		{
+			if (!object->getStateMachine()->userdata().hurt_hero)
+			{
+				Message msg;
+				msg.sender = object->getID();
+				msg.receiver = collision.entity->getID();
+				msg.msg_code = msg_EntityHurt;
+
+				STEntityHurt extra_info;
+				extra_info.pos = collision.collision_pos;
+				msg.extra_info = &extra_info;
+				msg.extra_info_size = sizeof(STEntityHurt);
+
+				MessageDispatcher::instance()->dispatchMessage(msg);
+				object->getStateMachine()->userdata().hurt_hero = true;
+			}
+		}
+	}
+	object->getStateMachine()->userdata().hurt_hero = false;
 }
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)

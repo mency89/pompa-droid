@@ -205,6 +205,21 @@ bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
 	return false;
 }
 
+// 是否相邻
+bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
+{
+	CCAssert(a != nullptr && b != nullptr, "");
+
+	// 是否位于同一高度
+	Vec2 pos_a = convertToNodeSpace(getRealEntityPosition(a));
+	Vec2 pos_b = convertToNodeSpace(getRealEntityPosition(b));
+	if (abs(pos_b.y - pos_a.y) <= 1.0f)
+	{
+		return a->getRealRect().intersectsRect(b->getRealRect());
+	}
+	return false;
+}
+
 // 镜头跟随主角
 void LevelLayer::followHeroWithCamera()
 {
