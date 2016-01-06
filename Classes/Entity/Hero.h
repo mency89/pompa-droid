@@ -25,6 +25,11 @@ public:
 
 public:
 	/**
+	 * 是否是跳跃状态
+	 */
+	bool isJumpingState() const;
+
+	/**
 	 * 获取有限状态机
 	 */
 	StateMachine<Hero>* getStateMachine();

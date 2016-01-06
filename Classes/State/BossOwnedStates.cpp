@@ -3,6 +3,8 @@
 #include "ActionTags.h"
 #include "AnimationManger.h"
 #include "Scene/LevelLayer.h"
+#include "SimpleRobotLogic.h"
+#include "Entity/Hero.h"
 #include "Entity/EntityManger.h"
 #include "Message/MeesageTypes.h"
 #include "Message/MessageDispatcher.h"
@@ -257,17 +259,17 @@ bool BossBeelineWalk::on_message(Boss *object, const Message &msg)
 }
 
 /******Boss休息状态******/
-void BossIdelDelayTime::enter(Boss *object)
+void BossIdelLittleWhile::enter(Boss *object)
 {
 	BossIdle::instance()->enter(object);
 }
 
-void BossIdelDelayTime::exit(Boss *object)
+void BossIdelLittleWhile::exit(Boss *object)
 {
 	BossIdle::instance()->exit(object);
 }
 
-void BossIdelDelayTime::execute(Boss *object)
+void BossIdelLittleWhile::execute(Boss *object)
 {
 	if (object->getStateMachine()->userdata().end_resting_time < system_clock::now())
 	{
@@ -275,7 +277,7 @@ void BossIdelDelayTime::execute(Boss *object)
 	}
 }
 
-bool BossIdelDelayTime::on_message(Boss *object, const Message &msg)
+bool BossIdelLittleWhile::on_message(Boss *object, const Message &msg)
 {
 	return BossIdle::instance()->on_message(object, msg);
 }
@@ -296,94 +298,7 @@ void BossGlobal::exit(Boss *object)
 
 void BossGlobal::execute(Boss *object)
 {
-	// 决策系统
-	LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
-	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
-	{
-		// 面向玩家
-		BaseGameEntity *hero = current_level->getHeroEntity();
-		if (hero->getPositionX() < object->getPositionX())
-		{
-			object->setDirection(BaseGameEntity::Left);
-		}
-		else if (hero->getPositionX() > object->getPositionX())
-		{
-			object->setDirection(BaseGameEntity::Right);
-		}
-
-		if (current_level->isAdjacent(object, hero))
-		{
-			// 如果玩家在攻击范围内
-			if (rand() % 3 == 0)
-			{
-				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = system_clock::now()
-					+ milliseconds(rand() % 2000);
-				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
-			}
-			else
-			{
-				// 攻击玩家
-				object->getStateMachine()->change_state(BossAttack::instance());
-			}
-		}
-		else
-		{
-			if (rand() % 3 == 0)
-			{
-				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = system_clock::now()
-					+ milliseconds(rand() % 1000);
-				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
-			}
-			else
-			{
-				// 靠近玩家
-				if (current_level->insideOfFloor(hero))
-				{			
-					Vec2 temp = object->getPosition();
-					Vec2 hero_pos = current_level->getRealEntityPosition(hero);
-					if (hero->getPositionX() < object->getPositionX())
-					{
-						hero_pos.x = hero_pos.x + hero->realWidth() / 2 + object->realWidth() / 2;
-					}
-					else
-					{
-						hero_pos.x = hero_pos.x - hero->realWidth() / 2 - object->realWidth() / 2;
-					}
-					Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
-					current_level->setRealEntityPosition(object, hero_pos);
-					target_pos = object->getPosition();
-					object->setPosition(temp);
-					object->getStateMachine()->change_state(BossBeelineWalk::instance());
-				}
-			}
-		}
-	}
-
-	// 判断是否攻击到目标
-	if (object->getStateMachine()->get_current_state() == BossAttack::instance())
-	{
-		auto targets = object->getHitTargets();
-		for (auto &collision : targets)
-		{
-			if (!object->getStateMachine()->userdata().hit_hero)
-			{
-				Message msg;
-				msg.sender = object->getID();
-				msg.receiver = collision.entity->getID();
-				msg.msg_code = msg_EntityHurt;
-
-				STEntityHurt extra_info;
-				extra_info.pos = collision.collision_pos;
-				msg.extra_info = &extra_info;
-				msg.extra_info_size = sizeof(STEntityHurt);
-
-				MessageDispatcher::instance()->dispatchMessage(msg);
-				object->getStateMachine()->userdata().hit_hero = true;
-			}
-		}
-	}
+	SimpleRobotLogic<Boss, BossIdelLittleWhile, BossBeelineWalk, BossAttack>(object);
 }
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)

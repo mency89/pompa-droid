@@ -49,6 +49,13 @@ void Hero::handleMenssage(const Message &msg)
 	state_machine_->handle_message(msg);
 }
 
+// 是否是跳跃状态
+bool Hero::isJumpingState() const
+{
+	return state_machine_->get_current_state() == HeroJump::instance() ||
+		state_machine_->get_current_state() == HeroJumpingAttack::instance();
+}
+
 // 获取有限状态机
 StateMachine<Hero>* Hero::getStateMachine()
 {

@@ -173,6 +173,9 @@
     <ClInclude Include="..\Classes\Entity\ShapeCategory.h">
       <Filter>src\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\State\SimpleRobotLogic.h">
+      <Filter>src\State</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">

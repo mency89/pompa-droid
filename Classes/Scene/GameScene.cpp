@@ -5,6 +5,7 @@
 #include "VisibleRect.h"
 #include "GLES-Render.h"
 #include "GameApplication.h"
+#include "Entity/Hero.h"
 #include "Entity/BaseGameEntity.h"
 #include "Message/MeesageTypes.h"
 #include "Message/MessageDispatcher.h"

@@ -190,6 +190,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\State\ActionTags.h" />
     <ClInclude Include="..\Classes\State\BossOwnedStates.h" />
     <ClInclude Include="..\Classes\State\HeroOwnedStates.h" />
+    <ClInclude Include="..\Classes\State\SimpleRobotLogic.h" />
     <ClInclude Include="..\Classes\State\State.h" />
     <ClInclude Include="..\Classes\State\StateMachine.h" />
     <ClInclude Include="..\Classes\TexturePacker.h" />

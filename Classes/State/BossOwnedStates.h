@@ -156,9 +156,9 @@ public:
 /**
  * Boss休息状态
  */
-class BossIdelDelayTime : public State < Boss >, public Singleton < BossIdelDelayTime >
+class BossIdelLittleWhile : public State < Boss >, public Singleton < BossIdelLittleWhile >
 {
-	SINGLETON_DEFAULT(BossIdelDelayTime);
+	SINGLETON_DEFAULT(BossIdelLittleWhile);
 
 public:
 	virtual void enter(Boss *object) override;

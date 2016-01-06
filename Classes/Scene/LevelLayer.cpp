@@ -77,7 +77,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 }
 
 // 获取主角实例
-BaseGameEntity* LevelLayer::getHeroEntity()
+Hero* LevelLayer::getHeroEntity()
 {
 	if (hero_ == nullptr)
 	{
@@ -87,7 +87,8 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 			ValueMap data = objects->getObject("Hero");
 			float x = data["x"].asFloat();
 			float y = data["y"].asFloat();
-			hero_ = entity_manger_->create(entity_hero);
+			hero_ = dynamic_cast<Hero *>(entity_manger_->create(entity_hero));
+			CCAssert(hero_ != nullptr, "");
 			hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
 			setRealEntityPosition(hero_, Vec2(x, y));
 		}

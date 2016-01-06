@@ -4,6 +4,7 @@
 #include <memory>
 #include "cocos2d.h"
 
+class Hero;
 class b2World;
 class EntityManger;
 class BaseGameEntity;
@@ -41,7 +42,7 @@ public:
 	/**
 	 * 获取主角实例
 	 */
-	BaseGameEntity* getHeroEntity();
+	Hero* getHeroEntity();
 
 	/**
 	 * 设置跟随主角
@@ -105,7 +106,7 @@ private:
 	bool						follow_;
 	int							layer_count_;
 	int							floor_height_;
-	BaseGameEntity*				hero_;
+	Hero*						hero_;
 	const float					innerstage_left_;
 	const float					inner_stage_right_;
 	std::shared_ptr<b2World>	world_;
