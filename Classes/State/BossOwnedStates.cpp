@@ -69,6 +69,7 @@ bool BossWalk::on_message(Boss *object, const Message &msg)
 void BossAttack::enter(Boss *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_attack");
+	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::boss_attack);
 	object->runAction(animate);
@@ -365,21 +366,18 @@ void BossGlobal::execute(Boss *object)
 		{
 			if (!object->getStateMachine()->userdata().hit_hero)
 			{
-				if (current_level->isAdjacent(object, current_level->getHeroEntity()))
-				{
-					Message msg;
-					msg.sender = object->getID();
-					msg.receiver = collision.entity->getID();
-					msg.msg_code = msg_EntityHurt;
+				Message msg;
+				msg.sender = object->getID();
+				msg.receiver = collision.entity->getID();
+				msg.msg_code = msg_EntityHurt;
 
-					STEntityHurt extra_info;
-					extra_info.pos = collision.collision_pos;
-					msg.extra_info = &extra_info;
-					msg.extra_info_size = sizeof(STEntityHurt);
+				STEntityHurt extra_info;
+				extra_info.pos = collision.collision_pos;
+				msg.extra_info = &extra_info;
+				msg.extra_info_size = sizeof(STEntityHurt);
 
-					MessageDispatcher::instance()->dispatchMessage(msg);
-					object->getStateMachine()->userdata().hit_hero = true;
-				}
+				MessageDispatcher::instance()->dispatchMessage(msg);
+				object->getStateMachine()->userdata().hit_hero = true;
 			}
 		}
 	}

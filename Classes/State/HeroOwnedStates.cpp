@@ -451,6 +451,7 @@ bool HeroHurt::on_message(Hero *object, const Message &msg)
 void HeroKnockout::enter(Hero *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_knockout");
+	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::hero_knockout);
 	object->runAction(animate);
@@ -463,6 +464,16 @@ void HeroKnockout::exit(Hero *object)
 
 void HeroKnockout::execute(Hero *object)
 {
+	if (HeroJump::instance() == object->getStateMachine()->get_previous_state() ||
+		HeroJumpingAttack::instance() == object->getStateMachine()->get_previous_state())
+	{
+		object->setPositionY(object->getPositionY() - object->getJumpForce());
+		if (object->getPositionY() < object->getStateMachine()->userdata().before_he_height)
+		{
+			object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+		}
+	}
+
 	if (object->getActionByTag(ActionTags::hero_knockout) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroGetup::instance());
@@ -480,6 +491,7 @@ bool HeroKnockout::on_message(Hero *object, const Message &msg)
 void HeroGetup::enter(Hero *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_getup");
+	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::hero_getup);
 	object->runAction(animate);
@@ -580,7 +592,16 @@ bool HeroGlobal::on_message(Hero *object, const Message &msg)
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
 		object->onHurt(extra_info.pos);
-		object->getStateMachine()->change_state(HeroHurt::instance());
+		if (HeroJump::instance() == object->getStateMachine()->get_current_state() ||
+			HeroJumpingAttack::instance() == object->getStateMachine()->get_current_state())
+		{
+			object->getStateMachine()->userdata().continuous_hurt = 0;
+			object->getStateMachine()->change_state(HeroKnockout::instance());
+		}
+		else
+		{
+			object->getStateMachine()->change_state(HeroHurt::instance());
+		}
 		return true;
 	}
 	return false;
