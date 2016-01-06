@@ -13,14 +13,14 @@ struct StateMachineData < Boss >
 
 	bool hit_hero;					// 击中英雄
 	int hurt_source;				// 伤害来源
-	int continuous_hurt;			// 连续受击次数
-	time_point last_hurt_time;		// 上次受击时间
+	int was_hit_count;				// 连续受击次数
+	time_point was_hit_time;		// 上次受击时间
 	time_point end_resting_time;	// 结束休息时间
 	cocos2d::Vec2 target_pos;		// 目标位置
 	StateMachineData()
 		: hurt_source(0)
-		, continuous_hurt(0)
 		, hit_hero(false)
+		, was_hit_count(0)
 	{
 	}
 };

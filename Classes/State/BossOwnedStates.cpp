@@ -7,6 +7,7 @@
 #include "Message/MeesageTypes.h"
 #include "Message/MessageDispatcher.h"
 using namespace cocos2d;
+using namespace std::chrono;
 
 
 /************************************************************************/
@@ -98,25 +99,25 @@ bool BossAttack::on_message(Boss *object, const Message &msg)
 
 void BossHurt::enter(Boss *object)
 {
-	std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
-	std::chrono::system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().last_hurt_time;
-	std::chrono::system_clock::duration duration = current_time - last_hurt_time;
-	if (std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() < 1000)
+	system_clock::time_point current_time = system_clock::now();
+	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().was_hit_time;
+	system_clock::duration duration = current_time - last_hurt_time;
+	if (duration_cast<milliseconds>(duration).count() < 1000)
 	{
-		++object->getStateMachine()->userdata().continuous_hurt;
+		++object->getStateMachine()->userdata().was_hit_count;
 	}
 	else
 	{
-		object->getStateMachine()->userdata().continuous_hurt = 1;
+		object->getStateMachine()->userdata().was_hit_count = 1;
 	}
 
-	if (object->getStateMachine()->userdata().continuous_hurt < 3)
+	if (object->getStateMachine()->userdata().was_hit_count < 5)
 	{
 		Animation *animation = AnimationManger::instance()->getAnimation("boss_hurt");
 		Animate *animate = Animate::create(animation);
 		animate->setTag(ActionTags::boss_hurt);
 		object->runAction(animate);
-		object->getStateMachine()->userdata().last_hurt_time = std::chrono::system_clock::now();
+		object->getStateMachine()->userdata().was_hit_time = system_clock::now();
 	}
 	else
 	{
@@ -268,7 +269,7 @@ void BossIdelDelayTime::exit(Boss *object)
 
 void BossIdelDelayTime::execute(Boss *object)
 {
-	if (object->getStateMachine()->userdata().end_resting_time < std::chrono::system_clock::now())
+	if (object->getStateMachine()->userdata().end_resting_time < system_clock::now())
 	{
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
@@ -295,34 +296,33 @@ void BossGlobal::exit(Boss *object)
 
 void BossGlobal::execute(Boss *object)
 {
-	LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
-
 	// 决策系统
+	LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
 	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
 	{
+		// 面向玩家
 		BaseGameEntity *hero = current_level->getHeroEntity();
+		if (hero->getPositionX() < object->getPositionX())
+		{
+			object->setDirection(BaseGameEntity::Left);
+		}
+		else if (hero->getPositionX() > object->getPositionX())
+		{
+			object->setDirection(BaseGameEntity::Right);
+		}
+
 		if (current_level->isAdjacent(object, hero))
 		{
-			//// 如果玩家在攻击范围内
+			// 如果玩家在攻击范围内
 			if (rand() % 3 == 0)
 			{
 				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
-					+ std::chrono::milliseconds(rand() % 2000);
+				object->getStateMachine()->userdata().end_resting_time = system_clock::now()
+					+ milliseconds(rand() % 2000);
 				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
 			}
 			else
 			{
-				// 面向玩家
-				if (hero->getPositionX() < object->getPositionX())
-				{
-					object->setDirection(BaseGameEntity::Left);
-				}
-				else if (hero->getPositionX() > object->getPositionX())
-				{
-					object->setDirection(BaseGameEntity::Right);
-				}
-
 				// 攻击玩家
 				object->getStateMachine()->change_state(BossAttack::instance());
 			}
@@ -332,28 +332,31 @@ void BossGlobal::execute(Boss *object)
 			if (rand() % 3 == 0)
 			{
 				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
-					+ std::chrono::milliseconds(rand() % 1000);
+				object->getStateMachine()->userdata().end_resting_time = system_clock::now()
+					+ milliseconds(rand() % 1000);
 				object->getStateMachine()->change_state(BossIdelDelayTime::instance());
 			}
 			else
 			{
 				// 靠近玩家
-				Vec2 temp = object->getPosition();
-				Vec2 hero_pos = current_level->getRealEntityPosition(hero);
-				if (hero->getPositionX() < object->getPositionX())
-				{
-					hero_pos.x = hero_pos.x + hero->realWidth() / 2 + object->realWidth() / 2;
+				if (current_level->insideOfFloor(hero))
+				{			
+					Vec2 temp = object->getPosition();
+					Vec2 hero_pos = current_level->getRealEntityPosition(hero);
+					if (hero->getPositionX() < object->getPositionX())
+					{
+						hero_pos.x = hero_pos.x + hero->realWidth() / 2 + object->realWidth() / 2;
+					}
+					else
+					{
+						hero_pos.x = hero_pos.x - hero->realWidth() / 2 - object->realWidth() / 2;
+					}
+					Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
+					current_level->setRealEntityPosition(object, hero_pos);
+					target_pos = object->getPosition();
+					object->setPosition(temp);
+					object->getStateMachine()->change_state(BossBeelineWalk::instance());
 				}
-				else
-				{
-					hero_pos.x = hero_pos.x - hero->realWidth() / 2 - object->realWidth() / 2;
-				}
-				Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
-				current_level->setRealEntityPosition(object, hero_pos);
-				target_pos = object->getPosition();
-				object->setPosition(temp);
-				object->getStateMachine()->change_state(BossBeelineWalk::instance());
 			}
 		}
 	}

@@ -1,12 +1,14 @@
 ﻿#include "HeroOwnedStates.h"
 
 #include "ActionTags.h"
+#include "Entity/Boss.h"
 #include "AnimationManger.h"
 #include "Scene/LevelLayer.h"
 #include "Entity/EntityManger.h"
 #include "Message/MeesageTypes.h"
 #include "Message/MessageDispatcher.h"
 using namespace cocos2d;
+using namespace std::chrono;
 
 namespace
 {
@@ -115,10 +117,10 @@ bool HeroIdle::on_message(Hero *object, const Message &msg)
 				BaseGameEntity::Direction direction = ConvertDirectionKeyToHeroDirection(extra_info.key_code);
 				if (direction == object->getDirection() && direction != BaseGameEntity::Up && direction != BaseGameEntity::Down)
 				{
-					std::chrono::system_clock::time_point current_time = std::chrono::system_clock::now();
-					std::chrono::system_clock::time_point last_direction_key_pressed_time = object->getStateMachine()->userdata().last_direction_key_pressed_time;
-					std::chrono::system_clock::duration duration = current_time - last_direction_key_pressed_time;
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() < 250)
+					system_clock::time_point current_time = system_clock::now();
+					system_clock::time_point last_direction_key_pressed_time = object->getStateMachine()->userdata().last_direction_key_pressed_time;
+					system_clock::duration duration = current_time - last_direction_key_pressed_time;
+					if (duration_cast<milliseconds>(duration).count() < 250)
 					{
 						object->getStateMachine()->change_state(HeroRun::instance());
 					}
@@ -132,7 +134,7 @@ bool HeroIdle::on_message(Hero *object, const Message &msg)
 					object->setDirection(direction);
 					object->getStateMachine()->change_state(HeroWalk::instance());
 				}
-				object->getStateMachine()->userdata().last_direction_key_pressed_time = std::chrono::system_clock::now();
+				object->getStateMachine()->userdata().last_direction_key_pressed_time = system_clock::now();
 				return true;
 			}
 		}
@@ -246,7 +248,7 @@ bool HeroRun::on_message(Hero *object, const Message &msg)
 void HeroJump::enter(Hero *object)
 {
 	object->getStateMachine()->userdata().jump_up = true;
-	object->getStateMachine()->userdata().before_he_height = object->getPositionY();
+	object->getStateMachine()->userdata().before_jump_y = object->getPositionY();
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_jump");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
@@ -263,7 +265,7 @@ void HeroJump::execute(Hero *object)
 {
 	if (object->getStateMachine()->userdata().jump_up)
 	{
-		if (object->getPositionY() < object->getStateMachine()->userdata().before_he_height + object->getMaxJumpHeight())
+		if (object->getPositionY() < object->getStateMachine()->userdata().before_jump_y + object->getMaxJumpHeight())
 		{
 			object->setPositionY(object->getPositionY() + object->getJumpForce());
 		}
@@ -293,9 +295,9 @@ void HeroJump::execute(Hero *object)
 	}
 
 	if (!object->getStateMachine()->userdata().jump_up &&
-		object->getPositionY() < object->getStateMachine()->userdata().before_he_height)
+		object->getPositionY() < object->getStateMachine()->userdata().before_jump_y)
 	{
-		object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+		object->setPositionY(object->getStateMachine()->userdata().before_jump_y);
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
 }
@@ -307,7 +309,7 @@ bool HeroJump::on_message(Hero *object, const Message &msg)
 		STKeyPressed extra_info = *reinterpret_cast<const STKeyPressed *>(msg.extra_info);
 		if (IsAttackKey(extra_info.key_code))
 		{
-			if (object->getPositionY() >= object->getStateMachine()->userdata().before_he_height + object->getMaxJumpHeight() / 2)
+			if (object->getPositionY() >= object->getStateMachine()->userdata().before_jump_y + object->getMaxJumpHeight() / 2)
 			{
 				object->getStateMachine()->change_state(HeroJumpingAttack::instance());
 			}		
@@ -395,9 +397,9 @@ void HeroJumpingAttack::execute(Hero *object)
 	if (object->getActionByTag(ActionTags::hero_jumpattack) == nullptr)
 	{
 		object->setPositionY(object->getPositionY() - object->getJumpForce());
-		if (object->getPositionY() < object->getStateMachine()->userdata().before_he_height)
+		if (object->getPositionY() < object->getStateMachine()->userdata().before_jump_y)
 		{
-			object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+			object->setPositionY(object->getStateMachine()->userdata().before_jump_y);
 			object->getStateMachine()->change_state(HeroIdle::instance());
 		}
 	}
@@ -412,13 +414,29 @@ bool HeroJumpingAttack::on_message(Hero *object, const Message &msg)
 
 void HeroHurt::enter(Hero *object)
 {
-	if (++object->getStateMachine()->userdata().continuous_hurt < 3)
+	system_clock::time_point current_time = system_clock::now();
+	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().was_hit_time;
+	system_clock::duration duration = current_time - last_hurt_time;
+	if (duration_cast<milliseconds>(duration).count() < 1000)
 	{
-		object->stopActionByTag(ActionTags::hero_hurt);
+		++object->getStateMachine()->userdata().was_hit_count;
+	}
+	else
+	{
+		object->getStateMachine()->userdata().was_hit_count = 1;
+	}
+
+	if (object->getStateMachine()->userdata().was_hit_count < 3)
+	{
 		Animation *animation = AnimationManger::instance()->getAnimation("hero_hurt");
 		Animate *animate = Animate::create(animation);
 		animate->setTag(ActionTags::hero_hurt);
 		object->runAction(animate);
+		object->getStateMachine()->userdata().was_hit_time = system_clock::now();
+	}
+	else
+	{
+		object->getStateMachine()->change_state(HeroKnockout::instance());
 	}
 }
 
@@ -429,15 +447,9 @@ void HeroHurt::exit(Hero *object)
 
 void HeroHurt::execute(Hero *object)
 {
-	if (object->getStateMachine()->userdata().continuous_hurt >= 3)
-	{
-		object->getStateMachine()->change_state(HeroKnockout::instance());
-		object->getStateMachine()->userdata().continuous_hurt = 0;
-	}
-	else if (object->getActionByTag(ActionTags::hero_hurt) == nullptr)
+	if (object->getActionByTag(ActionTags::hero_hurt) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
-		object->getStateMachine()->userdata().continuous_hurt = 0;
 	}
 }
 
@@ -468,9 +480,9 @@ void HeroKnockout::execute(Hero *object)
 		HeroJumpingAttack::instance() == object->getStateMachine()->get_previous_state())
 	{
 		object->setPositionY(object->getPositionY() - object->getJumpForce());
-		if (object->getPositionY() < object->getStateMachine()->userdata().before_he_height)
+		if (object->getPositionY() < object->getStateMachine()->userdata().before_jump_y)
 		{
-			object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+			object->setPositionY(object->getStateMachine()->userdata().before_jump_y);
 		}
 	}
 
@@ -556,7 +568,7 @@ void HeroGlobal::execute(Hero *object)
 				if (HeroJumpingAttack::instance() == object->getStateMachine()->get_current_state())
 				{
 					float y = object->getPositionY();
-					object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+					object->setPositionY(object->getStateMachine()->userdata().before_jump_y);
 					adjacent = current_level->isAdjacent(object, collision.entity);
 					object->setPositionY(y);
 				}
@@ -595,7 +607,10 @@ bool HeroGlobal::on_message(Hero *object, const Message &msg)
 		if (HeroJump::instance() == object->getStateMachine()->get_current_state() ||
 			HeroJumpingAttack::instance() == object->getStateMachine()->get_current_state())
 		{
-			object->getStateMachine()->userdata().continuous_hurt = 0;
+			object->getStateMachine()->change_state(HeroKnockout::instance());
+		}
+		else if (dynamic_cast<Boss *>(object->getEntityManger()->getEntityByID(msg.sender)) != nullptr)
+		{
 			object->getStateMachine()->change_state(HeroKnockout::instance());
 		}
 		else

@@ -40,6 +40,7 @@ bool LevelLayer::init()
 {
 	// 获取图层数量
 	layer_count_ = getLayerCount();
+
 	// 获取地板高度
 	floor_height_ = getFloorHeight();
 
@@ -47,6 +48,11 @@ bool LevelLayer::init()
 	entity_manger_.reset(new EntityManger(world_, this));
 	hero_ = getHeroEntity();
 	setFollowHero(true);
+
+	// 创建测试Boss
+	auto boss = entity_manger_->create(entity_boss);
+	boss->setAnchorPoint(Vec2(0.5f, 0.0f));
+	setRealEntityPosition(boss, Vec2(Director::getInstance()->getWinSize().width - hero_->getPositionX(), hero_->getPositionY()));
 
 	scheduleUpdate();
 
@@ -63,6 +69,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 
 	// 获取图层数量
 	layer_count_ = getLayerCount();
+
 	// 获取地板高度
 	floor_height_ = getFloorHeight();
 
@@ -83,11 +90,6 @@ BaseGameEntity* LevelLayer::getHeroEntity()
 			hero_ = entity_manger_->create(entity_hero);
 			hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
 			setRealEntityPosition(hero_, Vec2(x, y));
-
-
-			auto boss = entity_manger_->create(entity_boss);
-			boss->setAnchorPoint(Vec2(0.5f, 0.0f));
-			setRealEntityPosition(boss, Vec2(x, y));
 		}
 	}
 	return hero_;
