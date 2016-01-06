@@ -540,7 +540,16 @@ void HeroGlobal::execute(Hero *object)
 			auto result = object->getStateMachine()->userdata().hit_targets.find(collision.entity->getID());
 			if (result == object->getStateMachine()->userdata().hit_targets.end())
 			{
-				if (current_level->isAdjacent(object, collision.entity))
+				bool adjacent = current_level->isAdjacent(object, collision.entity);
+				if (HeroJumpingAttack::instance() == object->getStateMachine()->get_current_state())
+				{
+					float y = object->getPositionY();
+					object->setPositionY(object->getStateMachine()->userdata().before_he_height);
+					adjacent = current_level->isAdjacent(object, collision.entity);
+					object->setPositionY(y);
+				}
+
+				if (adjacent)
 				{
 					Message msg;
 					msg.sender = object->getID();
@@ -554,7 +563,7 @@ void HeroGlobal::execute(Hero *object)
 
 					MessageDispatcher::instance()->dispatchMessage(msg);
 					object->getStateMachine()->userdata().hit_targets.insert(collision.entity->getID());
-				}			
+				}
 			}	
 		}
 	}
