@@ -434,17 +434,15 @@ void LevelLayer::updateTruggersState()
 					for (size_t i = 0; i < entitys.size(); ++i)
 					{
 						Vec2 pos;
-						int y = getTileSize().height * floorHeight();
 						if (item.direction == Direction::Left)
 						{
 							pos.x = - entitys[i]->realWidth() / 2;
-							pos.y = rand() % y;
 						}
 						else
 						{
 							pos.x = size.width + entitys[i]->realWidth() / 2;
-							pos.y = rand() % y;
 						}
+						pos.y = rand() % int(getTileSize().height * floorHeight());
 						pos = convertToNodeSpace(pos);
 						setRealEntityPosition(entitys[i], pos);
 					}
