@@ -22,6 +22,9 @@
     <Filter Include="src\Message">
       <UniqueIdentifier>{5ae69f09-8898-4b17-afa9-528268125516}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\AStar">
+      <UniqueIdentifier>{2b911c86-d29e-4718-98d1-e3bf1988f738}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Message\MessageDispatcher.cpp">
       <Filter>src\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AStar\AStar.cpp">
+      <Filter>src\AStar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AStar\BlockAllocator.cpp">
+      <Filter>src\AStar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +184,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\State\SimpleRobotLogic.h">
       <Filter>src\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AStar\AStar.h">
+      <Filter>src\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AStar\BlockAllocator.h">
+      <Filter>src\AStar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

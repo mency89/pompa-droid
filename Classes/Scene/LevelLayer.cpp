@@ -1,6 +1,7 @@
 ﻿#include "LevelLayer.h"
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
+#include "AStar/AStar.h"
 #include "json/document.h"
 #include "Entity/EntityManger.h"
 using namespace cocos2d;
