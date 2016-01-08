@@ -57,6 +57,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	
     register_all_packages();
 
+	srand(time(nullptr));
+
 	Director::getInstance()->setNotificationNode(GameApplication::instance());
 
     // create a scene. it's an autorelease object

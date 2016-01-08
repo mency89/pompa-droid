@@ -1,10 +1,21 @@
 ﻿#include "LevelLayer.h"
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
+#include "json/document.h"
 #include "Entity/EntityManger.h"
 using namespace cocos2d;
 
+enum Direction
+{
+	Left,
+	Right,
+};
+
 #define HERO_MAX_Y_CORRECTION 10
+
+static const std::map<std::string, EntityType> gStringToEntityType = {
+	{ "Boss" , EntityType::entity_boss }
+};
 
 LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name)
 	: world_(world)
@@ -47,12 +58,9 @@ bool LevelLayer::init()
 	// 创建游戏实例
 	entity_manger_.reset(new EntityManger(world_, this));
 	hero_ = getHeroEntity();
-	setFollowHero(true);
 
-	// 创建测试Boss
-	auto boss = entity_manger_->create(entity_boss);
-	boss->setAnchorPoint(Vec2(0.5f, 0.0f));
-	setRealEntityPosition(boss, Vec2(Director::getInstance()->getWinSize().width - hero_->getPositionX(), hero_->getPositionY()));
+	// 加载触发器
+	loadTriggers();
 
 	scheduleUpdate();
 
@@ -67,12 +75,16 @@ void LevelLayer::loadLevel(const std::string &level_name)
 	setPosition(Vec2::ZERO);
 	setAnchorPoint(Vec2::ZERO);
 
+	// 加载触发器
+	loadTriggers();
+
 	// 获取图层数量
 	layer_count_ = getLayerCount();
 
 	// 获取地板高度
 	floor_height_ = getFloorHeight();
 
+	// 销毁所有实例
 	entity_manger_->destroyAllEntity();
 }
 
@@ -140,6 +152,54 @@ int LevelLayer::getFloorHeight() const
 		return max_height;
 	}
 	return 0;
+}
+
+// 加载触发器
+void LevelLayer::loadTriggers()
+{
+	triggers_.clear();
+	auto objects = getObjectGroup("objects");
+	if (objects != nullptr)
+	{
+		for (auto value : objects->getObjects())
+		{
+			if (value.asValueMap()["type"].asString() == "Trigger")
+			{
+				auto unpack = [](Direction direction, const std::string &json_string)
+				{
+					rapidjson::Document doc;
+					std::vector<STrigger::SEntity> ret;
+					doc.Parse<0>(json_string.c_str());
+					for (size_t i = 0; i < doc.Size(); ++i)
+					{
+						const rapidjson::Value &object = doc[i];
+						auto result = gStringToEntityType.find(object.MemberBegin()->name.GetString());
+						CCAssert(result != gStringToEntityType.end(), "");
+						if (result != gStringToEntityType.end())
+						{
+							STrigger::SEntity enyity;
+							enyity.direction = direction;
+							enyity.entity_type = result->second;
+							enyity.num = object.MemberBegin()->value.GetInt();
+							ret.push_back(enyity);
+						}
+					}
+					return ret;
+				};
+
+				STrigger trigger;
+				trigger.x = value.asValueMap()["x"].asFloat();
+				trigger.y = value.asValueMap()["y"].asFloat();
+				trigger.width = value.asValueMap()["width"].asFloat();
+				trigger.height = value.asValueMap()["height"].asFloat();
+				auto vec = unpack(Direction::Left, value.asValueMap()["Left"].asString());
+				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
+				vec = unpack(Direction::Right, value.asValueMap()["Right"].asString());
+				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
+				triggers_.push_back(std::move(trigger));
+			}
+		}
+	}
 }
 
 // 图层数量
@@ -345,6 +405,57 @@ void LevelLayer::setFollowHero(bool follow)
 	follow_ = follow;
 }
 
+// 更新触发器状态
+void LevelLayer::updateTruggersState()
+{
+	if (hero_ != nullptr && !triggers_.empty())
+	{
+		Rect hero_rect(hero_->getRealRect());
+		for (size_t i = 0; i < triggers_.size(); ++i)
+		{
+			Rect trigger(triggers_[i].x, triggers_[i].y, triggers_[i].width, triggers_[i].height);
+			if (hero_rect.intersectsRect(trigger))
+			{
+				// 生成机器人
+				std::vector<BaseGameEntity *> entitys;
+				Size size = Director::getInstance()->getWinSize();
+				for (auto &item : triggers_[i].creater_)
+				{
+					// 创建实例
+					entitys.clear();
+					for (int i = 0; i < item.num; ++i)
+					{
+						auto entity = entity_manger_->create(static_cast<EntityType>(item.entity_type));
+						entity->setAnchorPoint(Vec2(0.5f, 0.0f));
+						entitys.push_back(entity);
+					}
+
+					// 随机位置
+					for (size_t i = 0; i < entitys.size(); ++i)
+					{
+						Vec2 pos;
+						int y = getTileSize().height * floorHeight();
+						if (item.direction == Direction::Left)
+						{
+							pos.x = - entitys[i]->realWidth() / 2;
+							pos.y = rand() % y;
+						}
+						else
+						{
+							pos.x = size.width + entitys[i]->realWidth() / 2;
+							pos.y = rand() % y;
+						}
+						pos = convertToNodeSpace(pos);
+						setRealEntityPosition(entitys[i], pos);
+					}
+				}
+				std::swap(triggers_[i], triggers_.back());
+				triggers_.pop_back();
+			}
+		}
+	}
+}
+
 void LevelLayer::update(float delta)
 {
 	// 更新演员
@@ -352,6 +463,9 @@ void LevelLayer::update(float delta)
 
 	// 镜头跟随
 	followHeroWithCamera();
+
+	// 更新触发器
+	updateTruggersState();
 
 	// 更新层级
 	std::vector<BaseGameEntity*> entitys = entity_manger_->getAllEntitys();

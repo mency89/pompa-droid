@@ -16,8 +16,8 @@
         "real_size": "52,80"
     }, 
     "Boss": {
-        "walk_speed": 1, 
-        "run_speed": 2, 
+        "walk_speed": 0.8, 
+        "run_speed": 1.6, 
         "jump_force": 2, 
         "max_jump_height": 50, 
         "size": "280,150", 

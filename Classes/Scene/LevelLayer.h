@@ -11,6 +11,22 @@ class BaseGameEntity;
 
 class LevelLayer : public cocos2d::TMXTiledMap
 {
+	struct STrigger
+	{
+		struct SEntity
+		{
+			int direction;
+			int entity_type;
+			int num;
+		};
+
+		float x;
+		float y;
+		float width;
+		float height;
+		std::vector<SEntity> creater_;
+	};
+
 public:
 	LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name);
 
@@ -93,6 +109,11 @@ public:
 
 private:
 	/**
+	 * 加载触发器
+	 */
+	void loadTriggers();
+
+	/**
 	 * 获取图层数量
 	 */
 	int getLayerCount() const;
@@ -102,6 +123,11 @@ private:
 	 */
 	int getFloorHeight() const;
 
+	/**
+	 * 更新触发器状态
+	 */
+	void updateTruggersState();
+
 private:
 	bool						follow_;
 	int							layer_count_;
@@ -109,6 +135,7 @@ private:
 	Hero*						hero_;
 	const float					innerstage_left_;
 	const float					inner_stage_right_;
+	std::vector<STrigger>		triggers_;
 	std::shared_ptr<b2World>	world_;
 	std::auto_ptr<EntityManger>	entity_manger_;
 	
