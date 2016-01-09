@@ -14,7 +14,7 @@ enum Direction
 #define HERO_MAX_Y_CORRECTION 10
 
 static const std::map<std::string, EntityType> gStringToEntityType = {
-	{ "Boss" , EntityType::entity_boss }
+	{ "Boss" , EntityType::kEntityBoss }
 };
 
 LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name)
@@ -99,7 +99,7 @@ Hero* LevelLayer::getHeroEntity()
 			ValueMap data = objects->getObject("Hero");
 			float x = data["x"].asFloat();
 			float y = data["y"].asFloat();
-			hero_ = dynamic_cast<Hero *>(entity_manger_->create(entity_hero));
+			hero_ = dynamic_cast<Hero *>(entity_manger_->create(kEntityHero));
 			CCAssert(hero_ != nullptr, "");
 			hero_->setAnchorPoint(Vec2(0.5f, 0.0f));
 			setRealEntityPosition(hero_, Vec2(x, y));

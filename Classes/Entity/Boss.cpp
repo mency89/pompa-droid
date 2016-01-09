@@ -34,14 +34,14 @@ void Boss::update()
 	state_machine_->update();
 }
 
-std::string Boss::name() const
+const char* Boss::name() const
 {
 	return "Boss";
 }
 
 int Boss::weaponCategoryBits() const
 {
-	return ShapeCategory::kEnemyWeaponShape;
+	return kEnemyWeaponShape;
 }
 
 void Boss::handleMenssage(const Message &msg)

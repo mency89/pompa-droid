@@ -34,14 +34,14 @@ void Hero::update()
 	state_machine_->update();
 }
 
-std::string Hero::name() const
+const char* Hero::name() const
 {
 	return "Hero";
 }
 
 int Hero::weaponCategoryBits() const
 {
-	return ShapeCategory::kHeroWeaponShape;
+	return kHeroWeaponShape;
 }
 
 void Hero::handleMenssage(const Message &msg)

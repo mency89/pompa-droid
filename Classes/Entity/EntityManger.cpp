@@ -3,6 +3,7 @@
 #include <Box2D/Box2D.h>
 #include "Hero.h"
 #include "Boss.h"
+#include "Trashcan.h"
 #include "Scene/LevelLayer.h"
 
 
@@ -25,11 +26,14 @@ BaseGameEntity* EntityManger::create(EntityType type)
 	BaseGameEntity *entity = nullptr;
 	switch (type)
 	{
-		case entity_hero:
+		case kEntityHero:
 			entity = GameEntityCreator<Hero>().create(world_);
 			break;
-		case entity_boss:
+		case kEntityBoss:
 			entity = GameEntityCreator<Boss>().create(world_);
+			break;
+		case kEntityTrashcan:
+			entity = GameEntityCreator<Trashcan>().create(world_);
 			break;
 		default:
 			return nullptr;

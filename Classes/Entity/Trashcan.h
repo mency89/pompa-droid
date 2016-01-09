@@ -4,10 +4,9 @@
 #include "BaseGameEntity.h"
 #include "State/StateMachine.h"
 
-
 class Trashcan : public BaseGameEntity
 {
-	typedef std::auto_ptr<StateMachine<Boss> > TrashcanStateMachine;
+	typedef std::auto_ptr<StateMachine<Trashcan> > TrashcanStateMachine;
 
 public:
 	Trashcan(std::shared_ptr<b2World> world);
@@ -18,11 +17,13 @@ public:
 
 	virtual void update() override;
 
-	virtual std::string name() const override;
+	virtual const char* name() const override;
 
 	virtual int weaponCategoryBits() const override;
 
 	virtual void handleMenssage(const Message &msg) override;
+
+	virtual cocos2d::Rect getRealRect() const override;
 
 public:
 	/**

@@ -11,8 +11,9 @@ class BaseGameEntity;
 
 enum EntityType
 {
-	entity_hero,
-	entity_boss,
+	kEntityHero,
+	kEntityBoss,
+	kEntityTrashcan,
 };
 
 class EntityManger
