@@ -22,5 +22,13 @@
         "max_jump_height": 50, 
         "size": "280,150", 
         "real_size": "84,78"
+    }, 
+    "Trashcan": {
+        "walk_speed": 0, 
+        "run_speed": 0, 
+        "jump_force": 0, 
+        "max_jump_height": 0, 
+        "size": "64,96", 
+        "real_size": "64,48"
     }
 }

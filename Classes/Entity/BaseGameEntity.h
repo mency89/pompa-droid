@@ -42,9 +42,6 @@ public:
 public:
 	virtual bool init() override;
 
-	virtual void setParent(cocos2d::Node* parent) override;
-
-public:
 	/**
 	 * 每帧更新
 	 */
@@ -71,6 +68,11 @@ public:
 	 */
 	virtual void handleMenssage(const Message &msg);
 
+	/**
+	 * 获取矩形框实际大小
+	 */
+	virtual cocos2d::Rect getRealRect() const;
+
 public:
 	/**
 	 * 唯一id
@@ -96,11 +98,6 @@ public:
 	 * 实际高度
 	 */
 	float realHeight() const;
-
-	/**
-	 * 获取实际矩形框
-	 */
-	cocos2d::Rect getRealRect() const;
 
 	/**
 	 * 获取刚体
@@ -202,6 +199,8 @@ public:
 	virtual void setPosition(const cocos2d::Vec2 &pos) override;
 
 	virtual void setPosition(float x, float y) override;
+
+	virtual void setParent(cocos2d::Node* parent) override;
 
 protected:
 	/**
