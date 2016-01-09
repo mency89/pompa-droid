@@ -73,6 +73,11 @@ public:
 	void adjustmentHeroPositionY();
 
 	/**
+	 * 避开障碍物
+	 */
+	void trashcanAvoidance(BaseGameEntity *entity);
+
+	/**
 	 * 图层数量
 	 */
 	int layerCount() const;

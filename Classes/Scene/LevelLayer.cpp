@@ -425,6 +425,19 @@ void LevelLayer::adjustmentHeroPositionY()
 	}
 }
 
+// 避开障碍物
+void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
+{
+	Rect heroRet = entity->getRealRect();
+	for (auto *entity : entity_manger_->getAllEntitys())
+	{	
+		if (strcmp(entity->name(), "Trashcan") == 0)
+		{
+			Rect entityRet = entity->getRealRect();
+		}
+	}
+}
+
 // 设置跟随主角
 void LevelLayer::setFollowHero(bool follow)
 {
