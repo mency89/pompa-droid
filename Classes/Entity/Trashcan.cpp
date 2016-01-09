@@ -21,6 +21,7 @@ bool Trashcan::init()
 		return false;
 	}
 
+	setSpriteFrame("trashcan.png");
 	state_machine_.reset(new StateMachine<Trashcan>(this));
 
 	return true;

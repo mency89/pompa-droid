@@ -28,10 +28,10 @@
   </data>
  </layer>
  <objectgroup name="objects">
-  <object id="1" name="TrashCan" type="TrashCan" x="303" y="322"/>
-  <object id="2" name="TrashCan" type="TrashCan" x="1517" y="339"/>
-  <object id="3" name="TrashCan" type="TrashCan" x="2829" y="371"/>
-  <object id="4" name="TrashCan" type="TrashCan" x="619" y="310"/>
+  <object id="1" name="Trashcan" type="Trashcan" x="303" y="322"/>
+  <object id="2" name="Trashcan" type="Trashcan" x="1517" y="339"/>
+  <object id="3" name="Trashcan" type="Trashcan" x="2829" y="371"/>
+  <object id="4" name="Trashcan" type="Trashcan" x="619" y="310"/>
   <object id="7" name="Hero" type="Hero" x="48" y="352"/>
   <object id="9" name="Trigger" type="Trigger" x="160" y="286" width="32" height="96">
    <properties>

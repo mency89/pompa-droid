@@ -114,6 +114,11 @@ private:
 	void loadTriggers();
 
 	/**
+	 * 创建障碍物
+	 */
+	void createTrashcan();
+
+	/**
 	 * 获取图层数量
 	 */
 	int getLayerCount() const;

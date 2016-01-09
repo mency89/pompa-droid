@@ -60,7 +60,10 @@ bool LevelLayer::init()
 	hero_ = getHeroEntity();
 
 	// 加载触发器
-	loadTriggers();
+	//loadTriggers();
+
+	// 创建障碍物
+	createTrashcan();
 
 	scheduleUpdate();
 
@@ -77,6 +80,9 @@ void LevelLayer::loadLevel(const std::string &level_name)
 
 	// 加载触发器
 	loadTriggers();
+
+	// 创建障碍物
+	createTrashcan();
 
 	// 获取图层数量
 	layer_count_ = getLayerCount();
@@ -197,6 +203,26 @@ void LevelLayer::loadTriggers()
 				vec = unpack(Direction::Right, value.asValueMap()["Right"].asString());
 				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
 				triggers_.push_back(std::move(trigger));
+			}
+		}
+	}
+}
+
+// 创建障碍物
+void LevelLayer::createTrashcan()
+{
+	auto objects = getObjectGroup("objects");
+	if (objects != nullptr)
+	{
+		for (auto value : objects->getObjects())
+		{
+			if (value.asValueMap()["type"].asString() == "Trashcan")
+			{
+				float x = value.asValueMap()["x"].asFloat();
+				float y = value.asValueMap()["y"].asFloat();
+				auto entity = entity_manger_->create(EntityType::kEntityTrashcan);
+				entity->setAnchorPoint(Vec2(0.5f, 0.0f));
+				setRealEntityPosition(entity, Vec2(x, y));
 			}
 		}
 	}
