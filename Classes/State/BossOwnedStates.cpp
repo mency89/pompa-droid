@@ -23,13 +23,13 @@ void BossIdle::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_idle");
 	animation->setLoops(-1);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::boss_idle);
+	animate->setTag(ActionTags::kBossIdle);
 	object->runAction(animate);
 }
 
 void BossIdle::exit(Boss *object)
 {
-	object->stopActionByTag(ActionTags::boss_idle);
+	object->stopActionByTag(ActionTags::kBossIdle);
 }
 
 void BossIdle::execute(Boss *object)
@@ -48,13 +48,13 @@ void BossWalk::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_walk");
 	animation->setLoops(-1);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::boss_walk);
+	animate->setTag(ActionTags::kBossWalk);
 	object->runAction(animate);
 }
 
 void BossWalk::exit(Boss *object)
 {
-	object->stopActionByTag(ActionTags::boss_walk);
+	object->stopActionByTag(ActionTags::kBossWalk);
 }
 
 void BossWalk::execute(Boss *object)
@@ -74,19 +74,19 @@ void BossAttack::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_attack");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::boss_attack);
+	animate->setTag(ActionTags::kBossAttack);
 	object->runAction(animate);
 }
 
 void BossAttack::exit(Boss *object)
 {
-	object->stopActionByTag(ActionTags::boss_attack);
+	object->stopActionByTag(ActionTags::kBossAttack);
 	object->getStateMachine()->userdata().hit_hero = false;
 }
 
 void BossAttack::execute(Boss *object)
 {
-	if (object->getActionByTag(ActionTags::boss_attack) == nullptr)
+	if (object->getActionByTag(ActionTags::kBossAttack) == nullptr)
 	{
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
@@ -117,7 +117,7 @@ void BossHurt::enter(Boss *object)
 	{
 		Animation *animation = AnimationManger::instance()->getAnimation("boss_hurt");
 		Animate *animate = Animate::create(animation);
-		animate->setTag(ActionTags::boss_hurt);
+		animate->setTag(ActionTags::kBossHurt);
 		object->runAction(animate);
 		object->getStateMachine()->userdata().was_hit_time = system_clock::now();
 	}
@@ -129,12 +129,12 @@ void BossHurt::enter(Boss *object)
 
 void BossHurt::exit(Boss *object)
 {
-	object->stopActionByTag(ActionTags::boss_hurt);
+	object->stopActionByTag(ActionTags::kBossHurt);
 }
 
 void BossHurt::execute(Boss *object)
 {
-	if (object->getActionByTag(ActionTags::boss_hurt) == nullptr)
+	if (object->getActionByTag(ActionTags::kBossHurt) == nullptr)
 	{
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
@@ -152,18 +152,18 @@ void BossKnockout::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_knockout");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::boss_knockout);
+	animate->setTag(ActionTags::kBossKnockout);
 	object->runAction(animate);
 }
 
 void BossKnockout::exit(Boss *object)
 {
-	object->stopActionByTag(ActionTags::boss_knockout);
+	object->stopActionByTag(ActionTags::kBossKnockout);
 }
 
 void BossKnockout::execute(Boss *object)
 {
-	if (object->getActionByTag(ActionTags::boss_knockout) == nullptr)
+	if (object->getActionByTag(ActionTags::kBossKnockout) == nullptr)
 	{
 		// 面向对你造成伤害者
 		int entity_id = object->getStateMachine()->userdata().hurt_source;
@@ -172,11 +172,11 @@ void BossKnockout::execute(Boss *object)
 		{
 			if (entity->getPositionX() < object->getPositionX())
 			{
-				object->setDirection(BaseGameEntity::Left);
+				object->setDirection(BaseGameEntity::kLeftDirection);
 			}
 			else
 			{
-				object->setDirection(BaseGameEntity::Right);
+				object->setDirection(BaseGameEntity::kRightDirection);
 			}
 		}
 		object->getStateMachine()->change_state(BossGetup::instance());
@@ -186,7 +186,7 @@ void BossKnockout::execute(Boss *object)
 bool BossKnockout::on_message(Boss *object, const Message &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_EntityHurt;
+	return msg.msg_code == kMsgEntityHurt;
 }
 
 /******Boss起身状态******/
@@ -196,18 +196,18 @@ void BossGetup::enter(Boss *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("boss_getup");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::boss_getup);
+	animate->setTag(ActionTags::kBossGetup);
 	object->runAction(animate);
 }
 
 void BossGetup::exit(Boss *object)
 {
-	object->stopActionByTag(ActionTags::boss_getup);
+	object->stopActionByTag(ActionTags::kBossGetup);
 }
 
 void BossGetup::execute(Boss *object)
 {
-	if (object->getActionByTag(ActionTags::boss_getup) == nullptr)
+	if (object->getActionByTag(ActionTags::kBossGetup) == nullptr)
 	{
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
@@ -216,7 +216,7 @@ void BossGetup::execute(Boss *object)
 bool BossGetup::on_message(Boss *object, const Message &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_EntityHurt;
+	return msg.msg_code == kMsgEntityHurt;
 }
 
 /************************************************************************/
@@ -303,7 +303,7 @@ void BossGlobal::execute(Boss *object)
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)
 {
-	if (msg.msg_code == msg_EntityHurt)
+	if (msg.msg_code == kMsgEntityHurt)
 	{
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;

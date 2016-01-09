@@ -41,7 +41,7 @@ std::string Hero::name() const
 
 int Hero::weaponCategoryBits() const
 {
-	return ShapeCategory::shape_hero_weapon;
+	return ShapeCategory::kHeroWeaponShape;
 }
 
 void Hero::handleMenssage(const Message &msg)

@@ -41,7 +41,7 @@ std::string Boss::name() const
 
 int Boss::weaponCategoryBits() const
 {
-	return ShapeCategory::shape_enemy_weapon;
+	return ShapeCategory::kEnemyWeaponShape;
 }
 
 void Boss::handleMenssage(const Message &msg)

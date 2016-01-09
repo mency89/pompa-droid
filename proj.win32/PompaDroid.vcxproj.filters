@@ -96,6 +96,9 @@
     <ClCompile Include="..\Classes\AStar\BlockAllocator.cpp">
       <Filter>src\AStar</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Trashcan.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\AStar\BlockAllocator.h">
       <Filter>src\AStar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Trashcan.h">
+      <Filter>src\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

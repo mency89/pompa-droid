@@ -7,10 +7,11 @@
  */
 enum ShapeCategory
 {
-	shape_hero_body = 0x0001,
-	shape_hero_weapon = 0x0002,
-	shape_enemy_body = 0x0004,
-	shape_enemy_weapon = 0x0008,
+	kHeroBodyShape = 0x0001,
+	kHeroWeaponShape = 0x0002,
+	kEnemyBodyShape = 0x0004,
+	kEnemyWeaponShape = 0x0008,
+	kTrashcanBodyShape = 0x0010,
 };
 
 #endif

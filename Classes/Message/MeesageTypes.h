@@ -6,11 +6,11 @@
 
 enum MessageTypes
 {
-	msg_KeyPressed = 1000,
-	msg_KeyReleased = 1001,
-	msg_EntityMove = 2001,
-	msg_EntityHurt = 2002,
-	msg_EntityAttack = 2003
+	kMsgKeyPressed = 1001,
+	kMsgKeyReleased = 1002,
+	kMsgEntityMove = 2001,
+	kMsgEntityHurt = 2002,
+	kMsgEntityAttack = 2003
 };
 
 struct STKeyPressed

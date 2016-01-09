@@ -51,7 +51,7 @@ bool BaseGameEntity::init()
 	collision_body_ = world_->CreateBody(&def);
 
 	// 设置方向
-	setDirection(Direction::Right);
+	setDirection(kRightDirection);
 
 	// 设置属性
 	const EntityAttribute *attribute = nullptr;
@@ -224,15 +224,15 @@ void BaseGameEntity::setEntityManger(EntityManger *manager)
 // 移动实体
 void BaseGameEntity::moveEntity(float speed)
 {
-	if (direction_ == Direction::Up)
+	if (direction_ == kUpDirection)
 	{
 		setPosition(getPosition() + Vec2(0, speed));
 	}
-	else if (direction_ == Direction::Down)
+	else if (direction_ == kDownDirection)
 	{
 		setPosition(getPosition() - Vec2(0, speed));
 	}
-	else if (direction_ == Direction::Left)
+	else if (direction_ == kLeftDirection)
 	{
 		setPosition(getPosition() - Vec2(speed, 0));
 	}
@@ -247,11 +247,11 @@ void BaseGameEntity::moveEntity(const cocos2d::Vec2 &velocity)
 {
 	if (velocity.x > 0.0f)
 	{
-		setDirection(Right);
+		setDirection(kRightDirection);
 	}
 	else if (velocity.x < 0.0f)
 	{
-		setDirection(Left);
+		setDirection(kLeftDirection);
 	}
 	setPosition(getPosition() + velocity);
 }
@@ -313,18 +313,18 @@ BaseGameEntity::Direction BaseGameEntity::getDirection() const
 // 获取面对的方向
 BaseGameEntity::Direction BaseGameEntity::getLookDirection() const
 {
-	return isFlippedX() ? BaseGameEntity::Direction::Left : BaseGameEntity::Direction::Right;
+	return isFlippedX() ? kLeftDirection : kRightDirection;
 }
 
 // 设置方向
 void BaseGameEntity::setDirection(Direction direction)
 {
 	direction_ = direction;
-	if (direction_ == Direction::Right)
+	if (direction_ == kRightDirection)
 	{
 		setFlippedX(false);
 	}
-	else if (direction_ == Direction::Left)
+	else if (direction_ == kLeftDirection)
 	{
 		setFlippedX(true);
 	}

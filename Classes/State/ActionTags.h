@@ -3,22 +3,22 @@
 
 enum ActionTags
 {
-	hero_idle = 1001,
-	hero_walk = 1002,
-	hero_run = 1003,
-	hero_jump = 1004,
-	hero_attack = 1005,
-	hero_runattack = 1006,
-	hero_jumpattack = 1007,
-	hero_hurt = 1008,
-	hero_knockout = 1009,
-	hero_getup = 1010,
-	boss_idle = 1011,
-	boss_walk = 1012,
-	boss_hurt = 1013,
-	boss_knockout = 1015,
-	boss_getup = 1015,
-	boss_attack = 1016,
+	kHeroIdle = 1001,
+	kHeroWalk = 1002,
+	kHeroRun = 1003,
+	kHeroJump = 1004,
+	kHeroAttcak = 1005,
+	kHeroRunAttcak = 1006,
+	kHeroJumpAttcak = 1007,
+	kHeroHurt = 1008,
+	kHeroKnockout = 1009,
+	kheroGetup = 1010,
+	kBossIdle = 1011,
+	kBossWalk = 1012,
+	kBossHurt = 1013,
+	kBossKnockout = 1015,
+	kBossGetup = 1015,
+	kBossAttack = 1016,
 };
 
 #endif

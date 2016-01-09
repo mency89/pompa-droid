@@ -121,7 +121,7 @@ void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		STKeyPressed extra_info;
 		extra_info.key_code = keyCode;
 		msg.receiver = level_->getHeroEntity()->getID();
-		msg.msg_code = MessageTypes::msg_KeyPressed;
+		msg.msg_code = MessageTypes::kMsgKeyPressed;
 		msg.extra_info = &extra_info;
 		msg.extra_info_size = sizeof(STKeyPressed);
 		MessageDispatcher::instance()->dispatchMessage(msg);
@@ -136,7 +136,7 @@ void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 		STKeyReleased extra_info;
 		extra_info.key_code = keyCode;
 		msg.receiver = level_->getHeroEntity()->getID();
-		msg.msg_code = MessageTypes::msg_KeyReleased;
+		msg.msg_code = MessageTypes::kMsgKeyReleased;
 		msg.extra_info = &extra_info;
 		msg.extra_info_size = sizeof(STKeyReleased);
 		MessageDispatcher::instance()->dispatchMessage(msg);

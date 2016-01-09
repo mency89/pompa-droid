@@ -13,11 +13,11 @@ void SimpleRobotLogic(EntityType *object)
 		Hero *hero = current_level->getHeroEntity();
 		if (hero->getPositionX() < object->getPositionX())
 		{
-			object->setDirection(BaseGameEntity::Left);
+			object->setDirection(BaseGameEntity::kLeftDirection);
 		}
 		else if (hero->getPositionX() > object->getPositionX())
 		{
-			object->setDirection(BaseGameEntity::Right);
+			object->setDirection(BaseGameEntity::kRightDirection);
 		}
 
 		if (current_level->isAdjacent(object, hero))
@@ -81,7 +81,7 @@ void SimpleRobotLogic(EntityType *object)
 				Message msg;
 				msg.sender = object->getID();
 				msg.receiver = collision.entity->getID();
-				msg.msg_code = msg_EntityHurt;
+				msg.msg_code = kMsgEntityHurt;
 
 				STEntityHurt extra_info;
 				extra_info.pos = collision.collision_pos;

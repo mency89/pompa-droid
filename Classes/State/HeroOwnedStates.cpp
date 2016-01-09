@@ -50,19 +50,19 @@ namespace
 		CCAssert(IsDirectionKey(keyCode), "");
 		if (keyCode == EventKeyboard::KeyCode::KEY_W)
 		{
-			return BaseGameEntity::Direction::Up;
+			return BaseGameEntity::kUpDirection;
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_S)
 		{
-			return BaseGameEntity::Direction::Down;
+			return BaseGameEntity::kDownDirection;
 		}
 		else if (keyCode == EventKeyboard::KeyCode::KEY_A)
 		{
-			return BaseGameEntity::Direction::Left;
+			return BaseGameEntity::kLeftDirection;
 		}
 		else
 		{
-			return BaseGameEntity::Direction::Right;
+			return BaseGameEntity::kRightDirection;
 		}
 	}
 
@@ -81,13 +81,13 @@ void HeroIdle::enter(Hero *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_idle");
 	animation->setLoops(-1);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_idle);
+	animate->setTag(ActionTags::kHeroIdle);
 	object->runAction(animate);
 }
 
 void HeroIdle::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_idle);
+	object->stopActionByTag(ActionTags::kHeroIdle);
 }
 
 void HeroIdle::execute(Hero *object)
@@ -97,7 +97,7 @@ void HeroIdle::execute(Hero *object)
 
 bool HeroIdle::on_message(Hero *object, const Message &msg)
 {
-	if (MessageTypes::msg_KeyPressed == msg.msg_code)
+	if (MessageTypes::kMsgKeyPressed == msg.msg_code)
 	{
 		STKeyPressed extra_info = *reinterpret_cast<const STKeyPressed*>(msg.extra_info);
 		if (IsOpenKeyCode(extra_info.key_code))
@@ -115,7 +115,7 @@ bool HeroIdle::on_message(Hero *object, const Message &msg)
 			else if (IsDirectionKey(extra_info.key_code))
 			{
 				BaseGameEntity::Direction direction = ConvertDirectionKeyToHeroDirection(extra_info.key_code);
-				if (direction == object->getDirection() && direction != BaseGameEntity::Up && direction != BaseGameEntity::Down)
+				if (direction == object->getDirection() && direction != BaseGameEntity::kUpDirection && direction != BaseGameEntity::kDownDirection)
 				{
 					system_clock::time_point current_time = system_clock::now();
 					system_clock::time_point last_direction_key_pressed_time = object->getStateMachine()->userdata().last_direction_key_pressed_time;
@@ -149,13 +149,13 @@ void HeroWalk::enter(Hero *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_walk");
 	animation->setLoops(-1);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_walk);
+	animate->setTag(ActionTags::kHeroWalk);
 	object->runAction(animate);
 }
 
 void HeroWalk::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_walk);
+	object->stopActionByTag(ActionTags::kHeroWalk);
 }
 
 void HeroWalk::execute(Hero *object)
@@ -166,7 +166,7 @@ void HeroWalk::execute(Hero *object)
 
 bool HeroWalk::on_message(Hero *object, const Message &msg)
 {
-	if (MessageTypes::msg_KeyPressed == msg.msg_code)
+	if (MessageTypes::kMsgKeyPressed == msg.msg_code)
 	{
 		STKeyPressed extra_info = *reinterpret_cast<const STKeyPressed *>(msg.extra_info);
 		if (IsJumpKey(extra_info.key_code))
@@ -180,7 +180,7 @@ bool HeroWalk::on_message(Hero *object, const Message &msg)
 			return true;
 		}
 	}
-	else if (MessageTypes::msg_KeyReleased == msg.msg_code)
+	else if (MessageTypes::kMsgKeyReleased == msg.msg_code)
 	{
 		STKeyReleased extra_info = *reinterpret_cast<const STKeyReleased *>(msg.extra_info);
 		if (IsDirectionKey(extra_info.key_code))
@@ -200,13 +200,13 @@ void HeroRun::enter(Hero *object)
 	animation->setLoops(-1);
 	animation->setDelayPerUnit(0.08f);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_run);
+	animate->setTag(ActionTags::kHeroRun);
 	object->runAction(animate);
 }
 
 void HeroRun::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_run);
+	object->stopActionByTag(ActionTags::kHeroRun);
 }
 
 void HeroRun::execute(Hero *object)
@@ -217,7 +217,7 @@ void HeroRun::execute(Hero *object)
 
 bool HeroRun::on_message(Hero *object, const Message &msg)
 {
-	if (MessageTypes::msg_KeyPressed == msg.msg_code)
+	if (MessageTypes::kMsgKeyPressed == msg.msg_code)
 	{
 		STKeyPressed extra_info = *reinterpret_cast<const STKeyPressed *>(msg.extra_info);
 		if (IsJumpKey(extra_info.key_code))
@@ -231,7 +231,7 @@ bool HeroRun::on_message(Hero *object, const Message &msg)
 			return true;
 		}
 	}
-	else if (MessageTypes::msg_KeyReleased == msg.msg_code)
+	else if (MessageTypes::kMsgKeyReleased == msg.msg_code)
 	{
 		STKeyReleased extra_info = *reinterpret_cast<const STKeyReleased *>(msg.extra_info);
 		if (IsDirectionKey(extra_info.key_code))
@@ -252,13 +252,13 @@ void HeroJump::enter(Hero *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_jump");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_jump);
+	animate->setTag(ActionTags::kHeroJump);
 	object->runAction(animate);
 }
 
 void HeroJump::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_jump);
+	object->stopActionByTag(ActionTags::kHeroJump);
 }
 
 void HeroJump::execute(Hero *object)
@@ -304,7 +304,7 @@ void HeroJump::execute(Hero *object)
 
 bool HeroJump::on_message(Hero *object, const Message &msg)
 {
-	if (MessageTypes::msg_KeyPressed == msg.msg_code)
+	if (MessageTypes::kMsgKeyPressed == msg.msg_code)
 	{
 		STKeyPressed extra_info = *reinterpret_cast<const STKeyPressed *>(msg.extra_info);
 		if (IsAttackKey(extra_info.key_code))
@@ -325,18 +325,18 @@ void HeroAttack::enter(Hero *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_attack_00");
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_attack);
+	animate->setTag(ActionTags::kHeroAttcak);
 	object->runAction(animate);
 }
 
 void HeroAttack::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_attack);
+	object->stopActionByTag(ActionTags::kHeroAttcak);
 }
 
 void HeroAttack::execute(Hero *object)
 {
-	if (object->getActionByTag(ActionTags::hero_attack) == nullptr)
+	if (object->getActionByTag(ActionTags::kHeroAttcak) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
@@ -353,20 +353,20 @@ void HeroRuningAttack::enter(Hero *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_runattack");
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_runattack);
+	animate->setTag(ActionTags::kHeroRunAttcak);
 	object->runAction(animate);
 }
 
 void HeroRuningAttack::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_runattack);
+	object->stopActionByTag(ActionTags::kHeroRunAttcak);
 }
 
 void HeroRuningAttack::execute(Hero *object)
 {
 	object->moveEntity(object->getWalkSpeed());
 	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
-	if (object->getActionByTag(ActionTags::hero_runattack) == nullptr)
+	if (object->getActionByTag(ActionTags::kHeroRunAttcak) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
@@ -383,18 +383,18 @@ void HeroJumpingAttack::enter(Hero *object)
 {
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_jumpattack");
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_jumpattack);
+	animate->setTag(ActionTags::kHeroJumpAttcak);
 	object->runAction(animate);
 }
 
 void HeroJumpingAttack::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_jumpattack);
+	object->stopActionByTag(ActionTags::kHeroJumpAttcak);
 }
 
 void HeroJumpingAttack::execute(Hero *object)
 {
-	if (object->getActionByTag(ActionTags::hero_jumpattack) == nullptr)
+	if (object->getActionByTag(ActionTags::kHeroJumpAttcak) == nullptr)
 	{
 		object->setPositionY(object->getPositionY() - object->getJumpForce());
 		if (object->getPositionY() < object->getStateMachine()->userdata().before_jump_y)
@@ -430,7 +430,7 @@ void HeroHurt::enter(Hero *object)
 	{
 		Animation *animation = AnimationManger::instance()->getAnimation("hero_hurt");
 		Animate *animate = Animate::create(animation);
-		animate->setTag(ActionTags::hero_hurt);
+		animate->setTag(ActionTags::kHeroHurt);
 		object->runAction(animate);
 		object->getStateMachine()->userdata().was_hit_time = system_clock::now();
 	}
@@ -442,12 +442,12 @@ void HeroHurt::enter(Hero *object)
 
 void HeroHurt::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_hurt);
+	object->stopActionByTag(ActionTags::kHeroHurt);
 }
 
 void HeroHurt::execute(Hero *object)
 {
-	if (object->getActionByTag(ActionTags::hero_hurt) == nullptr)
+	if (object->getActionByTag(ActionTags::kHeroHurt) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
@@ -465,13 +465,13 @@ void HeroKnockout::enter(Hero *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_knockout");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_knockout);
+	animate->setTag(ActionTags::kHeroKnockout);
 	object->runAction(animate);
 }
 
 void HeroKnockout::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_knockout);
+	object->stopActionByTag(ActionTags::kHeroKnockout);
 }
 
 void HeroKnockout::execute(Hero *object)
@@ -486,7 +486,7 @@ void HeroKnockout::execute(Hero *object)
 		}
 	}
 
-	if (object->getActionByTag(ActionTags::hero_knockout) == nullptr)
+	if (object->getActionByTag(ActionTags::kHeroKnockout) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroGetup::instance());
 	}
@@ -495,7 +495,7 @@ void HeroKnockout::execute(Hero *object)
 bool HeroKnockout::on_message(Hero *object, const Message &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_EntityHurt;
+	return msg.msg_code == kMsgEntityHurt;
 }
 
 /******英雄起身状态******/
@@ -505,18 +505,18 @@ void HeroGetup::enter(Hero *object)
 	Animation *animation = AnimationManger::instance()->getAnimation("hero_getup");
 	animation->setRestoreOriginalFrame(false);
 	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::hero_getup);
+	animate->setTag(ActionTags::kheroGetup);
 	object->runAction(animate);
 }
 
 void HeroGetup::exit(Hero *object)
 {
-	object->stopActionByTag(ActionTags::hero_getup);
+	object->stopActionByTag(ActionTags::kheroGetup);
 }
 
 void HeroGetup::execute(Hero *object)
 {
-	if (object->getActionByTag(ActionTags::hero_getup) == nullptr)
+	if (object->getActionByTag(ActionTags::kheroGetup) == nullptr)
 	{
 		// 面向对你造成伤害者
 		int entity_id = object->getStateMachine()->userdata().hurt_source;
@@ -525,11 +525,11 @@ void HeroGetup::execute(Hero *object)
 		{
 			if (entity->getPositionX() < object->getPositionX())
 			{
-				object->setDirection(BaseGameEntity::Left);
+				object->setDirection(BaseGameEntity::kLeftDirection);
 			}
 			else
 			{
-				object->setDirection(BaseGameEntity::Right);
+				object->setDirection(BaseGameEntity::kRightDirection);
 			}
 		}
 		object->getStateMachine()->change_state(HeroIdle::instance());
@@ -539,7 +539,7 @@ void HeroGetup::execute(Hero *object)
 bool HeroGetup::on_message(Hero *object, const Message &msg)
 {
 	// 吞噬受击消息
-	return msg.msg_code == msg_EntityHurt;
+	return msg.msg_code == kMsgEntityHurt;
 }
 
 /******英雄全局状态******/
@@ -578,7 +578,7 @@ void HeroGlobal::execute(Hero *object)
 					Message msg;
 					msg.sender = object->getID();
 					msg.receiver = collision.entity->getID();
-					msg.msg_code = msg_EntityHurt;
+					msg.msg_code = kMsgEntityHurt;
 
 					STEntityHurt extra_info;
 					extra_info.pos = collision.collision_pos;
@@ -599,7 +599,7 @@ void HeroGlobal::execute(Hero *object)
 
 bool HeroGlobal::on_message(Hero *object, const Message &msg)
 {
-	if (msg.msg_code == msg_EntityHurt)
+	if (msg.msg_code == kMsgEntityHurt)
 	{
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;

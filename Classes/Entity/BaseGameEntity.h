@@ -18,10 +18,10 @@ class BaseGameEntity : public cocos2d::Sprite
 public:
 	enum Direction
 	{
-		Up,
-		Down,
-		Left,
-		Right
+		kUpDirection = 1,
+		kDownDirection = 2,
+		kLeftDirection = 3,
+		kRightDirection = 4
 	};
 
 	struct Collision
