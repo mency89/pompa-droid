@@ -12,6 +12,7 @@ class BaseGameEntity;
 enum EntityType
 {
 	kEntityHero,
+	kEntityRobot,
 	kEntityBoss,
 	kEntityTrashcan,
 };

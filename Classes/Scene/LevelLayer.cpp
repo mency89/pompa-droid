@@ -14,7 +14,8 @@ enum Direction
 #define HERO_MAX_Y_CORRECTION 10
 
 static const std::map<std::string, EntityType> gStringToEntityType = {
-	{ "Boss" , EntityType::kEntityBoss }
+	{ "Boss" , EntityType::kEntityBoss },
+	{ "Robot", EntityType::kEntityRobot },
 };
 
 LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name)
@@ -60,10 +61,10 @@ bool LevelLayer::init()
 	hero_ = getHeroEntity();
 
 	// 加载触发器
-	//loadTriggers();
+	loadTriggers();
 
 	// 创建障碍物
-	createTrashcan();
+	//createTrashcan();
 
 	scheduleUpdate();
 
@@ -188,6 +189,10 @@ void LevelLayer::loadTriggers()
 							enyity.entity_type = result->second;
 							enyity.num = object.MemberBegin()->value.GetInt();
 							ret.push_back(enyity);
+						}
+						else
+						{
+							CCAssert(false, "");
 						}
 					}
 					return ret;

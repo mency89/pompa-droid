@@ -1,5 +1,6 @@
 ﻿#include "Robot.h"
 #include "ShapeCategory.h"
+#include "State/RobotOwnedStates.h"
 using namespace cocos2d;
 
 
@@ -23,6 +24,7 @@ bool Robot::init()
 	}
 
 	state_machine_.reset(new StateMachine<Robot>(this));
+	state_machine_->change_state(RobotIdle::instance());
 
 	player_ = Sprite::create();
 	player_->setAnchorPoint(Vec2::ZERO);

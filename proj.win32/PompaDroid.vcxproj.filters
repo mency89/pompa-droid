@@ -99,6 +99,12 @@
     <ClCompile Include="..\Classes\Entity\Trashcan.cpp">
       <Filter>src\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Robot.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\State\RobotOwnedStates.cpp">
+      <Filter>src\State</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -196,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Entity\Trashcan.h">
       <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Robot.h">
+      <Filter>src\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\State\RobotOwnedStates.h">
+      <Filter>src\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

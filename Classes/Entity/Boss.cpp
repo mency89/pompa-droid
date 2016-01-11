@@ -1,6 +1,5 @@
 ﻿#include "Boss.h"
 #include "ShapeCategory.h"
-#include "GameEntityConfig.h"
 #include "State/BossOwnedStates.h"
 
 
