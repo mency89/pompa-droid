@@ -51,7 +51,7 @@ int Robot::weaponCategoryBits() const
 
 void Robot::handleMenssage(const Message &msg)
 {
-	// ignore
+	state_machine_->handle_message(msg);
 }
 
 // 获取特效播放器

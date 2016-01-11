@@ -3325,6 +3325,823 @@
                     </dict>
 				</array>
 			</dict>
+			<key>robot_base_attack_00</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>18.000</real>
+                             <key>position</key> <string>{ 1.921,-5.304 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_attack_01</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -6.590,24.058 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>18.000</real>
+                             <key>position</key> <string>{ -2.973,-2.751 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_attack_02</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -4.888,23.632 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>20.025</real>
+                             <key>position</key> <string>{ -2.760,1.292 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_attack_03</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 3.623,21.930 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>18.000</real>
+                             <key>position</key> <string>{ 5.325,-0.836 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_attack_04</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 2.857,21.857 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 6.000,-5.000 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_hurt_00</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -24.571,15.286 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -9.714,-3.286 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_hurt_01</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -26.000,17.571 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -10.286,-1.857 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_hurt_02</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -27.714,16.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ -11.429,-3.286 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_idle_00</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 2.571,-3.857 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_idle_01</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 1.714,-4.143 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_idle_02</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,23.571 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>18.000</real>
+                             <key>position</key> <string>{ 0.857,-3.857 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_idle_03</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>18.000</real>
+                             <key>position</key> <string>{ 0.571,-3.857 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_idle_04</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>19.000</real>
+                             <key>position</key> <string>{ 0.857,-2.714 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_walk_00</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 1.714,21.571 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>20.000</real>
+                             <key>position</key> <string>{ 3.429,-1.571 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_walk_01</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.571,24.714 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>19.000</real>
+                             <key>position</key> <string>{ 2.286,-1.000 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_walk_02</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>19.000</real>
+                             <key>position</key> <string>{ 2.857,-1.000 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_walk_03</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 1.714,21.000 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>19.000</real>
+                             <key>position</key> <string>{ 4.286,-4.429 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_walk_04</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.286,24.429 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>20.000</real>
+                             <key>position</key> <string>{ 0.857,0.429 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
+			<key>robot_base_walk_05</key>
+			<dict>
+				<key>anchorpoint</key>
+                <string>{ 0.5000,0.5000 }</string>
+				<key>fixtures</key>
+				<array>
+
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>16.031</real>
+                             <key>position</key> <string>{ 0.857,22.143 }</string>
+                         </dict>
+                    </dict>
+					<dict>
+                        <key>density</key> <real>2</real>
+                        <key>friction</key> <real>0</real>
+                        <key>restitution</key> <real>0</real>
+                        <key>filter_categoryBits</key> <integer>4</integer>
+                        <key>filter_groupIndex</key> <integer>0</integer>
+                        <key>filter_maskBits</key> <integer>2</integer>
+                        <key>isSensor</key> <true/>
+                        <key>id</key> <string></string>
+                        <key>fixture_type</key> <string>CIRCLE</string>
+
+                         <key>circle</key>
+                         <dict>
+                             <key>radius</key> <real>20.000</real>
+                             <key>position</key> <string>{ 2.857,-6.143 }</string>
+                         </dict>
+                    </dict>
+				</array>
+			</dict>
 		</dict>
 	</dict>
 </plist>
