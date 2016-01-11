@@ -64,7 +64,7 @@ public:
 };
 
 /**
- * 英雄攻击状态
+ * Boss攻击状态
  */
 class BossAttack : public State < Boss >, public Singleton < BossAttack >
 {
@@ -79,7 +79,6 @@ public:
 
 	virtual bool on_message(Boss *object, const Message &msg) override;
 };
-
 
 /**
  * Boss受击状态
@@ -156,9 +155,9 @@ public:
 /**
  * Boss休息状态
  */
-class BossIdelLittleWhile : public State < Boss >, public Singleton < BossIdelLittleWhile >
+class BossIdleLittleWhile : public State < Boss >, public Singleton < BossIdleLittleWhile >
 {
-	SINGLETON_DEFAULT(BossIdelLittleWhile);
+	SINGLETON_DEFAULT(BossIdleLittleWhile);
 
 public:
 	virtual void enter(Boss *object) override;
@@ -173,6 +172,7 @@ public:
 /************************************************************************/
 /* Role layer state											            */
 /************************************************************************/
+
 /**
  * Boss全局状态
  */

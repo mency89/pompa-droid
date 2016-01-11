@@ -46,4 +46,148 @@ public:
 	virtual bool on_message(Robot *object, const Message &msg) override;
 };
 
+/**
+ * 机器人行走状态
+ */
+class RobotWalk : public State < Robot >, public Singleton < RobotWalk >
+{
+	SINGLETON_DEFAULT(RobotWalk);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/**
+ * 机器人攻击状态
+ */
+class RobotAttack : public State < Robot >, public Singleton < RobotAttack >
+{
+	SINGLETON_DEFAULT(RobotAttack);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/**
+ * 机器人受击状态
+ */
+class RobotHurt : public State < Robot >, public Singleton < RobotHurt >
+{
+	SINGLETON_DEFAULT(RobotHurt);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/**
+ * 机器人倒下状态
+ */
+class RobotKnockout : public State < Robot >, public Singleton < RobotKnockout >
+{
+	SINGLETON_DEFAULT(RobotKnockout);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/**
+ * 机器人起身状态
+ */
+class RobotGetup : public State < Robot >, public Singleton < RobotGetup >
+{
+	SINGLETON_DEFAULT(RobotGetup);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/************************************************************************/
+/* Behavior layer state                                                 */
+/************************************************************************/
+
+/**
+ * 机器人直线行走状态
+ */
+class RobotBeelineWalk : public State < Robot >, public Singleton < RobotBeelineWalk >
+{
+	SINGLETON_DEFAULT(RobotBeelineWalk);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/**
+ * 机器人休息状态
+ */
+class RobotIdleLittleWhile : public State < Robot >, public Singleton < RobotIdleLittleWhile >
+{
+	SINGLETON_DEFAULT(RobotIdleLittleWhile);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
+/************************************************************************/
+/* Role layer state											            */
+/************************************************************************/
+
+/**
+ * Boss全局状态
+ */
+class RobotGlobal : public State < Robot >, public Singleton < RobotGlobal >
+{
+	SINGLETON_DEFAULT(RobotGlobal);
+
+public:
+	virtual void enter(Robot *object) override;
+
+	virtual void exit(Robot *object) override;
+
+	virtual void execute(Robot *object) override;
+
+	virtual bool on_message(Robot *object, const Message &msg) override;
+};
+
 #endif

@@ -25,6 +25,7 @@ bool Robot::init()
 
 	state_machine_.reset(new StateMachine<Robot>(this));
 	state_machine_->change_state(RobotIdle::instance());
+	state_machine_->set_global_state(RobotGlobal::instance());
 
 	player_ = Sprite::create();
 	player_->setAnchorPoint(Vec2::ZERO);
@@ -40,7 +41,7 @@ void Robot::update()
 
 const char* Robot::name() const
 {
-	return "Robot";
+	return "robot";
 }
 
 int Robot::weaponCategoryBits() const

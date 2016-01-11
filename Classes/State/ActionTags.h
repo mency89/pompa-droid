@@ -20,6 +20,11 @@ enum ActionTags
 	kBossGetup = 1015,
 	kBossAttack = 1016,
 	kRobotIdle = 1017,
+	kRobotWalk = 1018,
+	kRobotAttack = 1019,
+	kRobotHurt = 1020,
+	kRobotKnockout = 1021,
+	kRobotGetup = 1022,
 };
 
 #endif

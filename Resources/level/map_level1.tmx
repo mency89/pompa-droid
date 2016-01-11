@@ -28,15 +28,15 @@
   </data>
  </layer>
  <objectgroup name="objects">
-  <object id="1" name="Trashcan" type="Trashcan" x="303" y="322"/>
-  <object id="2" name="Trashcan" type="Trashcan" x="1517" y="339"/>
-  <object id="3" name="Trashcan" type="Trashcan" x="2829" y="371"/>
-  <object id="4" name="Trashcan" type="Trashcan" x="619" y="310"/>
-  <object id="7" name="Hero" type="Hero" x="48" y="352"/>
-  <object id="9" name="Trigger" type="Trigger" x="160" y="286" width="32" height="96">
+  <object id="1" name="trashcan" type="trashcan" x="303" y="322"/>
+  <object id="2" name="trashcan" type="trashcan" x="1517" y="339"/>
+  <object id="3" name="trashcan" type="trashcan" x="2829" y="371"/>
+  <object id="4" name="trashcan" type="trashcan" x="619" y="310"/>
+  <object id="7" name="hero" type="hero" x="48" y="352"/>
+  <object id="9" name="trigger" type="trigger" x="160" y="286" width="32" height="96">
    <properties>
-    <property name="Left" value="[{&quot;Boss&quot;:1}]"/>
-    <property name="Right" value="[{&quot;Boss&quot;:1}]"/>
+    <property name="left" value="[{&quot;robot&quot;:1}]"/>
+    <property name="right" value="[{&quot;robot&quot;:1}]"/>
    </properties>
   </object>
  </objectgroup>

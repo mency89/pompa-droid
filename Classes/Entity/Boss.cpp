@@ -35,7 +35,7 @@ void Boss::update()
 
 const char* Boss::name() const
 {
-	return "Boss";
+	return "boss";
 }
 
 int Boss::weaponCategoryBits() const

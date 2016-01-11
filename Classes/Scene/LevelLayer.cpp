@@ -14,8 +14,8 @@ enum Direction
 #define HERO_MAX_Y_CORRECTION 10
 
 static const std::map<std::string, EntityType> gStringToEntityType = {
-	{ "Boss" , EntityType::kEntityBoss },
-	{ "Robot", EntityType::kEntityRobot },
+	{ "boss" , EntityType::kEntityBoss },
+	{ "robot", EntityType::kEntityRobot },
 };
 
 LevelLayer::LevelLayer(std::shared_ptr<b2World> world, const std::string &level_name)
@@ -103,7 +103,7 @@ Hero* LevelLayer::getHeroEntity()
 		auto objects = getObjectGroup("objects");
 		if (objects != nullptr)
 		{
-			ValueMap data = objects->getObject("Hero");
+			ValueMap data = objects->getObject("hero");
 			float x = data["x"].asFloat();
 			float y = data["y"].asFloat();
 			hero_ = dynamic_cast<Hero *>(entity_manger_->create(kEntityHero));
@@ -170,7 +170,7 @@ void LevelLayer::loadTriggers()
 	{
 		for (auto value : objects->getObjects())
 		{
-			if (value.asValueMap()["type"].asString() == "Trigger")
+			if (value.asValueMap()["type"].asString() == "trigger")
 			{
 				auto unpack = [](Direction direction, const std::string &json_string)
 				{
@@ -203,9 +203,9 @@ void LevelLayer::loadTriggers()
 				trigger.y = value.asValueMap()["y"].asFloat();
 				trigger.width = value.asValueMap()["width"].asFloat();
 				trigger.height = value.asValueMap()["height"].asFloat();
-				auto vec = unpack(Direction::Left, value.asValueMap()["Left"].asString());
+				auto vec = unpack(Direction::Left, value.asValueMap()["left"].asString());
 				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
-				vec = unpack(Direction::Right, value.asValueMap()["Right"].asString());
+				vec = unpack(Direction::Right, value.asValueMap()["right"].asString());
 				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
 				triggers_.push_back(std::move(trigger));
 			}
@@ -221,7 +221,7 @@ void LevelLayer::createTrashcan()
 	{
 		for (auto value : objects->getObjects())
 		{
-			if (value.asValueMap()["type"].asString() == "Trashcan")
+			if (value.asValueMap()["type"].asString() == "trashcan")
 			{
 				float x = value.asValueMap()["x"].asFloat();
 				float y = value.asValueMap()["y"].asFloat();

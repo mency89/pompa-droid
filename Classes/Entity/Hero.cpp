@@ -35,7 +35,7 @@ void Hero::update()
 
 const char* Hero::name() const
 {
-	return "Hero";
+	return "hero";
 }
 
 int Hero::weaponCategoryBits() const

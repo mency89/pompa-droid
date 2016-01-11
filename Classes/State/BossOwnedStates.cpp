@@ -258,18 +258,18 @@ bool BossBeelineWalk::on_message(Boss *object, const Message &msg)
 	return BossWalk::instance()->on_message(object, msg);
 }
 
-/******Boss休息状态******/
-void BossIdelLittleWhile::enter(Boss *object)
+/******Boss休息一会儿状态******/
+void BossIdleLittleWhile::enter(Boss *object)
 {
 	BossIdle::instance()->enter(object);
 }
 
-void BossIdelLittleWhile::exit(Boss *object)
+void BossIdleLittleWhile::exit(Boss *object)
 {
 	BossIdle::instance()->exit(object);
 }
 
-void BossIdelLittleWhile::execute(Boss *object)
+void BossIdleLittleWhile::execute(Boss *object)
 {
 	if (object->getStateMachine()->userdata().end_resting_time < system_clock::now())
 	{
@@ -277,7 +277,7 @@ void BossIdelLittleWhile::execute(Boss *object)
 	}
 }
 
-bool BossIdelLittleWhile::on_message(Boss *object, const Message &msg)
+bool BossIdleLittleWhile::on_message(Boss *object, const Message &msg)
 {
 	return BossIdle::instance()->on_message(object, msg);
 }
@@ -298,7 +298,7 @@ void BossGlobal::exit(Boss *object)
 
 void BossGlobal::execute(Boss *object)
 {
-	SimpleRobotLogic<Boss, BossIdelLittleWhile, BossBeelineWalk, BossAttack>(object);
+	SimpleRobotLogic<Boss, BossIdle, BossIdleLittleWhile, BossBeelineWalk, BossAttack>(object);
 }
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)

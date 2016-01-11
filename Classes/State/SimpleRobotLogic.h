@@ -2,12 +2,12 @@
 #define __SIMPLEROBOTLOGIC_H__
 
 
-template <typename EntityType, typename IdelLittleWhileState, typename MoveState, typename AttackState>
+template <typename EntityType, typename IdleState, typename IdleLittleWhileState, typename MoveState, typename AttackState>
 void SimpleRobotLogic(EntityType *object)
 {
 	// 决策系统
 	LevelLayer *current_level = object->getEntityManger()->getCurrentLevel();
-	if (BossIdle::instance() == object->getStateMachine()->get_current_state())
+	if (IdleState::instance() == object->getStateMachine()->get_current_state())
 	{
 		// 面向玩家
 		Hero *hero = current_level->getHeroEntity();
@@ -28,7 +28,7 @@ void SimpleRobotLogic(EntityType *object)
 				// 休息一会儿
 				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
 					+ std::chrono::milliseconds(rand() % 2000);
-				object->getStateMachine()->change_state(IdelLittleWhileState::instance());
+				object->getStateMachine()->change_state(IdleLittleWhileState::instance());
 			}
 			else
 			{
@@ -43,7 +43,7 @@ void SimpleRobotLogic(EntityType *object)
 				// 休息一会儿
 				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
 					+ std::chrono::milliseconds(rand() % 1000);
-				object->getStateMachine()->change_state(IdelLittleWhileState::instance());
+				object->getStateMachine()->change_state(IdleLittleWhileState::instance());
 			}
 			else
 			{

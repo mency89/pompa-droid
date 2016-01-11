@@ -34,7 +34,7 @@ void Trashcan::update()
 
 const char* Trashcan::name() const
 {
-	return "Trashcan";
+	return "trashcan";
 }
 
 int Trashcan::weaponCategoryBits() const

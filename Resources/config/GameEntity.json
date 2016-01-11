@@ -1,5 +1,5 @@
 {
-    "Hero": {
+    "hero": {
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 2, 
@@ -7,7 +7,7 @@
         "size": "280,150", 
         "real_size": "52,80"
     }, 
-    "Robot": {
+    "robot": {
         "walk_speed": 1, 
         "run_speed": 2, 
         "jump_force": 0, 
@@ -15,7 +15,7 @@
         "size": "280,150", 
         "real_size": "62,78"
     }, 
-    "Boss": {
+    "boss": {
         "walk_speed": 0.8, 
         "run_speed": 1.5, 
         "jump_force": 0, 
@@ -23,7 +23,7 @@
         "size": "280,150", 
         "real_size": "84,78"
     }, 
-    "Trashcan": {
+    "trashcan": {
         "walk_speed": 0, 
         "run_speed": 0, 
         "jump_force": 0, 
