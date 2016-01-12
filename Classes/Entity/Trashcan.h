@@ -23,8 +23,6 @@ public:
 
 	virtual void handleMenssage(const Message &msg) override;
 
-	virtual cocos2d::Rect getRealRect() const override;
-
 public:
 	/**
 	 * 获取有限状态机

@@ -2,6 +2,7 @@
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
 #include "json/document.h"
+#include "State/HeroOwnedStates.h"
 #include "Entity/EntityManger.h"
 using namespace cocos2d;
 
@@ -14,7 +15,7 @@ enum Direction
 #define HERO_MAX_Y_CORRECTION 10
 
 static const std::map<std::string, EntityType> gStringToEntityType = {
-	{ "boss" , EntityType::kEntityBoss },
+	{ "boss", EntityType::kEntityBoss },
 	{ "robot", EntityType::kEntityRobot },
 };
 
@@ -61,10 +62,10 @@ bool LevelLayer::init()
 	hero_ = getHeroEntity();
 
 	// 加载触发器
-	loadTriggers();
+	//loadTriggers();
 
 	// 创建障碍物
-	//createTrashcan();
+	createTrashcan();
 
 	scheduleUpdate();
 
@@ -228,6 +229,7 @@ void LevelLayer::createTrashcan()
 				auto entity = entity_manger_->create(EntityType::kEntityTrashcan);
 				entity->setAnchorPoint(Vec2(0.5f, 0.0f));
 				setRealEntityPosition(entity, Vec2(x, y));
+				break;
 			}
 		}
 	}
@@ -261,10 +263,10 @@ Vec2 LevelLayer::getRealEntityPosition(BaseGameEntity *entity) const
 	const Size size(entity->fullWidth(), entity->fullHeight());
 	const Size real_size(entity->realWidth(), entity->realHeight());
 	Vec2 origin = entity->getPosition() - Vec2(size.width * entity->getAnchorPoint().x,
-		size.height * entity->getAnchorPoint().y);
+											   size.height * entity->getAnchorPoint().y);
 	Vec2 real_origin = origin + Vec2(size.width / 2 - real_size.width / 2, size.height / 2 - real_size.height / 2);
 	Vec2 real_pos(real_origin.x + real_size.width * entity->getAnchorPoint().x,
-		real_origin.y + real_size.height * entity->getAnchorPoint().y);
+				  real_origin.y + real_size.height * entity->getAnchorPoint().y);
 	return convertToWorldSpace(real_pos);
 }
 
@@ -356,89 +358,137 @@ void LevelLayer::followHeroWithCamera()
 // 自动调整主角位置
 void LevelLayer::adjustmentHeroPosition()
 {
-	if (hero_ != nullptr && !insideOfFloor(hero_))
+	if (hero_ != nullptr)
 	{
-		const Rect rect = getRealEntityRect(hero_);
-		const Vec2 realEntityPos = getRealEntityPosition(hero_);
-		const Size win_size = Director::getInstance()->getWinSize();
-		const Size real_size(hero_->realWidth(), hero_->realHeight());
-		const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
-		const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
-
-		if (rect.getMinX() < 0)
+		if (!insideOfFloor(hero_))
 		{
-			setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
-		}
+			const Rect rect = getRealEntityRect(hero_);
+			const Vec2 realEntityPos = getRealEntityPosition(hero_);
+			const Size win_size = Director::getInstance()->getWinSize();
+			const Size real_size(hero_->realWidth(), hero_->realHeight());
+			const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
+			const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
-		if (rect.getMaxX() > right_boundary)
-		{
-			setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
-		}
+			if (rect.getMinX() < 0)
+			{
+				setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
+			}
 
-		if (rect.getMinY() < 0)
-		{
-			setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
-		}
+			if (rect.getMaxX() > right_boundary)
+			{
+				setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
+			}
 
-		if (rect.getMinY() > top_boundary)
-		{
-			setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
+			if (rect.getMinY() < 0)
+			{
+				setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
+			}
+
+			if (rect.getMinY() > top_boundary)
+			{
+				setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
+			}
 		}
+		trashcanAvoidance(hero_);
 	}
 }
 
 void LevelLayer::adjustmentHeroPositionX()
 {
-	if (hero_ != nullptr && !insideOfFloor(hero_))
+	if (hero_ != nullptr)
 	{
-		const Rect rect = getRealEntityRect(hero_);
-		const Vec2 realEntityPos = getRealEntityPosition(hero_);
-		const Size win_size = Director::getInstance()->getWinSize();
-		const Size real_size(hero_->realWidth(), hero_->realHeight());
-		const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
-	
-		if (rect.getMinX() < 0)
+		if (!insideOfFloor(hero_))
 		{
-			setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
-		}
+			const Rect rect = getRealEntityRect(hero_);
+			const Vec2 realEntityPos = getRealEntityPosition(hero_);
+			const Size win_size = Director::getInstance()->getWinSize();
+			const Size real_size(hero_->realWidth(), hero_->realHeight());
+			const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
 
-		if (rect.getMaxX() > right_boundary)
-		{
-			setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
+			if (rect.getMinX() < 0)
+			{
+				setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
+			}
+
+			if (rect.getMaxX() > right_boundary)
+			{
+				setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
+			}
 		}
+		//trashcanAvoidance(hero_);
 	}
 }
 
 void LevelLayer::adjustmentHeroPositionY()
 {
-	if (hero_ != nullptr && !insideOfFloor(hero_))
+	if (hero_ != nullptr)
 	{
-		const Rect rect = getRealEntityRect(hero_);
-		const Vec2 realEntityPos = getRealEntityPosition(hero_);
-		const Size real_size(hero_->realWidth(), hero_->realHeight());
-		const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
-
-		if (rect.getMinY() < 0)
+		if (!insideOfFloor(hero_))
 		{
-			setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
-		}
+			const Rect rect = getRealEntityRect(hero_);
+			const Vec2 realEntityPos = getRealEntityPosition(hero_);
+			const Size real_size(hero_->realWidth(), hero_->realHeight());
+			const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
-		if (rect.getMinY() > top_boundary)
-		{
-			setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
+			if (rect.getMinY() < 0)
+			{
+				setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
+			}
+
+			if (rect.getMinY() > top_boundary)
+			{
+				setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
+			}
 		}
+		trashcanAvoidance(hero_);
 	}
 }
 
 // 避开障碍物
 void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 {
-	Rect heroRet = entity->getRealRect();
-	for (auto *entity : entity_manger_->getAllEntitys())
-	{	
-		if (strcmp(entity->name(), "Trashcan") == 0)
+	Rect entityRet = entity->getRealRect();
+	Vec2 entityPos = getRealEntityPosition(entity);
+	for (auto *trashcan : entity_manger_->getAllEntitys())
+	{
+		if (strcmp(trashcan->name(), "trashcan") == 0)
 		{
-			Rect entityRet = entity->getRealRect();
+			Rect trashcanRet = trashcan->getRealRect();
+			trashcanRet.size.height = 27;
+			const float offset = entity->realWidth() * entity->getAnchorPoint().x;
+
+			if (!(entityRet.getMaxX() < trashcanRet.getMinX() ||
+				trashcanRet.getMaxX() < entityRet.getMinX() ||
+				entityRet.getMinY() < trashcanRet.getMinY() ||
+				trashcanRet.getMaxY() < entityRet.getMinY()
+				))
+			{
+				if (entityRet.getMaxX() > trashcanRet.getMinX() &&
+					entityRet.getMinX() < trashcanRet.getMinX())
+				{
+					setRealEntityPosition(entity, Vec2(trashcanRet.getMinX() - offset, entityPos.y));
+				}
+
+				if (entityRet.getMaxX() > trashcanRet.getMaxX() &&
+					entityRet.getMinX() < trashcanRet.getMaxX())
+				{
+					setRealEntityPosition(entity, Vec2(trashcanRet.getMaxX() + offset, entityPos.y));
+				}
+
+				entityPos = getRealEntityPosition(entity);
+				if (entityRet.getMinY() > trashcanRet.getMinY() &&
+					entityRet.getMinY() < trashcanRet.getMaxY())
+				{
+					if (entityRet.getMinY() - trashcanRet.getMinY() < trashcanRet.getMaxY() - entityRet.getMinY())
+					{
+						setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMinY()));
+					}
+					else
+					{
+						setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMaxY()));
+					}
+				}
+			}
 		}
 	}
 }
@@ -480,7 +530,7 @@ void LevelLayer::updateTruggersState()
 						Vec2 pos;
 						if (item.direction == Direction::Left)
 						{
-							pos.x = - entitys[i]->realWidth() / 2;
+							pos.x = -entitys[i]->realWidth() / 2;
 						}
 						else
 						{
@@ -508,12 +558,4 @@ void LevelLayer::update(float delta)
 
 	// 更新触发器
 	updateTruggersState();
-
-	// 更新层级
-	std::vector<BaseGameEntity*> entitys = entity_manger_->getAllEntitys();
-	for (size_t i = 0; i < entitys.size(); ++i)
-	{
-		Size size = Director::getInstance()->getWinSize();
-		entitys[i]->setLocalZOrder(layerCount() + (size.height - getRealEntityPosition(entitys[i]).y));
-	}
 }

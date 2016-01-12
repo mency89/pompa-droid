@@ -28,7 +28,7 @@
   </data>
  </layer>
  <objectgroup name="objects">
-  <object id="1" name="trashcan" type="trashcan" x="303" y="322"/>
+  <object id="1" name="trashcan" type="trashcan" x="303" y="359"/>
   <object id="2" name="trashcan" type="trashcan" x="1517" y="339"/>
   <object id="3" name="trashcan" type="trashcan" x="2829" y="371"/>
   <object id="4" name="trashcan" type="trashcan" x="619" y="310"/>

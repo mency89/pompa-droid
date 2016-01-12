@@ -68,11 +68,6 @@ public:
 	 */
 	virtual void handleMenssage(const Message &msg);
 
-	/**
-	 * 获取矩形框实际大小
-	 */
-	virtual cocos2d::Rect getRealRect() const;
-
 public:
 	/**
 	 * 唯一id
@@ -98,6 +93,11 @@ public:
 	 * 实际高度
 	 */
 	float realHeight() const;
+
+	/**
+	 * 获取矩形框实际大小
+	 */
+	cocos2d::Rect getRealRect() const;
 
 	/**
 	 * 获取刚体

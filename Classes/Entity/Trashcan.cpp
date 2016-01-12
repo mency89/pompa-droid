@@ -44,15 +44,7 @@ int Trashcan::weaponCategoryBits() const
 
 void Trashcan::handleMenssage(const Message &msg)
 {
-
-}
-
-Rect Trashcan::getRealRect() const
-{
-	const Size size(fullWidth(), fullHeight());
-	Vec2 origin = getPosition() - Vec2(size.width * getAnchorPoint().x, size.height * getAnchorPoint().y);
-	Rect ret(origin.x, origin.y, realWidth(), realHeight());
-	return ret;
+	state_machine_->handle_message(msg);
 }
 
 // 获取有限状态机
