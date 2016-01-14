@@ -109,7 +109,10 @@ void EntityManger::update()
 	// 更新状态
 	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
 	{
-		itr->second->update();
+		if (!itr->second->isDeath())
+		{
+			itr->second->update();
+		}
 	}
 
 	// 删除实例
@@ -129,6 +132,9 @@ void EntityManger::update()
 	// 更新形状和位置
 	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
 	{
-		itr->second->updateCollisionBodyBySpriteframe();
+		if (!itr->second->isDeath())
+		{
+			itr->second->updateCollisionBodyBySpriteframe();
+		}
 	}
 }

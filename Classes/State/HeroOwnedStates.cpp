@@ -488,7 +488,15 @@ void HeroKnockout::execute(Hero *object)
 
 	if (object->getActionByTag(ActionTags::kHeroKnockout) == nullptr)
 	{
-		object->getStateMachine()->change_state(HeroGetup::instance());
+		if (object->isDeath())
+		{
+			object->getStateMachine()->set_current_state(nullptr);
+			object->getStateMachine()->set_global_state(nullptr);
+		}
+		else
+		{
+			object->getStateMachine()->change_state(HeroGetup::instance());
+		}
 	}
 }
 
@@ -581,9 +589,22 @@ void HeroGlobal::execute(Hero *object)
 					msg.msg_code = kMsgEntityHurt;
 
 					STEntityHurt extra_info;
-					extra_info.pos = collision.collision_pos;
+					extra_info.local_pos = collision.collision_pos;
 					msg.extra_info = &extra_info;
 					msg.extra_info_size = sizeof(STEntityHurt);
+
+					if (object->getStateMachine()->get_current_state() == HeroAttack::instance())
+					{
+						extra_info.value = object->getAttack();
+					}
+					else if (object->getStateMachine()->get_current_state() == HeroRuningAttack::instance())
+					{
+						extra_info.value = object->getRunAttack();
+					}
+					else if (object->getStateMachine()->get_current_state() == HeroJumpingAttack::instance())
+					{
+						extra_info.value = object->getJumpAttack();
+					}
 
 					MessageDispatcher::instance()->dispatchMessage(msg);
 					object->getStateMachine()->userdata().hit_targets.insert(collision.entity->getID());
@@ -603,19 +624,27 @@ bool HeroGlobal::on_message(Hero *object, const Message &msg)
 	{
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
-		object->onHurt(extra_info.pos);
-		if (HeroJump::instance() == object->getStateMachine()->get_current_state() ||
-			HeroJumpingAttack::instance() == object->getStateMachine()->get_current_state())
-		{
-			object->getStateMachine()->change_state(HeroKnockout::instance());
-		}
-		else if (dynamic_cast<Boss *>(object->getEntityManger()->getEntityByID(msg.sender)) != nullptr)
+		object->getEntityManger()->getCurrentLevel()->playHitEffect(extra_info.local_pos);
+		object->hurtLife(extra_info.value);
+		if (object->isDeath())
 		{
 			object->getStateMachine()->change_state(HeroKnockout::instance());
 		}
 		else
 		{
-			object->getStateMachine()->change_state(HeroHurt::instance());
+			if (HeroJump::instance() == object->getStateMachine()->get_current_state() ||
+				HeroJumpingAttack::instance() == object->getStateMachine()->get_current_state())
+			{
+				object->getStateMachine()->change_state(HeroKnockout::instance());
+			}
+			else if (dynamic_cast<Boss *>(object->getEntityManger()->getEntityByID(msg.sender)) != nullptr)
+			{
+				object->getStateMachine()->change_state(HeroKnockout::instance());
+			}
+			else
+			{
+				object->getStateMachine()->change_state(HeroHurt::instance());
+			}
 		}
 		return true;
 	}

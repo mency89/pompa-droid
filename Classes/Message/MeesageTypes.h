@@ -25,7 +25,8 @@ struct STKeyReleased
 
 struct STEntityHurt
 {
-	cocos2d::Vec2 pos;
+	cocos2d::Vec2 local_pos;
+	unsigned int value;
 };
 
 #endif

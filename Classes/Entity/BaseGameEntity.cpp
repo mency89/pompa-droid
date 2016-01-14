@@ -5,7 +5,6 @@
 
 #include "Helper.h"
 #include "GB2ShapeCache.h"
-#include "AnimationManger.h"
 #include "GameEntityConfig.h"
 #include "Message/MessageDispatcher.h"
 using namespace cocos2d;
@@ -85,21 +84,6 @@ void BaseGameEntity::setParent(cocos2d::Node* parent)
 // 每帧更新
 void BaseGameEntity::update()
 {
-}
-
-// 受击
-void BaseGameEntity::onHurt(const cocos2d::Vec2 &pos)
-{
-	auto player = Sprite::create();
-	player->setPosition(convertToNodeSpace(pos));
-	addChild(player);
-
-	Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
-	Animate *animate = Animate::create(animation);
-	player->runAction(Sequence::create(animate, CallFunc::create([=]()
-	{
-		player->removeFromParentAndCleanup(true);
-	}), nullptr));
 }
 
 // 处理消息
@@ -273,7 +257,7 @@ void BaseGameEntity::hurtLife(unsigned int value)
 // 是否死亡
 bool BaseGameEntity::isDeath() const
 {
-	return hit_point_ > 0;
+	return hit_point_ == 0;
 }
 
 // 获取管理器

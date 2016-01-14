@@ -2,6 +2,7 @@
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
 #include "json/document.h"
+#include "AnimationManger.h"
 #include "State/HeroOwnedStates.h"
 #include "Entity/EntityManger.h"
 using namespace cocos2d;
@@ -62,10 +63,10 @@ bool LevelLayer::init()
 	hero_ = getHeroEntity();
 
 	// 加载触发器
-	//loadTriggers();
+	loadTriggers();
 
 	// 创建障碍物
-	createTrashcan();
+	//createTrashcan();
 
 	scheduleUpdate();
 
@@ -76,7 +77,7 @@ bool LevelLayer::init()
 void LevelLayer::loadLevel(const std::string &level_name)
 {
 	initWithTMXFile(level_name);
-	hero_ = nullptr;
+	hero_ = getHeroEntity();
 	setPosition(Vec2::ZERO);
 	setAnchorPoint(Vec2::ZERO);
 
@@ -84,7 +85,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 	loadTriggers();
 
 	// 创建障碍物
-	createTrashcan();
+	//createTrashcan();
 
 	// 获取图层数量
 	layer_count_ = getLayerCount();
@@ -271,10 +272,10 @@ Vec2 LevelLayer::getRealEntityPosition(BaseGameEntity *entity) const
 }
 
 // 设置非透明区域在世界中的坐标
-void LevelLayer::setRealEntityPosition(BaseGameEntity *entity, const Vec2 &pos)
+void LevelLayer::setRealEntityPosition(BaseGameEntity *entity, const Vec2 &world_pos)
 {
 	CCAssert(entity != nullptr && entity->getParent() == this, "");
-	Vec2 real_pos = convertToNodeSpace(pos);
+	Vec2 real_pos = convertToNodeSpace(world_pos);
 	const Size size(entity->fullWidth(), entity->fullHeight());
 	const Size real_size(entity->realWidth(), entity->realHeight());
 	Vec2 real_origin = real_pos - Vec2(real_size.width * entity->getAnchorPoint().x, real_size.height * entity->getAnchorPoint().y);
@@ -389,7 +390,6 @@ void LevelLayer::adjustmentHeroPosition()
 				setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
-		trashcanAvoidance(hero_);
 	}
 }
 
@@ -415,7 +415,6 @@ void LevelLayer::adjustmentHeroPositionX()
 				setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
 			}
 		}
-		//trashcanAvoidance(hero_);
 	}
 }
 
@@ -491,6 +490,21 @@ void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 			}
 		}
 	}
+}
+
+// 播放受击特效
+void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos)
+{
+	auto player = Sprite::create();
+	player->setPosition(local_pos);
+	addChild(player, 1000);
+
+	Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
+	Animate *animate = Animate::create(animation);
+	player->runAction(Sequence::create(animate, CallFunc::create([=]()
+	{
+		player->removeFromParentAndCleanup(true);
+	}), nullptr));
 }
 
 // 设置跟随主角

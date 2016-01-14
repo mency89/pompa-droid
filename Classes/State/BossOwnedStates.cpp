@@ -165,21 +165,15 @@ void BossKnockout::execute(Boss *object)
 {
 	if (object->getActionByTag(ActionTags::kBossKnockout) == nullptr)
 	{
-		// 面向对你造成伤害者
-		int entity_id = object->getStateMachine()->userdata().hurt_source;
-		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
-		if (entity != nullptr)
+		if (object->isDeath())
 		{
-			if (entity->getPositionX() < object->getPositionX())
-			{
-				object->setDirection(BaseGameEntity::kLeftDirection);
-			}
-			else
-			{
-				object->setDirection(BaseGameEntity::kRightDirection);
-			}
+			object->getStateMachine()->set_current_state(nullptr);
+			object->getStateMachine()->set_global_state(nullptr);
 		}
-		object->getStateMachine()->change_state(BossGetup::instance());
+		else
+		{
+			object->getStateMachine()->change_state(BossGetup::instance());
+		}
 	}
 }
 
@@ -209,6 +203,20 @@ void BossGetup::execute(Boss *object)
 {
 	if (object->getActionByTag(ActionTags::kBossGetup) == nullptr)
 	{
+		// 面向对你造成伤害者
+		int entity_id = object->getStateMachine()->userdata().hurt_source;
+		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
+		if (entity != nullptr)
+		{
+			if (entity->getPositionX() < object->getPositionX())
+			{
+				object->setDirection(BaseGameEntity::kLeftDirection);
+			}
+			else
+			{
+				object->setDirection(BaseGameEntity::kRightDirection);
+			}
+		}
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
 }
@@ -307,8 +315,16 @@ bool BossGlobal::on_message(Boss *object, const Message &msg)
 	{
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
-		object->onHurt(extra_info.pos);
-		object->getStateMachine()->change_state(BossHurt::instance());
+		object->getEntityManger()->getCurrentLevel()->playHitEffect(extra_info.local_pos);
+		object->hurtLife(extra_info.value);
+		if (object->isDeath())
+		{
+			object->getStateMachine()->change_state(BossKnockout::instance());
+		}
+		else
+		{
+			object->getStateMachine()->change_state(BossHurt::instance());
+		}
 		return true;
 	}
 	return false;

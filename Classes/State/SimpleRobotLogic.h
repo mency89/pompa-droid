@@ -20,51 +20,54 @@ void SimpleRobotLogic(EntityType *object)
 			object->setDirection(BaseGameEntity::kRightDirection);
 		}
 
-		if (current_level->isAdjacent(object, hero))
+		if (!hero->isDeath())
 		{
-			// 如果玩家在攻击范围内
-			if (rand() % 3 == 0)
+			if (current_level->isAdjacent(object, hero))
 			{
-				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
-					+ std::chrono::milliseconds(rand() % 2000);
-				object->getStateMachine()->change_state(IdleLittleWhileState::instance());
-			}
-			else
-			{
-				// 攻击玩家
-				object->getStateMachine()->change_state(AttackState::instance());
-			}
-		}
-		else
-		{
-			if (rand() % 3 == 0)
-			{
-				// 休息一会儿
-				object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
-					+ std::chrono::milliseconds(rand() % 1000);
-				object->getStateMachine()->change_state(IdleLittleWhileState::instance());
-			}
-			else
-			{
-				// 靠近玩家
-				if (!hero->isJumpingState() && current_level->insideOfFloor(hero))
+				// 如果玩家在攻击范围内
+				if (rand() % 3 == 0)
 				{
-					Vec2 temp = object->getPosition();
-					Vec2 hero_pos = current_level->getRealEntityPosition(hero);
-					if (hero->getPositionX() < object->getPositionX())
+					// 休息一会儿
+					object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
+						+ std::chrono::milliseconds(rand() % 2000);
+					object->getStateMachine()->change_state(IdleLittleWhileState::instance());
+				}
+				else
+				{
+					// 攻击玩家
+					object->getStateMachine()->change_state(AttackState::instance());
+				}
+			}
+			else
+			{
+				if (rand() % 3 == 0)
+				{
+					// 休息一会儿
+					object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
+						+ std::chrono::milliseconds(rand() % 1000);
+					object->getStateMachine()->change_state(IdleLittleWhileState::instance());
+				}
+				else
+				{
+					// 靠近玩家
+					if (!hero->isJumpingState() && current_level->insideOfFloor(hero))
 					{
-						hero_pos.x = hero_pos.x + hero->realWidth() / 2 + object->realWidth() / 2;
+						Vec2 temp = object->getPosition();
+						Vec2 hero_pos = current_level->getRealEntityPosition(hero);
+						if (hero->getPositionX() < object->getPositionX())
+						{
+							hero_pos.x = hero_pos.x + hero->realWidth() / 2 + object->realWidth() / 2;
+						}
+						else
+						{
+							hero_pos.x = hero_pos.x - hero->realWidth() / 2 - object->realWidth() / 2;
+						}
+						Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
+						current_level->setRealEntityPosition(object, hero_pos);
+						target_pos = object->getPosition();
+						object->setPosition(temp);
+						object->getStateMachine()->change_state(MoveState::instance());
 					}
-					else
-					{
-						hero_pos.x = hero_pos.x - hero->realWidth() / 2 - object->realWidth() / 2;
-					}
-					Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
-					current_level->setRealEntityPosition(object, hero_pos);
-					target_pos = object->getPosition();
-					object->setPosition(temp);
-					object->getStateMachine()->change_state(MoveState::instance());
 				}
 			}
 		}
@@ -84,7 +87,8 @@ void SimpleRobotLogic(EntityType *object)
 				msg.msg_code = kMsgEntityHurt;
 
 				STEntityHurt extra_info;
-				extra_info.pos = collision.collision_pos;
+				extra_info.local_pos = collision.collision_pos;
+				extra_info.value = object->getAttack();
 				msg.extra_info = &extra_info;
 				msg.extra_info_size = sizeof(STEntityHurt);
 

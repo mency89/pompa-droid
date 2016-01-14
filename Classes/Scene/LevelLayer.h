@@ -78,6 +78,11 @@ public:
 	void trashcanAvoidance(BaseGameEntity *entity);
 
 	/**
+	 * 播放受击特效
+	 */
+	void playHitEffect(const cocos2d::Vec2 &local_pos);
+
+	/**
 	 * 图层数量
 	 */
 	int layerCount() const;
@@ -110,7 +115,7 @@ public:
 	/**
 	 * 设置非透明区域在世界中的坐标
 	 */
-	void setRealEntityPosition(BaseGameEntity *entity, const cocos2d::Vec2 &pos);
+	void setRealEntityPosition(BaseGameEntity *entity, const cocos2d::Vec2 &world_pos);
 
 private:
 	/**
