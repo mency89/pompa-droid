@@ -23,13 +23,13 @@ bool Robot::init()
 		return false;
 	}
 
-	state_machine_.reset(new StateMachine<Robot>(this));
-	state_machine_->change_state(RobotIdle::instance());
-	state_machine_->set_global_state(RobotGlobal::instance());
-
 	player_ = Sprite::create();
 	player_->setAnchorPoint(Vec2::ZERO);
 	addChild(player_);
+
+	state_machine_.reset(new StateMachine<Robot>(this));
+	state_machine_->change_state(RobotIdle::instance());
+	state_machine_->set_global_state(RobotGlobal::instance());
 
 	return true;
 }
@@ -57,6 +57,7 @@ void Robot::handleMenssage(const Message &msg)
 // 获取特效播放器
 Node* Robot::getEffectsPlayer()
 {
+	player_->setFlippedX(isFlippedX());
 	return player_;
 }
 

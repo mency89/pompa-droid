@@ -25,11 +25,18 @@ void RobotIdle::enter(Robot *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kRobotIdle);
 	object->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_smoke_idle");
+	animation->setLoops(-1);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotSmokeIdle);
+	object->getEffectsPlayer()->runAction(animate);
 }
 
 void RobotIdle::exit(Robot *object)
 {
 	object->stopActionByTag(ActionTags::kRobotIdle);
+	object->getEffectsPlayer()->stopActionByTag(ActionTags::kRobotSmokeIdle);
 }
 
 void RobotIdle::execute(Robot *object)
@@ -50,11 +57,18 @@ void RobotWalk::enter(Robot *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kRobotWalk);
 	object->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_smoke_walk");
+	animation->setLoops(-1);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotSmokeWalk);
+	object->getEffectsPlayer()->runAction(animate);
 }
 
 void RobotWalk::exit(Robot *object)
 {
 	object->stopActionByTag(ActionTags::kRobotWalk);
+	object->getEffectsPlayer()->stopActionByTag(ActionTags::kRobotSmokeWalk);
 }
 
 void RobotWalk::execute(Robot *object)
@@ -76,11 +90,18 @@ void RobotAttack::enter(Robot *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kRobotAttack);
 	object->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_smoke_attack");
+	animation->setRestoreOriginalFrame(false);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotSmokeAttack);
+	object->getEffectsPlayer()->runAction(animate);
 }
 
 void RobotAttack::exit(Robot *object)
 {
 	object->stopActionByTag(ActionTags::kRobotAttack);
+	object->getEffectsPlayer()->stopActionByTag(ActionTags::kRobotSmokeAttack);
 	object->getStateMachine()->userdata().hit_hero = false;
 }
 
@@ -119,6 +140,12 @@ void RobotHurt::enter(Robot *object)
 		Animate *animate = Animate::create(animation);
 		animate->setTag(ActionTags::kRobotHurt);
 		object->runAction(animate);
+
+		animation = AnimationManger::instance()->getAnimation("robot_smoke_hurt");
+		animate = Animate::create(animation);
+		animate->setTag(ActionTags::kRobotSmokeHurt);
+		object->getEffectsPlayer()->runAction(animate);
+
 		object->getStateMachine()->userdata().was_hit_time = system_clock::now();
 	}
 	else
@@ -130,6 +157,7 @@ void RobotHurt::enter(Robot *object)
 void RobotHurt::exit(Robot *object)
 {
 	object->stopActionByTag(ActionTags::kRobotHurt);
+	object->getEffectsPlayer()->stopActionByTag(ActionTags::kRobotSmokeHurt);
 }
 
 void RobotHurt::execute(Robot *object)
@@ -154,11 +182,18 @@ void RobotKnockout::enter(Robot *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kRobotKnockout);
 	object->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_smoke_knockout");
+	animation->setRestoreOriginalFrame(false);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotSmokeKnockout);
+	object->getEffectsPlayer()->runAction(animate);
 }
 
 void RobotKnockout::exit(Robot *object)
 {
 	object->stopActionByTag(ActionTags::kRobotKnockout);
+	object->getEffectsPlayer()->stopActionByTag(ActionTags::kRobotSmokeKnockout);
 }
 
 void RobotKnockout::execute(Robot *object)
@@ -192,11 +227,18 @@ void RobotGetup::enter(Robot *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kRobotGetup);
 	object->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_smoke_getup");
+	animation->setRestoreOriginalFrame(false);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotSmokeGetup);
+	object->getEffectsPlayer()->runAction(animate);
 }
 
 void RobotGetup::exit(Robot *object)
 {
 	object->stopActionByTag(ActionTags::kRobotGetup);
+	object->getEffectsPlayer()->stopActionByTag(ActionTags::kRobotSmokeGetup);
 }
 
 void RobotGetup::execute(Robot *object)
