@@ -18,6 +18,7 @@ using namespace cocos2d;
 
 GameScene::GameScene()
 	: level_(nullptr)
+	, hit_point_label_(nullptr)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 	, debug_draw_(new GLESDebugDraw(GB2ShapeCache::instance()->getPTMRatio()))
 #endif
@@ -58,6 +59,11 @@ bool GameScene::init()
 	// 创建关卡
 	level_ = LevelLayer::create(world_, "level/map_level1.tmx");
 	addChild(level_, -1);
+
+	// 玩家血量
+	hit_point_label_ = Label::createWithBMFont("fonts/damage.fnt", "123456789");
+	hit_point_label_->setPosition(Vec2(200, 200));
+	addChild(hit_point_label_, 10);
 
 	// 注册游戏场景
 	GameApplication::instance()->setGameScene(this);

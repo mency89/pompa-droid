@@ -34,6 +34,7 @@ public:
 private:
 	LevelLayer*					level_;
 	std::shared_ptr<b2World>	world_;
+	cocos2d::Label*				hit_point_label_;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 public:

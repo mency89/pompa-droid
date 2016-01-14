@@ -6,7 +6,7 @@
         "max_jump_height": 50, 
         "size": "280,150", 
         "real_size": "52,80", 
-        "max_hit_point": 150, 
+        "max_hit_point": 200, 
         "attack": 10, 
         "run_attack": 15, 
         "jump_attack": 15
