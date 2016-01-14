@@ -9,7 +9,7 @@ class Robot : public BaseGameEntity
 	typedef std::auto_ptr<StateMachine<Robot> > RobotStateMachine;
 
 public:
-	Robot(std::shared_ptr<b2World> world);
+	Robot(int type, std::shared_ptr<b2World> world);
 
 	~Robot();
 
@@ -25,9 +25,14 @@ public:
 
 public:
 	/**
-	 * 获取特效播放器
+	 * 获取腰带
 	 */
-	cocos2d::Node* getEffectsPlayer();
+	cocos2d::Node* getBelt();
+
+	/**
+	 * 获取烟雾
+	 */
+	cocos2d::Node* getSmoke();
 
 	/**
 	 * 获取有限状态机
@@ -35,7 +40,8 @@ public:
 	StateMachine<Robot>* getStateMachine();
 
 private:
-	cocos2d::Sprite* player_;
+	cocos2d::Sprite* belt_;
+	cocos2d::Sprite* smoke_;
 	RobotStateMachine state_machine_;
 };
 

@@ -320,8 +320,8 @@ bool LevelLayer::insideOfFloor(BaseGameEntity *entity) const
 bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
 {
 	CCAssert(a != nullptr && b != nullptr, "");
-	Vec2 pos_a = convertToNodeSpace(getRealEntityPosition(a));
-	Vec2 pos_b = convertToNodeSpace(getRealEntityPosition(b));
+	Vec2 pos_a = getRealEntityPosition(a);
+	Vec2 pos_b = getRealEntityPosition(b);
 	if (abs(pos_b.y - pos_a.y) < getMapSize().height)
 	{
 		return a->getRealRect().intersectsRect(b->getRealRect());

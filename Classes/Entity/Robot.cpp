@@ -4,9 +4,10 @@
 using namespace cocos2d;
 
 
-Robot::Robot(std::shared_ptr<b2World> world)
-	: BaseGameEntity(world)
-	, player_(nullptr)
+Robot::Robot(int type, std::shared_ptr<b2World> world)
+	: BaseGameEntity(type, world)
+	, belt_(nullptr)
+	, smoke_(nullptr)
 {
 
 }
@@ -23,9 +24,13 @@ bool Robot::init()
 		return false;
 	}
 
-	player_ = Sprite::create();
-	player_->setAnchorPoint(Vec2::ZERO);
-	addChild(player_);
+	belt_ = Sprite::create();
+	belt_->setAnchorPoint(Vec2::ZERO);
+	addChild(belt_);
+
+	smoke_ = Sprite::create();
+	smoke_->setAnchorPoint(Vec2::ZERO);
+	addChild(smoke_);
 
 	state_machine_.reset(new StateMachine<Robot>(this));
 	state_machine_->change_state(RobotIdle::instance());
@@ -54,11 +59,18 @@ void Robot::handleMenssage(const Message &msg)
 	state_machine_->handle_message(msg);
 }
 
-// 获取特效播放器
-Node* Robot::getEffectsPlayer()
+// 获取腰带
+Node* Robot::getBelt()
 {
-	player_->setFlippedX(isFlippedX());
-	return player_;
+	belt_->setFlippedX(isFlippedX());
+	return belt_;
+}
+
+// 获取烟雾
+Node* Robot::getSmoke()
+{
+	smoke_->setFlippedX(isFlippedX());
+	return smoke_;
 }
 
 // 获取有限状态机

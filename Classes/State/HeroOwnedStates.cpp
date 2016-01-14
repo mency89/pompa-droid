@@ -66,7 +66,7 @@ namespace
 		}
 	}
 
-	// 是否处理攻击状态
+	// 是否是攻击状态
 	bool IsAttackState(State<Hero> *state)
 	{
 		return state == HeroAttack::instance() || state == HeroRuningAttack::instance() || state == HeroJumpingAttack::instance();
@@ -577,7 +577,9 @@ void HeroGlobal::execute(Hero *object)
 				{
 					float y = object->getPositionY();
 					object->setPositionY(object->getStateMachine()->userdata().before_jump_y);
-					adjacent = current_level->isAdjacent(object, collision.entity);
+					Vec2 a = current_level->getRealEntityPosition(object);
+					Vec2 b = current_level->getRealEntityPosition(collision.entity);
+					adjacent = abs(b.y - a.y) < current_level->getMapSize().height;				
 					object->setPositionY(y);
 				}
 

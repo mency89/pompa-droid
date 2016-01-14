@@ -9,7 +9,7 @@ class Boss : public BaseGameEntity
 	typedef std::auto_ptr<StateMachine<Boss> > BossStateMachine;
 
 public:
-	Boss(std::shared_ptr<b2World> world);
+	Boss(int type, std::shared_ptr<b2World> world);
 
 	~Boss();
 

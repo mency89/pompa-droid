@@ -3,8 +3,8 @@
 #include "State/BossOwnedStates.h"
 
 
-Boss::Boss(std::shared_ptr<b2World> world)
-	: BaseGameEntity(world)
+Boss::Boss(int type, std::shared_ptr<b2World> world)
+	: BaseGameEntity(type, world)
 {
 
 }

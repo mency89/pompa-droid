@@ -31,6 +31,12 @@ enum ActionTags
 	kRobotSmokeIdle = 1026,
 	kRobotSmokeKnockout = 1027,
 	kRobotSmokeWalk = 1028,
+	kRobotBeltAttack = 1029,
+	kRobotBeltGetup = 1030,
+	kRobotBeltHurt = 1031,
+	kRobotBeltIdle = 1032,
+	kRobotBeltKnockout = 1033,
+	kRobotBeltWalk = 1034,
 };
 
 #endif

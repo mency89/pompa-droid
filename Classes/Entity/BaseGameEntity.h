@@ -35,7 +35,7 @@ public:
 	};
 
 public:
-	BaseGameEntity(std::shared_ptr<b2World> world);
+	BaseGameEntity(int type, std::shared_ptr<b2World> world);
 
 	virtual ~BaseGameEntity();
 
@@ -67,6 +67,11 @@ public:
 	 * 唯一id
 	 */
 	int getID() const;
+
+	/**
+	 * 获取类型
+	 */
+	int getType() const;
 
 	/**
 	 * 全宽
@@ -264,7 +269,8 @@ private:
 	cocos2d::Vec2 getCollisionPosition(b2CircleShape *source, b2CircleShape *target, b2Body *target_body) const;
 
 private:
-	int							entity_id_;
+	const int					type_;
+	const int					entity_id_;
 	std::shared_ptr<b2World>	world_;
 	EntityManger*				manager_;
 	b2Body*						collision_body_;

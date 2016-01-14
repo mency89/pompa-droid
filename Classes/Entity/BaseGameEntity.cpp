@@ -11,8 +11,9 @@ using namespace cocos2d;
 
 int BaseGameEntity::s_next_entity_id_ = 0;
 
-BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
-	: world_(world)
+BaseGameEntity::BaseGameEntity(int type, std::shared_ptr<b2World> world)
+	: type_(type)
+	, world_(world)
 	, hit_point_(0)
 	, attack_(0)
 	, run_attack_(0)
@@ -182,6 +183,12 @@ Rect BaseGameEntity::getRealRect() const
 int BaseGameEntity::getID() const
 {
 	return entity_id_;
+}
+
+// 获取类型
+int BaseGameEntity::getType() const
+{
+	return type_;
 }
 
 // 获取刚体

@@ -9,7 +9,7 @@ class Trashcan : public BaseGameEntity
 	typedef std::auto_ptr<StateMachine<Trashcan> > TrashcanStateMachine;
 
 public:
-	Trashcan(std::shared_ptr<b2World> world);
+	Trashcan(int type, std::shared_ptr<b2World> world);
 
 	~Trashcan();
 

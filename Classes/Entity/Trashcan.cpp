@@ -3,8 +3,8 @@
 using namespace cocos2d;
 
 
-Trashcan::Trashcan(std::shared_ptr<b2World> world)
-	: BaseGameEntity(world)
+Trashcan::Trashcan(int type, std::shared_ptr<b2World> world)
+	: BaseGameEntity(type, world)
 {
 
 }

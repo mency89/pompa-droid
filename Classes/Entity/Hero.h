@@ -9,7 +9,7 @@ class Hero : public BaseGameEntity
 	typedef std::auto_ptr<StateMachine<Hero> > HeroStateMachine;
 
 public:
-	Hero(std::shared_ptr<b2World> world);
+	Hero(int type, std::shared_ptr<b2World> world);
 
 	~Hero();
 

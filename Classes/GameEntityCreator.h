@@ -6,9 +6,9 @@ class b2World;
 template <typename GameEntity>
 struct GameEntityCreator
 {
-	static GameEntity* create(std::shared_ptr<b2World> world)
+	static GameEntity* create(int type, std::shared_ptr<b2World> world)
 	{
-		GameEntity *entity = new (std::nothrow) GameEntity(world);
+		GameEntity *entity = new (std::nothrow) GameEntity(type, world);
 		if (entity && entity->init())
 		{
 			entity->autorelease();

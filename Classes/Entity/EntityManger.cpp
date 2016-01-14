@@ -28,16 +28,16 @@ BaseGameEntity* EntityManger::create(EntityType type)
 	switch (type)
 	{
 		case kEntityHero:
-			entity = GameEntityCreator<Hero>().create(world_);
+			entity = GameEntityCreator<Hero>().create(type, world_);
 			break;
 		case kEntityRobot:
-			entity = GameEntityCreator<Robot>().create(world_);
+			entity = GameEntityCreator<Robot>().create(type, world_);
 			break;
 		case kEntityBoss:
-			entity = GameEntityCreator<Boss>().create(world_);
+			entity = GameEntityCreator<Boss>().create(type, world_);
 			break;
 		case kEntityTrashcan:
-			entity = GameEntityCreator<Trashcan>().create(world_);
+			entity = GameEntityCreator<Trashcan>().create(type, world_);
 			break;
 		default:
 			return nullptr;

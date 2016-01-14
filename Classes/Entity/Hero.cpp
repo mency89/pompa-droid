@@ -3,8 +3,8 @@
 #include "State/HeroOwnedStates.h"
 
 
-Hero::Hero(std::shared_ptr<b2World> world)
-	: BaseGameEntity(world)
+Hero::Hero(int type, std::shared_ptr<b2World> world)
+	: BaseGameEntity(type, world)
 {
 
 }
