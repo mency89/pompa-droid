@@ -497,28 +497,58 @@ void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 // 播放受击特效
 void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hurtOfValue)
 {
-	auto player = Sprite::create();
-	player->setPosition(local_pos);
-	addChild(player, std::numeric_limits<unsigned short>::max() + 1);
-
-	char str[32];
-	sprintf(str, "%u", hurtOfValue);
-	auto hurt = Label::createWithBMFont("fonts/damage.fnt", str);
-	hurt->setPosition(local_pos);
-	addChild(hurt, std::numeric_limits<unsigned short>::max() + 1);
-	hurt->runAction(Sequence::create(MoveBy::create(0.5f, Vec2(0, 50)), 
-		CallFunc::create([=]()
+	// 受击特效
 	{
-		hurt->removeFromParentAndCleanup(true);
-	})
-		, nullptr));
+		Sprite *player = nullptr;
+		if (!sprite_queue_.empty())
+		{
+			player = sprite_queue_.back();
+			player->setVisible(true);
+			sprite_queue_.pop_back();
+		}
+		else
+		{
+			player = Sprite::create();
+			addChild(player, std::numeric_limits<unsigned short>::max() + 1);
+		}
+		player->setPosition(local_pos);
 
-	Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
-	Animate *animate = Animate::create(animation);
-	player->runAction(Sequence::create(animate, CallFunc::create([=]()
+		Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
+		Animate *animate = Animate::create(animation);
+		player->runAction(Sequence::create(animate, CallFunc::create([=]()
+		{
+			player->setVisible(false);
+			sprite_queue_.push_back(player);
+		}), nullptr));
+	}
+
+	// 掉血文字
 	{
-		player->removeFromParentAndCleanup(true);
-	}), nullptr));
+		char str[32];
+		Label* label = nullptr;
+		sprintf(str, "%u", hurtOfValue);
+		if (!label_queue_.empty())
+		{
+			label = label_queue_.back();
+			label->setVisible(true);
+			label->setString(str);
+			label_queue_.pop_back();
+		}
+		else
+		{
+			label = Label::createWithBMFont("fonts/damage.fnt", str);
+			addChild(label, std::numeric_limits<unsigned short>::max() + 1);
+		}
+		label->setPosition(local_pos);
+
+		label->runAction(Sequence::create(MoveBy::create(0.5f, Vec2(0, 50)),
+			CallFunc::create([=]()
+		{
+			label->setVisible(false);
+			label_queue_.push_back(label);
+		})
+			, nullptr));
+	}
 }
 
 // 设置跟随主角

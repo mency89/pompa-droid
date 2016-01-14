@@ -144,15 +144,17 @@ private:
 	void updateTruggersState();
 
 private:
-	bool						follow_;
-	int							layer_count_;
-	int							floor_height_;
-	Hero*						hero_;
-	const float					innerstage_left_;
-	const float					inner_stage_right_;
-	std::vector<STrigger>		triggers_;
-	std::shared_ptr<b2World>	world_;
-	std::auto_ptr<EntityManger>	entity_manger_;
+	bool							follow_;
+	int								layer_count_;
+	int								floor_height_;
+	Hero*							hero_;
+	const float						innerstage_left_;
+	const float						inner_stage_right_;
+	std::vector<STrigger>			triggers_;
+	std::vector<cocos2d::Label*>	label_queue_;
+	std::vector<cocos2d::Sprite*>	sprite_queue_;
+	std::shared_ptr<b2World>		world_;
+	std::auto_ptr<EntityManger>		entity_manger_;
 	
 };
 
