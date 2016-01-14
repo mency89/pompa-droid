@@ -34,6 +34,10 @@ void GameEntityConfig::loadConfigFile(const std::string &filename)
 				attrubute.run_speed = object["run_speed"].GetDouble();
 				attrubute.jump_force = object["jump_force"].GetDouble();
 				attrubute.max_jump_height = object["max_jump_height"].GetDouble();
+				attrubute.attack = object["attack"].GetUint();
+				attrubute.run_attack = object["run_attack"].GetUint();
+				attrubute.jump_attack = object["jump_attack"].GetUint();
+				attrubute.max_hit_point = object["max_hit_point"].GetUint();
 				
 				auto size = Split(object["size"].GetString(), ",");
 				auto real_size = Split(object["real_size"].GetString(), ",");

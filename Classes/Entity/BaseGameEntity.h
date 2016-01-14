@@ -166,6 +166,36 @@ public:
 	void setMaxJumpHeight(float height);
 
 	/**
+	 * 获取攻击力
+	 */
+	unsigned int getAttack() const;
+
+	/**
+	 * 获取奔跑攻击力
+	 */
+	unsigned int getRunAttack() const;
+
+	/**
+	 * 获取跳跃攻击力
+	 */
+	unsigned int getJumpAttack() const;
+
+	/**
+	 * 获取血量
+	 */
+	unsigned int getHitPoint() const;
+
+	/**
+	 * 伤害生命
+	 */
+	void hurtLife(unsigned int value);
+
+	/**
+	 * 是否死亡
+	 */
+	bool isDeath() const;
+
+	/**
 	 * 获取方向
 	 */
 	Direction getDirection() const;
@@ -210,6 +240,26 @@ protected:
 
 private:
 	/**
+	 * 设置攻击力
+	 */
+	void setAttack(unsigned int value);
+
+	/**
+	 * 设置奔跑攻击力
+	 */
+	void setRunAttack(unsigned int value);
+
+	/**
+	 * 设置跳跃攻击力
+	 */
+	void setJumpAttack(unsigned int value);
+
+	/**
+	 * 设置血量
+	 */
+	void setHitPoint(unsigned int value);
+
+	/**
 	 * 设置管理器
 	 */
 	void setEntityManger(EntityManger *manager);
@@ -229,7 +279,10 @@ private:
 	float						jump_force_;
 	float						jump_height_;
 	Direction					direction_;
-	int							hit_point_;
+	unsigned int				hit_point_;
+	unsigned int				attack_;
+	unsigned int				run_attack_;
+	unsigned int				jump_attack_;
 	std::string					shape_name_;
 	static int					s_next_entity_id_;
 };

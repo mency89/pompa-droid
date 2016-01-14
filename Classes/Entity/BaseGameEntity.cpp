@@ -15,6 +15,9 @@ int BaseGameEntity::s_next_entity_id_ = 0;
 BaseGameEntity::BaseGameEntity(std::shared_ptr<b2World> world)
 	: world_(world)
 	, hit_point_(0)
+	, attack_(0)
+	, run_attack_(0)
+	, jump_attack_(0)
 	, run_speed_(0.0f)
 	, walk_speed_(0.0f)
 	, jump_force_(0.0f)
@@ -61,6 +64,10 @@ bool BaseGameEntity::init()
 		setRunSpeed(attribute->run_speed);
 		setJumpForce(attribute->jump_force);
 		setMaxJumpHeight(attribute->max_jump_height);
+		setHitPoint(attribute->max_hit_point);
+		setAttack(attribute->attack);
+		setRunAttack(attribute->run_attack);
+		setJumpAttack(attribute->jump_attack);
 	}
 
 	// 注册消息事件
@@ -207,6 +214,66 @@ void BaseGameEntity::destroyBody()
 		collision_body_->GetWorld()->DestroyBody(collision_body_);
 		collision_body_ = nullptr;
 	}
+}
+
+// 获取攻击力
+unsigned int BaseGameEntity::getAttack() const
+{
+	return attack_;
+}
+
+// 设置攻击力
+void BaseGameEntity::setAttack(unsigned int value)
+{
+	attack_ = value;
+}
+
+// 获取奔跑攻击力
+unsigned int BaseGameEntity::getRunAttack() const
+{
+	return run_attack_;
+}
+
+// 设置奔跑攻击力
+void BaseGameEntity::setRunAttack(unsigned int value)
+{
+	run_attack_ = value;
+}
+
+// 获取跳跃攻击力
+unsigned int BaseGameEntity::getJumpAttack() const
+{
+	return jump_attack_;
+}
+
+// 设置跳跃攻击力
+void BaseGameEntity::setJumpAttack(unsigned int value)
+{
+	jump_attack_ = value;
+}
+
+// 获取血量
+unsigned int BaseGameEntity::getHitPoint() const
+{
+	return hit_point_;
+}
+
+// 设置血量
+void BaseGameEntity::setHitPoint(unsigned int value)
+{
+	hit_point_ = value;
+}
+
+// 伤害生命
+void BaseGameEntity::hurtLife(unsigned int value)
+{
+	hit_point_ = value >= hit_point_ ? 0 : hit_point_ - value;
+}
+
+// 是否死亡
+bool BaseGameEntity::isDeath() const
+{
+	return hit_point_ > 0;
 }
 
 // 获取管理器
