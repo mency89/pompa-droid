@@ -80,7 +80,7 @@ public:
 	/**
 	 * 播放受击特效
 	 */
-	void playHitEffect(const cocos2d::Vec2 &local_pos);
+	void playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hurtOfValue);
 
 	/**
 	 * 图层数量

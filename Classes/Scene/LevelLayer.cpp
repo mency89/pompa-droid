@@ -1,4 +1,6 @@
 ﻿#include "LevelLayer.h"
+
+#include <limits>
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
 #include "json/document.h"
@@ -493,11 +495,23 @@ void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 }
 
 // 播放受击特效
-void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos)
+void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hurtOfValue)
 {
 	auto player = Sprite::create();
 	player->setPosition(local_pos);
-	addChild(player, 1000);
+	addChild(player, std::numeric_limits<unsigned short>::max() + 1);
+
+	char str[32];
+	sprintf(str, "%u", hurtOfValue);
+	auto hurt = Label::createWithBMFont("fonts/damage.fnt", str);
+	hurt->setPosition(local_pos);
+	addChild(hurt, std::numeric_limits<unsigned short>::max() + 1);
+	hurt->runAction(Sequence::create(MoveBy::create(0.5f, Vec2(0, 50)), 
+		CallFunc::create([=]()
+	{
+		hurt->removeFromParentAndCleanup(true);
+	})
+		, nullptr));
 
 	Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
 	Animate *animate = Animate::create(animation);
@@ -572,4 +586,10 @@ void LevelLayer::update(float delta)
 
 	// 更新触发器
 	updateTruggersState();
+
+	// 更新层级
+	for (auto item : entity_manger_->getAllEntitys())
+	{
+		item->setLocalZOrder(std::numeric_limits<unsigned short>::max() - getRealEntityPosition(item).y);
+	}
 }

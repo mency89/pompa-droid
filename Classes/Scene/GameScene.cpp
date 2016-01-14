@@ -61,9 +61,11 @@ bool GameScene::init()
 	addChild(level_, -1);
 
 	// 玩家血量
-	hit_point_label_ = Label::createWithBMFont("fonts/damage.fnt", "123456789");
-	hit_point_label_->setPosition(Vec2(200, 200));
-	addChild(hit_point_label_, 10);
+	hit_point_label_ = Label::createWithBMFont("fonts/hud.fnt", "");
+	hit_point_label_->setAnchorPoint(Vec2(0.0f, 0.5f));
+	hit_point_label_->setPosition(VisibleRect::leftTop() + Vec2(10, -40));
+	hit_point_label_->setColor(Color3B(90, 240, 100));
+	addChild(hit_point_label_);
 
 	// 注册游戏场景
 	GameApplication::instance()->setGameScene(this);
@@ -88,6 +90,14 @@ void GameScene::update(float delta)
 
 	// 更新关卡环境
 	level_->update(delta);
+
+	// 更新角色血量
+	if (level_->getHeroEntity() != nullptr)
+	{
+		char str[32];
+		sprintf(str, "%u", level_->getHeroEntity()->getHitPoint());
+		hit_point_label_->setString(str);
+	}
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
