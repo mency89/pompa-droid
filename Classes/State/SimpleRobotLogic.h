@@ -25,7 +25,7 @@ void SimpleRobotLogic(EntityType *object)
 			if (current_level->isAdjacent(object, hero))
 			{
 				// 如果玩家在攻击范围内
-				if (rand() % 3 == 0)
+				if (rand() % 2 == 0)
 				{
 					// 休息一会儿
 					object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
@@ -40,7 +40,7 @@ void SimpleRobotLogic(EntityType *object)
 			}
 			else
 			{
-				if (rand() % 3 == 0)
+				if (rand() % 2 == 0)
 				{
 					// 休息一会儿
 					object->getStateMachine()->userdata().end_resting_time = std::chrono::system_clock::now()
