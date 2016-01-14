@@ -8,7 +8,7 @@
 #include "Entity/Hero.h"
 
 template <>
-struct StateMachineData < Hero >
+struct StatePrivateData < Hero >
 {
 	typedef std::chrono::system_clock::time_point time_point;
 
@@ -19,7 +19,7 @@ struct StateMachineData < Hero >
 	time_point was_hit_time;					// 上次受击时间
 	std::set<int> hit_targets;					// 击中的目标集合
 	time_point last_direction_key_pressed_time;	// 上次按下方向键的时间
-	StateMachineData()
+	StatePrivateData()
 		: jump_up(false)
 		, hurt_source(0)
 		, was_hit_count(0)

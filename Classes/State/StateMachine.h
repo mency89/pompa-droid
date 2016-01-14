@@ -4,7 +4,7 @@
 #include "State.h"
 
 template <typename T>
-struct StateMachineData
+struct StatePrivateData
 {
 };
 
@@ -101,7 +101,7 @@ public:
 		return false;
 	}
 
-	StateMachineData<EntityType>& userdata()
+	StatePrivateData<EntityType>& userdata()
 	{
 		return userdata_;
 	}
@@ -111,7 +111,7 @@ private:
 	State<EntityType>*				current_state_;
 	State<EntityType>*				previous_state_;
 	State<EntityType>*				global_state_;
-	StateMachineData<EntityType>	userdata_;
+	StatePrivateData<EntityType>	userdata_;
 };
 
 #endif

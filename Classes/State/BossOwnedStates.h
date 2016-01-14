@@ -7,7 +7,7 @@
 #include "Entity/Boss.h"
 
 template <>
-struct StateMachineData < Boss >
+struct StatePrivateData < Boss >
 {
 	typedef std::chrono::system_clock::time_point time_point;
 
@@ -17,7 +17,7 @@ struct StateMachineData < Boss >
 	time_point was_hit_time;		// 上次受击时间
 	time_point end_resting_time;	// 结束休息时间
 	cocos2d::Vec2 target_pos;		// 目标位置
-	StateMachineData()
+	StatePrivateData()
 		: hurt_source(0)
 		, hit_hero(false)
 		, was_hit_count(0)
