@@ -93,6 +93,11 @@ public:
 	bool pickUpWeaponForHero();
 
 	/**
+	 * 掉落武器
+	 */
+	void dropWeapon(const cocos2d::Vec2 &local_pos);
+
+	/**
 	 * 镜头跟随主角
 	 */
 	void followHeroWithCamera();

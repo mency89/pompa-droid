@@ -285,6 +285,13 @@ void HeroJump::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroJump);
 	object->runAction(animate);
+
+	if (object->hasWeapon())
+	{
+		object->setCrryWeapon(false);
+		auto current_level = object->getEntityManger()->getCurrentLevel();
+		current_level->dropWeapon(current_level->getRealEntityPosition(object));
+	}
 }
 
 void HeroJump::exit(Hero *object)
@@ -428,6 +435,13 @@ void HeroRuningAttack::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroRunAttcak);
 	object->runAction(animate);
+
+	if (object->hasWeapon())
+	{
+		object->setCrryWeapon(false);
+		auto current_level = object->getEntityManger()->getCurrentLevel();
+		current_level->dropWeapon(current_level->getRealEntityPosition(object));
+	}
 }
 
 void HeroRuningAttack::exit(Hero *object)
@@ -510,6 +524,13 @@ void HeroHurt::enter(Hero *object)
 	else
 	{
 		object->getStateMachine()->change_state(HeroKnockout::instance());
+	}
+
+	if (object->hasWeapon())
+	{
+		object->setCrryWeapon(false);
+		auto current_level = object->getEntityManger()->getCurrentLevel();
+		current_level->dropWeapon(current_level->getRealEntityPosition(object));
 	}
 }
 

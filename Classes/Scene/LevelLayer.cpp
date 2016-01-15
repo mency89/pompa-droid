@@ -70,10 +70,8 @@ bool LevelLayer::init()
 	// 创建障碍物
 	//createTrashcan();
 
-	// 创建武器
-	auto weapon = entity_manger_->create(kEntityWeapon);
-	weapon->setAnchorPoint(Vec2(0.5f, 0.0f));
-	setRealEntityPosition(weapon, Vec2(200, 20));
+	// 掉落武器
+	dropWeapon(Vec2(200, 100));
 
 	scheduleUpdate();
 
@@ -92,7 +90,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 	loadTriggers();
 
 	// 创建障碍物
-	//createTrashcan();
+	createTrashcan();
 
 	// 获取图层数量
 	layer_count_ = getLayerCount();
@@ -355,6 +353,15 @@ bool LevelLayer::pickUpWeaponForHero()
 		}
 	}
 	return false;
+}
+
+// 掉落武器
+void LevelLayer::dropWeapon(const cocos2d::Vec2 &local_pos)
+{
+	auto weapon = entity_manger_->create(kEntityWeapon);
+	weapon->setAnchorPoint(Vec2(0.5f, 0.0f));
+	setRealEntityPosition(weapon, local_pos);
+	weapon->runAction(MoveBy::create(0.5f, Vec2(0, local_pos.y > 20 ? -20 : -local_pos.y)));
 }
 
 // 镜头跟随主角
