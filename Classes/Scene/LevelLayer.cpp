@@ -322,7 +322,7 @@ bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
 	CCAssert(a != nullptr && b != nullptr, "");
 	Vec2 pos_a = getRealEntityPosition(a);
 	Vec2 pos_b = getRealEntityPosition(b);
-	if (abs(pos_b.y - pos_a.y) < getMapSize().height)
+	if (abs(pos_b.y - pos_a.y) < getTileSize().height / 2)
 	{
 		return a->getRealRect().intersectsRect(b->getRealRect());
 	}

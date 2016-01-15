@@ -65,6 +65,8 @@ void SimpleRobotLogic(EntityType *object)
 						Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
 						current_level->setRealEntityPosition(object, hero_pos);
 						target_pos = object->getPosition();
+						int offset = current_level->getTileSize().height / 2;
+						target_pos.y += rand() % 2 == 0 ? -(rand() % offset) : rand() % offset;
 						object->setPosition(temp);
 						object->getStateMachine()->change_state(MoveState::instance());
 					}
