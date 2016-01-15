@@ -23,14 +23,11 @@ bool Weapon::init()
 
 	setSpriteFrame("weapon_unequipped.png");
 
-	state_machine_.reset(new StateMachine<Weapon>(this));
-
 	return true;
 }
 
 void Weapon::update()
 {
-	state_machine_->update();
 }
 
 const char* Weapon::name() const
@@ -45,7 +42,6 @@ int Weapon::weaponCategoryBits() const
 
 void Weapon::handleMenssage(const Message &msg)
 {
-	state_machine_->handle_message(msg);
 }
 
 // 是否被装载
@@ -59,10 +55,4 @@ void Weapon::setLoad(bool value)
 {
 	loaded_ = value;
 	setVisible(!loaded_);
-}
-
-// 获取有限状态机
-StateMachine<Weapon>* Weapon::getStateMachine()
-{
-	return state_machine_.get();
 }

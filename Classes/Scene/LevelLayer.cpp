@@ -74,6 +74,8 @@ bool LevelLayer::init()
 	// 掉落武器
 	dropWeapon(Vec2(200, 80));
 
+	setFollowHero(true);
+
 	scheduleUpdate();
 
 	return true;
@@ -666,9 +668,15 @@ void LevelLayer::update(float delta)
 	// 更新触发器
 	updateTruggersState();
 
-	// 更新层级
+	// 更新层级和镜头
+	bool follow = true;
 	for (auto item : entity_manger_->getAllEntitys())
 	{
+		if (follow)
+		{
+			follow = item->isDeath() || item == getHeroEntity();
+		}
 		item->setLocalZOrder(std::numeric_limits<unsigned short>::max() - getRealEntityPosition(item).y);
 	}
+	setFollowHero(follow);
 }

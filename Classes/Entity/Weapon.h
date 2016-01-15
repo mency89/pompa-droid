@@ -6,8 +6,6 @@
 
 class Weapon : public BaseGameEntity
 {
-	typedef std::auto_ptr<StateMachine<Weapon> > WeaponStateMachine;
-
 public:
 	Weapon(int type, std::shared_ptr<b2World> world);
 
@@ -34,14 +32,8 @@ public:
 	 */
 	void setLoad(bool value);
 
-	/**
-	 * 获取有限状态机
-	 */
-	StateMachine<Weapon>* getStateMachine();
-
 private:
 	bool loaded_;
-	WeaponStateMachine state_machine_;
 };
 
 #endif
