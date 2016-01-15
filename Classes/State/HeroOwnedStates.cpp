@@ -323,7 +323,21 @@ bool HeroJump::on_message(Hero *object, const Message &msg)
 
 void HeroAttack::enter(Hero *object)
 {
-	Animation *animation = AnimationManger::instance()->getAnimation("hero_attack_00");
+	system_clock::time_point current_time = system_clock::now();
+	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().hit_target_time;
+	system_clock::duration duration = current_time - last_hurt_time;
+	if (duration_cast<milliseconds>(duration).count() < 1000)
+	{
+		++object->getStateMachine()->userdata().hit_target_count;
+	}
+	else
+	{
+		object->getStateMachine()->userdata().hit_target_count = 1;
+	}
+
+	char str[32];
+	sprintf(str, "hero_attack_0%d", object->getStateMachine()->userdata().hit_target_count - 1);
+	Animation *animation = AnimationManger::instance()->getAnimation(str);
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroAttcak);
 	object->runAction(animate);
@@ -332,6 +346,10 @@ void HeroAttack::enter(Hero *object)
 void HeroAttack::exit(Hero *object)
 {
 	object->stopActionByTag(ActionTags::kHeroAttcak);
+	if (object->getStateMachine()->userdata().hit_target_count >= 3)
+	{
+		object->getStateMachine()->userdata().hit_target_count = 0;
+	}
 }
 
 void HeroAttack::execute(Hero *object)
@@ -597,7 +615,7 @@ void HeroGlobal::execute(Hero *object)
 
 					if (object->getStateMachine()->get_current_state() == HeroAttack::instance())
 					{
-						extra_info.value = object->getAttack();
+						extra_info.value = object->getStateMachine()->userdata().hit_target_count >= 3 ? object->getRunAttack() : object->getAttack();
 					}
 					else if (object->getStateMachine()->get_current_state() == HeroRuningAttack::instance())
 					{
@@ -609,6 +627,10 @@ void HeroGlobal::execute(Hero *object)
 					}
 
 					MessageDispatcher::instance()->dispatchMessage(msg);
+					if (object->getStateMachine()->get_current_state() == HeroAttack::instance())
+					{
+						object->getStateMachine()->userdata().hit_target_time = system_clock::now();
+					}
 					object->getStateMachine()->userdata().hit_targets.insert(collision.entity->getID());
 				}
 			}	

@@ -16,13 +16,16 @@ struct StatePrivateData < Hero >
 	float before_jump_y;						// 跳跃前y值
 	int hurt_source;							// 伤害来源
 	int was_hit_count;							// 被连续攻击次数
+	int hit_target_count;						// 连击目标次数
 	time_point was_hit_time;					// 上次受击时间
+	time_point hit_target_time;					// 上次击中目标的时间
 	std::set<int> hit_targets;					// 击中的目标集合
 	time_point last_direction_key_pressed_time;	// 上次按下方向键的时间
 	StatePrivateData()
 		: jump_up(false)
 		, hurt_source(0)
 		, was_hit_count(0)
+		, hit_target_count(0)
 		, before_jump_y(0.0f)
 	{
 	}
