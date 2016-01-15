@@ -66,13 +66,13 @@ bool LevelLayer::init()
 	hero_ = getHeroEntity();
 
 	// 加载触发器
-	//loadTriggers();
+	loadTriggers();
 
 	// 创建障碍物
 	//createTrashcan();
 
 	// 掉落武器
-	dropWeapon(Vec2(200, 100));
+	dropWeapon(Vec2(200, 80));
 
 	scheduleUpdate();
 
@@ -364,7 +364,8 @@ void LevelLayer::dropWeaponFromHero()
 	{
 		Weapon *weapon = getHeroEntity()->unloadWeapon();
 		setRealEntityPosition(weapon, getRealEntityPosition(getHeroEntity()));
-		weapon->runAction(MoveBy::create(0.5f, Vec2(0, weapon->getPositionY() > 20 ? -20 : -weapon->getPositionY())));
+		Vec2 pos = getRealEntityPosition(weapon);
+		weapon->runAction(MoveBy::create(0.5f, Vec2(0, pos.y > 20 ? -20 : -pos.y)));
 	}
 }
 
