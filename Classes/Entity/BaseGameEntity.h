@@ -167,17 +167,17 @@ public:
 	/**
 	 * 获取攻击力
 	 */
-	unsigned int getAttack() const;
+	virtual unsigned int getAttack() const;
 
 	/**
 	 * 获取奔跑攻击力
 	 */
-	unsigned int getRunAttack() const;
+	virtual unsigned int getRunAttack() const;
 
 	/**
 	 * 获取跳跃攻击力
 	 */
-	unsigned int getJumpAttack() const;
+	virtual unsigned int getJumpAttack() const;
 
 	/**
 	 * 获取血量

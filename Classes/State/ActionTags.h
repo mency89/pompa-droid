@@ -37,6 +37,10 @@ enum ActionTags
 	kRobotBeltIdle = 1032,
 	kRobotBeltKnockout = 1033,
 	kRobotBeltWalk = 1034,
+	kWeaponAttack = 1035,
+	kWeaponIdle = 1036,
+	kWeaponWalk = 1037,
+
 };
 
 #endif

@@ -34,7 +34,33 @@ public:
 	 */
 	StateMachine<Hero>* getStateMachine();
 
+	/**
+	 * 是否有武器
+	 */
+	bool hasWeapon() const;
+
+	/**
+	 * 获取武器
+	 */
+	cocos2d::Node* getWeapon();
+
+	/**
+	 * 获取攻击力
+	 */
+	virtual unsigned int getAttack() const;
+
+	/**
+	 * 获取奔跑攻击力
+	 */
+	virtual unsigned int getRunAttack() const;
+
+	/**
+	 * 获取跳跃攻击力
+	 */
+	virtual unsigned int getJumpAttack() const;
+
 private:
+	cocos2d::Sprite* weapon_;
 	HeroStateMachine state_machine_;
 };
 

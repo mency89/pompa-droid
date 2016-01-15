@@ -259,6 +259,17 @@ void BaseGameEntity::setHitPoint(unsigned int value)
 void BaseGameEntity::hurtLife(unsigned int value)
 {
 	hit_point_ = value >= hit_point_ ? 0 : hit_point_ - value;
+	if (isDeath() && collision_body_ != nullptr)
+	{
+		// 销毁所有形状
+		b2Fixture *fixture = collision_body_->GetFixtureList();
+		while (fixture != nullptr)
+		{
+			b2Fixture *next_fixture = fixture->GetNext();
+			collision_body_->DestroyFixture(fixture);
+			fixture = next_fixture;
+		}
+	}
 }
 
 // 是否死亡

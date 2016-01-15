@@ -1,6 +1,7 @@
 ﻿#include "Hero.h"
 #include "ShapeCategory.h"
 #include "State/HeroOwnedStates.h"
+using namespace cocos2d;
 
 
 Hero::Hero(int type, std::shared_ptr<b2World> world)
@@ -20,6 +21,10 @@ bool Hero::init()
 	{
 		return false;
 	}
+
+	weapon_ = Sprite::create();
+	weapon_->setAnchorPoint(Vec2::ZERO);
+	addChild(weapon_);
 
 	state_machine_.reset(new StateMachine<Hero>(this));
 	state_machine_->set_global_state(HeroGlobal::instance());
@@ -59,4 +64,35 @@ bool Hero::isJumpingState() const
 StateMachine<Hero>* Hero::getStateMachine()
 {
 	return state_machine_.get();
+}
+
+// 是否有武器
+bool Hero::hasWeapon() const
+{
+	return true;
+}
+
+// 获取武器
+Node* Hero::getWeapon()
+{
+	weapon_->setFlippedX(isFlippedX());
+	return weapon_;
+}
+
+// 获取攻击力
+unsigned int Hero::getAttack() const
+{
+	return hasWeapon() ? BaseGameEntity::getAttack() * 2 : BaseGameEntity::getAttack();
+}
+
+// 获取奔跑攻击力
+unsigned int  Hero::getRunAttack() const
+{
+	return hasWeapon() ? BaseGameEntity::getRunAttack() * 2 : BaseGameEntity::getRunAttack();
+}
+
+// 获取跳跃攻击力
+unsigned int  Hero::getJumpAttack() const
+{
+	return hasWeapon() ? BaseGameEntity::getJumpAttack() * 2 : BaseGameEntity::getJumpAttack();
 }

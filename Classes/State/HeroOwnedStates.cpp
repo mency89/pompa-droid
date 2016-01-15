@@ -12,8 +12,8 @@ using namespace std::chrono;
 
 namespace
 {
-	// 是否是开放的按键
-	bool IsOpenKeyCode(EventKeyboard::KeyCode keyCode)
+	// 是否有效的按键
+	bool IsValidKeyCode(EventKeyboard::KeyCode keyCode)
 	{
 		return keyCode == EventKeyboard::KeyCode::KEY_W ||
 			keyCode == EventKeyboard::KeyCode::KEY_S ||
@@ -83,11 +83,26 @@ void HeroIdle::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroIdle);
 	object->runAction(animate);
+
+	if (object->hasWeapon())
+	{
+		animation = AnimationManger::instance()->getAnimation("weapon_idle");
+		animation->setLoops(-1);
+		animate = Animate::create(animation);
+		animate->setTag(ActionTags::kWeaponIdle);
+		object->getWeapon()->runAction(animate);
+		object->getWeapon()->setVisible(true);
+	}
 }
 
 void HeroIdle::exit(Hero *object)
 {
 	object->stopActionByTag(ActionTags::kHeroIdle);
+	if (object->hasWeapon())
+	{
+		object->getWeapon()->setVisible(false);
+		object->getWeapon()->stopActionByTag(ActionTags::kWeaponIdle);
+	}
 }
 
 void HeroIdle::execute(Hero *object)
@@ -100,7 +115,7 @@ bool HeroIdle::on_message(Hero *object, const Message &msg)
 	if (MessageTypes::kMsgKeyPressed == msg.msg_code)
 	{
 		STKeyPressed extra_info = *reinterpret_cast<const STKeyPressed*>(msg.extra_info);
-		if (IsOpenKeyCode(extra_info.key_code))
+		if (IsValidKeyCode(extra_info.key_code))
 		{
 			if (IsJumpKey(extra_info.key_code))
 			{
@@ -151,11 +166,27 @@ void HeroWalk::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroWalk);
 	object->runAction(animate);
+
+	if (object->hasWeapon())
+	{
+		animation = AnimationManger::instance()->getAnimation("weapon_walk");
+		animation->setLoops(-1);
+		animate = Animate::create(animation);
+		animate->setTag(ActionTags::kWeaponWalk);
+		object->getWeapon()->runAction(animate);
+		object->getWeapon()->setVisible(true);
+	}
 }
 
 void HeroWalk::exit(Hero *object)
 {
 	object->stopActionByTag(ActionTags::kHeroWalk);
+
+	if (object->hasWeapon())
+	{
+		object->getWeapon()->setVisible(false);
+		object->getWeapon()->stopActionByTag(ActionTags::kWeaponWalk);
+	}
 }
 
 void HeroWalk::execute(Hero *object)
@@ -341,11 +372,26 @@ void HeroAttack::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroAttcak);
 	object->runAction(animate);
+
+	if (object->hasWeapon())
+	{
+		sprintf(str, "weapon_attack_0%d", object->getStateMachine()->userdata().hit_target_count - 1);
+		animation = AnimationManger::instance()->getAnimation(str);
+		animate = Animate::create(animation);
+		animate->setTag(ActionTags::kWeaponAttack);
+		object->getWeapon()->runAction(animate);
+		object->getWeapon()->setVisible(true);
+	}
 }
 
 void HeroAttack::exit(Hero *object)
 {
 	object->stopActionByTag(ActionTags::kHeroAttcak);
+	if (object->hasWeapon())
+	{
+		object->getWeapon()->setVisible(false);
+		object->getWeapon()->stopActionByTag(ActionTags::kWeaponAttack);
+	}
 	if (object->getStateMachine()->userdata().hit_target_count >= 3)
 	{
 		object->getStateMachine()->userdata().hit_target_count = 0;
