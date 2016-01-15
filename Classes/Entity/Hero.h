@@ -40,6 +40,11 @@ public:
 	bool hasWeapon() const;
 
 	/**
+	 * 设置携带武器
+	 */
+	void setCrryWeapon(bool value);
+
+	/**
 	 * 获取武器
 	 */
 	cocos2d::Node* getWeapon();
@@ -60,6 +65,7 @@ public:
 	virtual unsigned int getJumpAttack() const;
 
 private:
+	bool has_weapon_;
 	cocos2d::Sprite* weapon_;
 	HeroStateMachine state_machine_;
 };

@@ -6,6 +6,7 @@ using namespace cocos2d;
 
 Hero::Hero(int type, std::shared_ptr<b2World> world)
 	: BaseGameEntity(type, world)
+	, has_weapon_(false)
 {
 
 }
@@ -69,7 +70,13 @@ StateMachine<Hero>* Hero::getStateMachine()
 // 是否有武器
 bool Hero::hasWeapon() const
 {
-	return true;
+	return has_weapon_;
+}
+
+// 设置携带武器
+void Hero::setCrryWeapon(bool value)
+{
+	has_weapon_ = value;
 }
 
 // 获取武器
