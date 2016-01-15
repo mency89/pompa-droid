@@ -27,12 +27,12 @@ public:
 	/**
 	 * 获取腰带
 	 */
-	cocos2d::Node* getBelt();
+	cocos2d::Node* getBeltSkin();
 
 	/**
 	 * 获取烟雾
 	 */
-	cocos2d::Node* getSmoke();
+	cocos2d::Node* getSmokeSkin();
 
 	/**
 	 * 获取有限状态机
@@ -40,8 +40,8 @@ public:
 	StateMachine<Robot>* getStateMachine();
 
 private:
-	cocos2d::Sprite* belt_;
-	cocos2d::Sprite* smoke_;
+	cocos2d::Sprite* belt_skin_;
+	cocos2d::Sprite* smoke_skin_;
 	RobotStateMachine state_machine_;
 };
 

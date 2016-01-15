@@ -6,8 +6,8 @@ using namespace cocos2d;
 
 Robot::Robot(int type, std::shared_ptr<b2World> world)
 	: BaseGameEntity(type, world)
-	, belt_(nullptr)
-	, smoke_(nullptr)
+	, belt_skin_(nullptr)
+	, smoke_skin_(nullptr)
 {
 
 }
@@ -24,13 +24,13 @@ bool Robot::init()
 		return false;
 	}
 
-	belt_ = Sprite::create();
-	belt_->setAnchorPoint(Vec2::ZERO);
-	addChild(belt_);
+	belt_skin_ = Sprite::create();
+	belt_skin_->setAnchorPoint(Vec2::ZERO);
+	addChild(belt_skin_);
 
-	smoke_ = Sprite::create();
-	smoke_->setAnchorPoint(Vec2::ZERO);
-	addChild(smoke_);
+	smoke_skin_ = Sprite::create();
+	smoke_skin_->setAnchorPoint(Vec2::ZERO);
+	addChild(smoke_skin_);
 
 	state_machine_.reset(new StateMachine<Robot>(this));
 	state_machine_->change_state(RobotIdle::instance());
@@ -60,17 +60,17 @@ void Robot::handleMenssage(const Message &msg)
 }
 
 // 获取腰带
-Node* Robot::getBelt()
+Node* Robot::getBeltSkin()
 {
-	belt_->setFlippedX(isFlippedX());
-	return belt_;
+	belt_skin_->setFlippedX(isFlippedX());
+	return belt_skin_;
 }
 
 // 获取烟雾
-Node* Robot::getSmoke()
+Node* Robot::getSmokeSkin()
 {
-	smoke_->setFlippedX(isFlippedX());
-	return smoke_;
+	smoke_skin_->setFlippedX(isFlippedX());
+	return smoke_skin_;
 }
 
 // 获取有限状态机

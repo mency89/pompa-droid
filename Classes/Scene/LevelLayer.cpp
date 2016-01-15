@@ -3,6 +3,7 @@
 #include <limits>
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
+#include "Entity/Weapon.h"
 #include "json/document.h"
 #include "AnimationManger.h"
 #include "State/HeroOwnedStates.h"
@@ -65,7 +66,7 @@ bool LevelLayer::init()
 	hero_ = getHeroEntity();
 
 	// 加载触发器
-	loadTriggers();
+	//loadTriggers();
 
 	// 创建障碍物
 	//createTrashcan();
@@ -344,15 +345,27 @@ bool LevelLayer::pickUpWeaponForHero()
 		{
 			if (entity->getType() == EntityType::kEntityWeapon)
 			{
-				if (entity->getRealRect().containsPoint(pos))
+				Weapon *weapon = dynamic_cast<Weapon *>(entity);
+				if (!weapon->isLoaded() && entity->getRealRect().containsPoint(pos))
 				{
-					entity_manger_->destroyEntity(entity);
+					getHeroEntity()->loadWeapon(weapon);
 					return true;
 				}
 			}
 		}
 	}
 	return false;
+}
+
+// 英雄掉落武器
+void LevelLayer::dropWeaponFromHero()
+{
+	if (getHeroEntity() != nullptr && getHeroEntity()->hasWeapon())
+	{
+		Weapon *weapon = getHeroEntity()->unloadWeapon();
+		setRealEntityPosition(weapon, getRealEntityPosition(getHeroEntity()));
+		weapon->runAction(MoveBy::create(0.5f, Vec2(0, weapon->getPositionY() > 20 ? -20 : -weapon->getPositionY())));
+	}
 }
 
 // 掉落武器

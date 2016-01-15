@@ -1,4 +1,5 @@
 ﻿#include "Hero.h"
+#include "Weapon.h"
 #include "ShapeCategory.h"
 #include "State/HeroOwnedStates.h"
 using namespace cocos2d;
@@ -6,7 +7,8 @@ using namespace cocos2d;
 
 Hero::Hero(int type, std::shared_ptr<b2World> world)
 	: BaseGameEntity(type, world)
-	, has_weapon_(false)
+	, weapon_(nullptr)
+	, weapon_skin_(nullptr)
 {
 
 }
@@ -23,9 +25,9 @@ bool Hero::init()
 		return false;
 	}
 
-	weapon_ = Sprite::create();
-	weapon_->setAnchorPoint(Vec2::ZERO);
-	addChild(weapon_);
+	weapon_skin_ = Sprite::create();
+	weapon_skin_->setAnchorPoint(Vec2::ZERO);
+	addChild(weapon_skin_);
 
 	state_machine_.reset(new StateMachine<Hero>(this));
 	state_machine_->set_global_state(HeroGlobal::instance());
@@ -70,20 +72,35 @@ StateMachine<Hero>* Hero::getStateMachine()
 // 是否有武器
 bool Hero::hasWeapon() const
 {
-	return has_weapon_;
+	return weapon_ != nullptr;
 }
 
-// 设置携带武器
-void Hero::setCrryWeapon(bool value)
+// 卸载武器
+Weapon* Hero::unloadWeapon()
 {
-	has_weapon_ = value;
+	if (hasWeapon())
+	{
+		Weapon *ret = weapon_;
+		weapon_ = nullptr;
+		ret->setLoad(false);
+		return ret;
+	}
+	return nullptr;
+}
+
+// 装载武器
+void Hero::loadWeapon(Weapon *weapon)
+{
+	CCAssert(weapon != nullptr, "");
+	weapon_ = weapon;
+	weapon_->setLoad(true);
 }
 
 // 获取武器
-Node* Hero::getWeapon()
+Node* Hero::getWeaponSkin()
 {
-	weapon_->setFlippedX(isFlippedX());
-	return weapon_;
+	weapon_skin_->setFlippedX(isFlippedX());
+	return weapon_skin_;
 }
 
 // 获取攻击力

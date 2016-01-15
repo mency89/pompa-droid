@@ -25,11 +25,22 @@ public:
 
 public:
 	/**
+	 * 是否被装载
+	 */
+	bool isLoaded() const;
+
+	/**
+	 * 设置装载
+	 */
+	void setLoad(bool value);
+
+	/**
 	 * 获取有限状态机
 	 */
 	StateMachine<Weapon>* getStateMachine();
 
 private:
+	bool loaded_;
 	WeaponStateMachine state_machine_;
 };
 

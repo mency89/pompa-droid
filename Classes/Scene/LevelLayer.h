@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 
 class Hero;
+class Weapon;
 class b2World;
 class EntityManger;
 class BaseGameEntity;
@@ -91,6 +92,11 @@ public:
 	 * 拾取武器
 	 */
 	bool pickUpWeaponForHero();
+
+	/**
+	 * 英雄掉落武器
+	 */
+	void dropWeaponFromHero();
 
 	/**
 	 * 掉落武器

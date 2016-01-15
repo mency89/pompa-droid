@@ -4,6 +4,7 @@
 
 Weapon::Weapon(int type, std::shared_ptr<b2World> world)
 	: BaseGameEntity(type, world)
+	, loaded_(false)
 {
 
 }
@@ -45,6 +46,19 @@ int Weapon::weaponCategoryBits() const
 void Weapon::handleMenssage(const Message &msg)
 {
 	state_machine_->handle_message(msg);
+}
+
+// 是否被装载
+bool Weapon::isLoaded() const
+{
+	return loaded_;
+}
+
+// 设置装载
+void Weapon::setLoad(bool value)
+{
+	loaded_ = value;
+	setVisible(!loaded_);
 }
 
 // 获取有限状态机

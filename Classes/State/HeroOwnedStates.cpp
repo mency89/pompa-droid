@@ -2,6 +2,7 @@
 
 #include "ActionTags.h"
 #include "Entity/Boss.h"
+#include "Entity/Weapon.h"
 #include "AnimationManger.h"
 #include "Scene/LevelLayer.h"
 #include "Entity/EntityManger.h"
@@ -90,8 +91,8 @@ void HeroIdle::enter(Hero *object)
 		animation->setLoops(-1);
 		animate = Animate::create(animation);
 		animate->setTag(ActionTags::kWeaponIdle);
-		object->getWeapon()->runAction(animate);
-		object->getWeapon()->setVisible(true);
+		object->getWeaponSkin()->runAction(animate);
+		object->getWeaponSkin()->setVisible(true);
 	}
 }
 
@@ -100,8 +101,8 @@ void HeroIdle::exit(Hero *object)
 	object->stopActionByTag(ActionTags::kHeroIdle);
 	if (object->hasWeapon())
 	{
-		object->getWeapon()->setVisible(false);
-		object->getWeapon()->stopActionByTag(ActionTags::kWeaponIdle);
+		object->getWeaponSkin()->setVisible(false);
+		object->getWeaponSkin()->stopActionByTag(ActionTags::kWeaponIdle);
 	}
 }
 
@@ -173,8 +174,8 @@ void HeroWalk::enter(Hero *object)
 		animation->setLoops(-1);
 		animate = Animate::create(animation);
 		animate->setTag(ActionTags::kWeaponWalk);
-		object->getWeapon()->runAction(animate);
-		object->getWeapon()->setVisible(true);
+		object->getWeaponSkin()->runAction(animate);
+		object->getWeaponSkin()->setVisible(true);
 	}
 }
 
@@ -184,8 +185,8 @@ void HeroWalk::exit(Hero *object)
 
 	if (object->hasWeapon())
 	{
-		object->getWeapon()->setVisible(false);
-		object->getWeapon()->stopActionByTag(ActionTags::kWeaponWalk);
+		object->getWeaponSkin()->setVisible(false);
+		object->getWeaponSkin()->stopActionByTag(ActionTags::kWeaponWalk);
 	}
 }
 
@@ -288,9 +289,8 @@ void HeroJump::enter(Hero *object)
 
 	if (object->hasWeapon())
 	{
-		object->setCrryWeapon(false);
 		auto current_level = object->getEntityManger()->getCurrentLevel();
-		current_level->dropWeapon(current_level->getRealEntityPosition(object));
+		current_level->dropWeaponFromHero();
 	}
 }
 
@@ -363,7 +363,6 @@ void HeroAttack::enter(Hero *object)
 {
 	if (object->getEntityManger()->getCurrentLevel()->pickUpWeaponForHero())
 	{
-		object->setCrryWeapon(true);
 		object->getStateMachine()->userdata().hit_target_count = 0;
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
@@ -394,8 +393,8 @@ void HeroAttack::enter(Hero *object)
 			animation = AnimationManger::instance()->getAnimation(str);
 			animate = Animate::create(animation);
 			animate->setTag(ActionTags::kWeaponAttack);
-			object->getWeapon()->runAction(animate);
-			object->getWeapon()->setVisible(true);
+			object->getWeaponSkin()->runAction(animate);
+			object->getWeaponSkin()->setVisible(true);
 		}
 	}
 }
@@ -405,8 +404,8 @@ void HeroAttack::exit(Hero *object)
 	object->stopActionByTag(ActionTags::kHeroAttcak);
 	if (object->hasWeapon())
 	{
-		object->getWeapon()->setVisible(false);
-		object->getWeapon()->stopActionByTag(ActionTags::kWeaponAttack);
+		object->getWeaponSkin()->setVisible(false);
+		object->getWeaponSkin()->stopActionByTag(ActionTags::kWeaponAttack);
 	}
 	if (object->getStateMachine()->userdata().hit_target_count >= 3)
 	{
@@ -438,9 +437,8 @@ void HeroRuningAttack::enter(Hero *object)
 
 	if (object->hasWeapon())
 	{
-		object->setCrryWeapon(false);
 		auto current_level = object->getEntityManger()->getCurrentLevel();
-		current_level->dropWeapon(current_level->getRealEntityPosition(object));
+		current_level->dropWeaponFromHero();
 	}
 }
 
@@ -528,9 +526,8 @@ void HeroHurt::enter(Hero *object)
 
 	if (object->hasWeapon())
 	{
-		object->setCrryWeapon(false);
 		auto current_level = object->getEntityManger()->getCurrentLevel();
-		current_level->dropWeapon(current_level->getRealEntityPosition(object));
+		current_level->dropWeaponFromHero();
 	}
 }
 

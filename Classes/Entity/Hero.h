@@ -4,6 +4,8 @@
 #include "BaseGameEntity.h"
 #include "State/StateMachine.h"
 
+class Weapon;
+
 class Hero : public BaseGameEntity
 {
 	typedef std::auto_ptr<StateMachine<Hero> > HeroStateMachine;
@@ -40,14 +42,19 @@ public:
 	bool hasWeapon() const;
 
 	/**
-	 * 设置携带武器
+	 * 卸载武器
 	 */
-	void setCrryWeapon(bool value);
+	Weapon* unloadWeapon();
+
+	/**
+	 * 装载武器
+	 */
+	void loadWeapon(Weapon *weapon);
 
 	/**
 	 * 获取武器
 	 */
-	cocos2d::Node* getWeapon();
+	cocos2d::Node* getWeaponSkin();
 
 	/**
 	 * 获取攻击力
@@ -65,8 +72,8 @@ public:
 	virtual unsigned int getJumpAttack() const;
 
 private:
-	bool has_weapon_;
-	cocos2d::Sprite* weapon_;
+	Weapon* weapon_;
+	cocos2d::Sprite* weapon_skin_;
 	HeroStateMachine state_machine_;
 };
 
