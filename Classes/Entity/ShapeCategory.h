@@ -7,6 +7,7 @@
  */
 enum ShapeCategory
 {
+	kNone = 0x0000,
 	kHeroBodyShape = 0x0001,
 	kHeroWeaponShape = 0x0002,
 	kEnemyBodyShape = 0x0004,

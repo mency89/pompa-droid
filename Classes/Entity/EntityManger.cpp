@@ -4,6 +4,7 @@
 #include "Hero.h"
 #include "Boss.h"
 #include "Robot.h"
+#include "Weapon.h"
 #include "Trashcan.h"
 #include "Scene/LevelLayer.h"
 
@@ -35,6 +36,9 @@ BaseGameEntity* EntityManger::create(EntityType type)
 			break;
 		case kEntityBoss:
 			entity = GameEntityCreator<Boss>().create(type, world_);
+			break;
+		case kEntityWeapon:
+			entity = GameEntityCreator<Weapon>().create(type, world_);
 			break;
 		case kEntityTrashcan:
 			entity = GameEntityCreator<Trashcan>().create(type, world_);

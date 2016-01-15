@@ -354,33 +354,42 @@ bool HeroJump::on_message(Hero *object, const Message &msg)
 
 void HeroAttack::enter(Hero *object)
 {
-	system_clock::time_point current_time = system_clock::now();
-	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().hit_target_time;
-	system_clock::duration duration = current_time - last_hurt_time;
-	if (duration_cast<milliseconds>(duration).count() < 1000)
+	if (object->getEntityManger()->getCurrentLevel()->pickUpWeaponForHero())
 	{
-		++object->getStateMachine()->userdata().hit_target_count;
+		object->setCrryWeapon(true);
+		object->getStateMachine()->userdata().hit_target_count = 0;
+		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
 	else
 	{
-		object->getStateMachine()->userdata().hit_target_count = 1;
-	}
+		system_clock::time_point current_time = system_clock::now();
+		system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().hit_target_time;
+		system_clock::duration duration = current_time - last_hurt_time;
+		if (duration_cast<milliseconds>(duration).count() < 1000)
+		{
+			++object->getStateMachine()->userdata().hit_target_count;
+		}
+		else
+		{
+			object->getStateMachine()->userdata().hit_target_count = 1;
+		}
 
-	char str[32];
-	sprintf(str, "hero_attack_0%d", object->getStateMachine()->userdata().hit_target_count - 1);
-	Animation *animation = AnimationManger::instance()->getAnimation(str);
-	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::kHeroAttcak);
-	object->runAction(animate);
+		char str[32];
+		sprintf(str, "hero_attack_0%d", object->getStateMachine()->userdata().hit_target_count - 1);
+		Animation *animation = AnimationManger::instance()->getAnimation(str);
+		Animate *animate = Animate::create(animation);
+		animate->setTag(ActionTags::kHeroAttcak);
+		object->runAction(animate);
 
-	if (object->hasWeapon())
-	{
-		sprintf(str, "weapon_attack_0%d", object->getStateMachine()->userdata().hit_target_count - 1);
-		animation = AnimationManger::instance()->getAnimation(str);
-		animate = Animate::create(animation);
-		animate->setTag(ActionTags::kWeaponAttack);
-		object->getWeapon()->runAction(animate);
-		object->getWeapon()->setVisible(true);
+		if (object->hasWeapon())
+		{
+			sprintf(str, "weapon_attack_0%d", object->getStateMachine()->userdata().hit_target_count - 1);
+			animation = AnimationManger::instance()->getAnimation(str);
+			animate = Animate::create(animation);
+			animate->setTag(ActionTags::kWeaponAttack);
+			object->getWeapon()->runAction(animate);
+			object->getWeapon()->setVisible(true);
+		}
 	}
 }
 

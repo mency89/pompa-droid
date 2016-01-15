@@ -88,6 +88,11 @@ public:
 	int layerCount() const;
 
 	/**
+	 * 拾取武器
+	 */
+	bool pickUpWeaponForHero();
+
+	/**
 	 * 镜头跟随主角
 	 */
 	void followHeroWithCamera();

@@ -14,6 +14,7 @@ enum EntityType
 	kEntityHero,
 	kEntityRobot,
 	kEntityBoss,
+	kEntityWeapon,
 	kEntityTrashcan,
 };
 

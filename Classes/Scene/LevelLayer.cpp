@@ -70,6 +70,11 @@ bool LevelLayer::init()
 	// 创建障碍物
 	//createTrashcan();
 
+	// 创建武器
+	auto weapon = entity_manger_->create(kEntityWeapon);
+	weapon->setAnchorPoint(Vec2(0.5f, 0.0f));
+	setRealEntityPosition(weapon, Vec2(200, 20));
+
 	scheduleUpdate();
 
 	return true;
@@ -325,6 +330,29 @@ bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
 	if (abs(pos_b.y - pos_a.y) < getTileSize().height / 2)
 	{
 		return a->getRealRect().intersectsRect(b->getRealRect());
+	}
+	return false;
+}
+
+// 拾取武器
+bool LevelLayer::pickUpWeaponForHero()
+{
+	if (getHeroEntity() != nullptr)
+	{
+		Rect rect = getHeroEntity()->getRealRect();
+		Vec2 pos(rect.origin.x + rect.size.width * getHeroEntity()->getAnchorPoint().x,
+				 rect.origin.y + rect.size.height * getHeroEntity()->getAnchorPoint().y);
+		for (auto entity : entity_manger_->getAllEntitys())
+		{
+			if (entity->getType() == EntityType::kEntityWeapon)
+			{
+				if (entity->getRealRect().containsPoint(pos))
+				{
+					entity_manger_->destroyEntity(entity);
+					return true;
+				}
+			}
+		}
 	}
 	return false;
 }

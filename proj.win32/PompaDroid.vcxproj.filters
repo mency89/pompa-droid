@@ -105,6 +105,9 @@
     <ClCompile Include="..\Classes\State\RobotOwnedStates.cpp">
       <Filter>src\State</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Entity\Weapon.cpp">
+      <Filter>src\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\State\RobotOwnedStates.h">
       <Filter>src\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity\Weapon.h">
+      <Filter>src\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
