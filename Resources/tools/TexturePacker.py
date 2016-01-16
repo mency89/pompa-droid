@@ -3,7 +3,7 @@
 import os
 import json
 
-def main():
+if __name__ == "__main__":
     json_map = {}
     filelist = os.walk(os.curdir)
     begin = len(os.curdir + os.path.sep)
@@ -18,6 +18,3 @@ def main():
     if len(json_map) > 0:
         file_handle = open("TexturePacker.json", "w")
         file_handle.write(json.dumps(json_map))
-
-if __name__ == "__main__":
-    main()
