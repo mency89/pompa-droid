@@ -193,7 +193,7 @@ void HeroWalk::exit(Hero *object)
 void HeroWalk::execute(Hero *object)
 {
 	object->move(object->getWalkSpeed());
-	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
+	object->getEntityManger()->getCurrentLevel()->adjustmentPosition(object);
 }
 
 bool HeroWalk::on_message(Hero *object, const Message &msg)
@@ -250,7 +250,7 @@ void HeroRun::exit(Hero *object)
 void HeroRun::execute(Hero *object)
 {
 	object->move(object->getRunSpeed());
-	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
+	object->getEntityManger()->getCurrentLevel()->adjustmentPosition(object);
 }
 
 bool HeroRun::on_message(Hero *object, const Message &msg)
@@ -335,7 +335,7 @@ void HeroJump::execute(Hero *object)
 		{
 			object->move(object->getRunSpeed());
 		}
-		object->getEntityManger()->getCurrentLevel()->adjustmentHeroPositionX();
+		object->getEntityManger()->getCurrentLevel()->adjustmentPositionX(object);
 	}
 
 	if (!object->getStateMachine()->userdata().jump_up &&
@@ -450,7 +450,7 @@ void HeroRuningAttack::exit(Hero *object)
 void HeroRuningAttack::execute(Hero *object)
 {
 	object->move(object->getWalkSpeed());
-	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
+	object->getEntityManger()->getCurrentLevel()->adjustmentPosition(object);
 	if (object->getActionByTag(ActionTags::kHeroRunAttcak) == nullptr)
 	{
 		object->getStateMachine()->change_state(HeroIdle::instance());
@@ -583,7 +583,7 @@ void HeroKnockout::exit(Hero *object)
 void HeroKnockout::execute(Hero *object)
 {
 	object->stepback(1.0f);
-	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPositionX();
+	object->getEntityManger()->getCurrentLevel()->adjustmentPositionX(object);
 
 	if (HeroJump::instance() == object->getStateMachine()->get_previous_state() ||
 		HeroJumpingAttack::instance() == object->getStateMachine()->get_previous_state())

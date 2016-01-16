@@ -92,10 +92,10 @@ void GameScene::update(float delta)
 	level_->update(delta);
 
 	// 更新角色血量
-	if (level_->getHeroEntity() != nullptr)
+	if (level_->getHero() != nullptr)
 	{
 		char str[32];
-		sprintf(str, "%u", level_->getHeroEntity()->getHitPoint());
+		sprintf(str, "%u", level_->getHero()->getHitPoint());
 		hit_point_label_->setString(str);
 	}
 }
@@ -131,12 +131,12 @@ LevelLayer* GameScene::getCurrentLevel()
 
 void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (level_->getHeroEntity())
+	if (level_->getHero())
 	{
 		Message msg;
 		STKeyPressed extra_info;
 		extra_info.key_code = keyCode;
-		msg.receiver = level_->getHeroEntity()->getID();
+		msg.receiver = level_->getHero()->getID();
 		msg.msg_code = MessageTypes::kMsgKeyPressed;
 		msg.extra_info = &extra_info;
 		msg.extra_info_size = sizeof(STKeyPressed);
@@ -146,12 +146,12 @@ void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
 void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-	if (level_->getHeroEntity() != nullptr)
+	if (level_->getHero() != nullptr)
 	{
 		Message msg;
 		STKeyReleased extra_info;
 		extra_info.key_code = keyCode;
-		msg.receiver = level_->getHeroEntity()->getID();
+		msg.receiver = level_->getHero()->getID();
 		msg.msg_code = MessageTypes::kMsgKeyReleased;
 		msg.extra_info = &extra_info;
 		msg.extra_info_size = sizeof(STKeyReleased);

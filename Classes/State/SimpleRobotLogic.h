@@ -10,7 +10,7 @@ void SimpleRobotLogic(EntityType *object)
 	if (IdleState::instance() == object->getStateMachine()->get_current_state())
 	{
 		// 面向玩家
-		Hero *hero = current_level->getHeroEntity();
+		Hero *hero = current_level->getHero();
 		if (hero->getPositionX() < object->getPositionX())
 		{
 			object->setDirection(BaseGameEntity::kLeftDirection);

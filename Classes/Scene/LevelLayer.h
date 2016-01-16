@@ -59,7 +59,7 @@ public:
 	/**
 	 * 获取主角实例
 	 */
-	Hero* getHeroEntity();
+	Hero* getHero();
 
 	/**
 	 * 设置跟随主角
@@ -67,11 +67,11 @@ public:
 	void setFollowHero(bool follow);
 
 	/**
-	 * 自动调整主角位置
+	 * 自动调整位置
 	 */
-	void adjustmentHeroPosition();
-	void adjustmentHeroPositionX();
-	void adjustmentHeroPositionY();
+	void adjustmentPosition(BaseGameEntity *entity);
+	void adjustmentPositionX(BaseGameEntity *entity);
+	void adjustmentPositionY(BaseGameEntity *entity);
 
 	/**
 	 * 避开障碍物

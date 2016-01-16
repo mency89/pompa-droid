@@ -63,7 +63,7 @@ bool LevelLayer::init()
 
 	// 创建游戏实例
 	entity_manger_.reset(new EntityManger(world_, this));
-	hero_ = getHeroEntity();
+	hero_ = getHero();
 
 	// 加载触发器
 	loadTriggers();
@@ -85,7 +85,7 @@ bool LevelLayer::init()
 void LevelLayer::loadLevel(const std::string &level_name)
 {
 	initWithTMXFile(level_name);
-	hero_ = getHeroEntity();
+	hero_ = getHero();
 	setPosition(Vec2::ZERO);
 	setAnchorPoint(Vec2::ZERO);
 
@@ -106,7 +106,7 @@ void LevelLayer::loadLevel(const std::string &level_name)
 }
 
 // 获取主角实例
-Hero* LevelLayer::getHeroEntity()
+Hero* LevelLayer::getHero()
 {
 	if (hero_ == nullptr)
 	{
@@ -338,7 +338,7 @@ bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
 // 拾取武器
 bool LevelLayer::pickUpWeapon(Hero *hero)
 {
-	CCAssert(hero == getHeroEntity(), "");
+	CCAssert(hero == getHero(), "");
 	if (hero != nullptr)
 	{
 		Rect rect = hero->getRealRect();
@@ -363,7 +363,7 @@ bool LevelLayer::pickUpWeapon(Hero *hero)
 // 掉落武器
 void LevelLayer::dropWeapon(Hero *hero)
 {
-	CCAssert(hero == getHeroEntity(), "");
+	CCAssert(hero == getHero(), "");
 	if (hero != nullptr && hero->hasWeapon())
 	{
 		Weapon *weapon = hero->unloadWeapon();
@@ -387,7 +387,7 @@ void LevelLayer::followHeroWithCamera()
 {
 	if (follow_)
 	{
-		BaseGameEntity *follow_target = getHeroEntity();
+		BaseGameEntity *follow_target = getHero();
 		if (follow_target != nullptr)
 		{
 			float localx = getPositionX() + follow_target->getPositionX();
@@ -411,90 +411,93 @@ void LevelLayer::followHeroWithCamera()
 	}
 }
 
-// 自动调整主角位置
-void LevelLayer::adjustmentHeroPosition()
+// 自动调整位置
+void LevelLayer::adjustmentPosition(BaseGameEntity *entity)
 {
-	if (hero_ != nullptr)
+	CCAssert(entity != nullptr, "");
+	if (entity != nullptr)
 	{
-		if (!insideOfFloor(hero_))
+		if (!insideOfFloor(entity))
 		{
-			const Rect rect = getRealEntityRect(hero_);
-			const Vec2 realEntityPos = getRealEntityPosition(hero_);
+			const Rect rect = getRealEntityRect(entity);
+			const Vec2 realEntityPos = getRealEntityPosition(entity);
 			const Size win_size = Director::getInstance()->getWinSize();
-			const Size real_size(hero_->realWidth(), hero_->realHeight());
-			const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
-			const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
+			const Size real_size(entity->realWidth(), entity->realHeight());
+			const float right_boundary = win_size.width - real_size.width * (1.0f - entity->getAnchorPoint().x);
+			const float top_boundary = getTileSize().height * floorHeight() + real_size.height * entity->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
 			if (rect.getMinX() < 0)
 			{
-				setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
+				setRealEntityPosition(entity, Vec2(real_size.width * entity->getAnchorPoint().x, realEntityPos.y));
 			}
 
 			if (rect.getMaxX() > right_boundary)
 			{
-				setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
+				setRealEntityPosition(entity, Vec2(right_boundary, realEntityPos.y));
 			}
 
 			if (rect.getMinY() < 0)
 			{
-				setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
+				setRealEntityPosition(entity, Vec2(realEntityPos.x, real_size.height * entity->getAnchorPoint().y));
 			}
 
 			if (rect.getMinY() > top_boundary)
 			{
-				setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
+				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
 	}
 }
 
-void LevelLayer::adjustmentHeroPositionX()
+void LevelLayer::adjustmentPositionX(BaseGameEntity *entity)
 {
-	if (hero_ != nullptr)
+	CCAssert(entity != nullptr, "");
+	if (entity != nullptr)
 	{
-		if (!insideOfFloor(hero_))
+		if (!insideOfFloor(entity))
 		{
-			const Rect rect = getRealEntityRect(hero_);
-			const Vec2 realEntityPos = getRealEntityPosition(hero_);
+			const Rect rect = getRealEntityRect(entity);
+			const Vec2 realEntityPos = getRealEntityPosition(entity);
 			const Size win_size = Director::getInstance()->getWinSize();
-			const Size real_size(hero_->realWidth(), hero_->realHeight());
-			const float right_boundary = win_size.width - real_size.width * (1.0f - hero_->getAnchorPoint().x);
+			const Size real_size(entity->realWidth(), entity->realHeight());
+			const float right_boundary = win_size.width - real_size.width * (1.0f - entity->getAnchorPoint().x);
 
 			if (rect.getMinX() < 0)
 			{
-				setRealEntityPosition(hero_, Vec2(real_size.width * hero_->getAnchorPoint().x, realEntityPos.y));
+				setRealEntityPosition(entity, Vec2(real_size.width * entity->getAnchorPoint().x, realEntityPos.y));
 			}
 
 			if (rect.getMaxX() > right_boundary)
 			{
-				setRealEntityPosition(hero_, Vec2(right_boundary, realEntityPos.y));
+				setRealEntityPosition(entity, Vec2(right_boundary, realEntityPos.y));
 			}
 		}
 	}
 }
 
-void LevelLayer::adjustmentHeroPositionY()
+void LevelLayer::adjustmentPositionY(BaseGameEntity *entity)
 {
-	if (hero_ != nullptr)
+	CCAssert(entity != nullptr, "");
+	if (entity != nullptr)
 	{
-		if (!insideOfFloor(hero_))
+		if (!insideOfFloor(entity))
 		{
-			const Rect rect = getRealEntityRect(hero_);
-			const Vec2 realEntityPos = getRealEntityPosition(hero_);
-			const Size real_size(hero_->realWidth(), hero_->realHeight());
-			const float top_boundary = getTileSize().height * floorHeight() + real_size.height * hero_->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
+			const Rect rect = getRealEntityRect(entity);
+			const Vec2 realEntityPos = getRealEntityPosition(entity);
+			const Size real_size(entity->realWidth(), entity->realHeight());
+			const float top_boundary = getTileSize().height * floorHeight() + real_size.height * entity->getAnchorPoint().y - HERO_MAX_Y_CORRECTION;
 
 			if (rect.getMinY() < 0)
 			{
-				setRealEntityPosition(hero_, Vec2(realEntityPos.x, real_size.height * hero_->getAnchorPoint().y));
+				setRealEntityPosition(entity, Vec2(realEntityPos.x, real_size.height * entity->getAnchorPoint().y));
 			}
 
 			if (rect.getMinY() > top_boundary)
 			{
-				setRealEntityPosition(hero_, Vec2(realEntityPos.x, top_boundary));
+				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
-		trashcanAvoidance(hero_);
+		trashcanAvoidance(entity);
 	}
 }
 
@@ -676,7 +679,7 @@ void LevelLayer::update(float delta)
 	{
 		if (follow)
 		{
-			follow = item->isDeath() || item == getHeroEntity();
+			follow = item->isDeath() || item == getHero();
 		}
 		item->setLocalZOrder(std::numeric_limits<unsigned short>::max() - getRealEntityPosition(item).y);
 	}
