@@ -4,6 +4,7 @@
 #include "LevelLayer.h"
 #include "VisibleRect.h"
 #include "GLES-Render.h"
+#include "WelcomeScene.h"
 #include "GameApplication.h"
 #include "Entity/Hero.h"
 #include "Entity/BaseGameEntity.h"
@@ -97,6 +98,35 @@ void GameScene::update(float delta)
 		char str[32];
 		sprintf(str, "%u", level_->getHero()->getHitPoint());
 		hit_point_label_->setString(str);
+
+		if (level_->getHero()->getHitPoint() <= 40)
+		{
+			hit_point_label_->setColor(Color3B(255, 0, 0));
+		}
+		else if (level_->getHero()->getHitPoint() <= 120)
+		{
+			hit_point_label_->setColor(Color3B(250, 160, 0));
+		}
+
+		if (level_->getHero()->isDeath())
+		{
+			auto label = Label::createWithBMFont("fonts/hud.fnt", "GAME OVER");
+			label->setPosition(VisibleRect::right());
+			label->setPositionX(label->getPositionX() + label->getContentSize().width / 2);
+			label->setColor(Color3B(255, 0, 0));
+			addChild(label);
+
+			label->runAction(Sequence::create(
+				MoveTo::create(0.5f, VisibleRect::center()),
+				DelayTime::create(0.8f),
+				MoveTo::create(0.5f, VisibleRect::left() - Vec2(label->getContentSize().width / 2, 0)),
+				CallFunc::create([]()
+			{
+				Director::getInstance()->replaceScene(TransitionFadeBL::create(0.5f, WelcomeScene::createScene()));
+			}),
+				nullptr));
+			unscheduleUpdate();
+		}
 	}
 }
 

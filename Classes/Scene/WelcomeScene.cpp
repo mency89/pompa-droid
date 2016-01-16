@@ -42,17 +42,22 @@ bool WelcomeScene::init()
 	{
 		if (touchtostart->getBoundingBox().containsPoint(touch->getLocation()))
 		{
-			Director::getInstance()->replaceScene(TransitionFadeBL::create(0.5f, GameScene::createScene()));
+			Director::getInstance()->replaceScene(TransitionFadeTR::create(0.5f, GameScene::createScene()));
 		}
 		return true;
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-	GameEntityConfig::instance();
-	TexturePacker::instance()->loadCategory("images");
-	GB2ShapeCache::instance()->addShapesWithFile("shapes/body.plist");
-	GB2ShapeCache::instance()->addShapesWithFile("shapes/weapon.plist");
-	AnimationManger::instance()->addAnimationWithFile("config/Animation.json");
+	static bool frist = false;
+	if (!frist)
+	{
+		frist = true;
+		GameEntityConfig::instance();
+		TexturePacker::instance()->loadCategory("images");
+		GB2ShapeCache::instance()->addShapesWithFile("shapes/body.plist");
+		GB2ShapeCache::instance()->addShapesWithFile("shapes/weapon.plist");
+		AnimationManger::instance()->addAnimationWithFile("config/Animation.json");
+	}
     
     return true;
 }
