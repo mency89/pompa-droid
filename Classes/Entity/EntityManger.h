@@ -43,6 +43,11 @@ public:
 	std::vector<BaseGameEntity*> getAllEntitys();
 
 	/**
+	 * 获取敌人数量
+	 */
+	unsigned int getEnemyNum() const;
+
+	/**
 	 * 销毁实例
 	 * @param int 实例id
 	 */

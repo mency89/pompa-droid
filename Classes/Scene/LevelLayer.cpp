@@ -56,10 +56,10 @@ LevelLayer* LevelLayer::create(std::shared_ptr<b2World> world, const std::string
 bool LevelLayer::init()
 {
 	// 获取图层数量
-	layer_count_ = getLayerCount();
+	layer_count_ = calcuLayerCount();
 
 	// 获取地板高度
-	floor_height_ = getFloorHeight();
+	floor_height_ = calcuFloorHeight();
 
 	// 创建游戏实例
 	entity_manger_.reset(new EntityManger(world_, this));
@@ -96,10 +96,10 @@ void LevelLayer::loadLevel(const std::string &level_name)
 	createTrashcan();
 
 	// 获取图层数量
-	layer_count_ = getLayerCount();
+	layer_count_ = calcuLayerCount();
 
 	// 获取地板高度
-	floor_height_ = getFloorHeight();
+	floor_height_ = calcuFloorHeight();
 
 	// 销毁所有实例
 	entity_manger_->destroyAllEntity();
@@ -143,7 +143,7 @@ int LevelLayer::floorHeight() const
 }
 
 // 获取地板高度
-int LevelLayer::getFloorHeight() const
+int LevelLayer::calcuFloorHeight() const
 {
 	auto floor_layer = getLayer("floor");
 	if (floor_layer != nullptr)
@@ -251,7 +251,7 @@ int LevelLayer::layerCount() const
 }
 
 // 获取图层数量
-int LevelLayer::getLayerCount() const
+int LevelLayer::calcuLayerCount() const
 {
 	int count = 0;
 	for (auto &child : getChildren())
@@ -629,7 +629,7 @@ void LevelLayer::updateTruggersState()
 				Size size = Director::getInstance()->getWinSize();
 				for (auto &item : triggers_[i].creater_)
 				{
-					// 创建实例
+					// 创建实例a
 					entitys.clear();
 					for (int i = 0; i < item.num; ++i)
 					{
@@ -662,6 +662,66 @@ void LevelLayer::updateTruggersState()
 	}
 }
 
+// 更新渲染层级和阴影
+void LevelLayer::updateZOrderAndShadow()
+{
+	size_t idx = 0;
+	bool follow = true;
+
+	for (auto item : shadow_queue_)
+	{
+		item->setVisible(false);
+	}
+
+	for (auto item : entity_manger_->getAllEntitys())
+	{
+		if (follow)
+		{
+			follow = item->isDeath() || item == getHero();
+		}
+		item->setLocalZOrder(std::numeric_limits<unsigned short>::max() - getRealEntityPosition(item).y);
+
+		if (item->getType() != EntityType::kEntityTrashcan)
+		{
+			if (item->getType() == EntityType::kEntityWeapon)
+			{
+				Weapon *weapon = dynamic_cast<Weapon *>(item);
+				if (weapon->isLoaded())
+				{
+					continue;
+				}
+			}
+
+			Sprite *shadow = nullptr;
+			if (shadow_queue_.size() > idx)
+			{
+				shadow = shadow_queue_[idx++];
+				shadow->setVisible(true);
+			}
+			else
+			{
+				shadow = Sprite::create();
+				addChild(shadow, layerCount());
+				shadow_queue_.push_back(shadow);
+			}
+			shadow->setSpriteFrame(item->getType() == EntityType::kEntityWeapon ? "shadow_weapon.png" : "shadow_character.png");
+
+			if (item->getType() == EntityType::kEntityHero)
+			{
+				Hero *hero = dynamic_cast<Hero *>(item);
+				if (hero->isJumpingState())
+				{
+					Vec2 pos = convertToNodeSpace(getRealEntityPosition(item));
+					pos.y -= hero->getPositionY() - hero->getBeforeJumpPositionY();
+					shadow->setPosition(pos);
+					continue;
+				}
+			}
+			shadow->setPosition(convertToNodeSpace(getRealEntityPosition(item)));
+		}
+	}
+}
+
 void LevelLayer::update(float delta)
 {
 	// 更新演员
@@ -673,15 +733,9 @@ void LevelLayer::update(float delta)
 	// 更新触发器
 	updateTruggersState();
 
-	// 更新层级和镜头
-	bool follow = true;
-	for (auto item : entity_manger_->getAllEntitys())
-	{
-		if (follow)
-		{
-			follow = item->isDeath() || item == getHero();
-		}
-		item->setLocalZOrder(std::numeric_limits<unsigned short>::max() - getRealEntityPosition(item).y);
-	}
-	setFollowHero(follow);
+	// 更新层级和阴影
+	updateZOrderAndShadow();
+
+	// 镜头跟随
+	setFollowHero(entity_manger_->getEnemyNum() == 0);
 }

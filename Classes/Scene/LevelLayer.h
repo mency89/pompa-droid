@@ -145,19 +145,24 @@ private:
 	void createTrashcan();
 
 	/**
-	 * 获取图层数量
+	 * 计算图层数量
 	 */
-	int getLayerCount() const;
+	int calcuLayerCount() const;
 
 	/**
-	 * 获取地板高度
+	 * 计算地板高度
 	 */
-	int getFloorHeight() const;
+	int calcuFloorHeight() const;
 
 	/**
 	 * 更新触发器状态
 	 */
 	void updateTruggersState();
+
+	/**
+	 * 更新渲染层级和阴影
+	 */
+	void updateZOrderAndShadow();
 
 private:
 	bool							follow_;
@@ -169,6 +174,7 @@ private:
 	std::vector<STrigger>			triggers_;
 	std::vector<cocos2d::Label*>	label_queue_;
 	std::vector<cocos2d::Sprite*>	sprite_queue_;
+	std::vector<cocos2d::Sprite*>	shadow_queue_;
 	std::shared_ptr<b2World>		world_;
 	std::auto_ptr<EntityManger>		entity_manger_;
 	

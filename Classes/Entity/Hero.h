@@ -57,6 +57,11 @@ public:
 	cocos2d::Node* getWeaponSkin();
 
 	/**
+	 * 获取跳跃前的y值
+	 */
+	float getBeforeJumpPositionY();
+
+	/**
 	 * 获取攻击力
 	 */
 	virtual unsigned int getAttack() const;

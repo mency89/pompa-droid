@@ -76,6 +76,21 @@ std::vector<BaseGameEntity*> EntityManger::getAllEntitys()
 	return ret;
 }
 
+// 获取敌人数量
+unsigned int EntityManger::getEnemyNum() const
+{
+	unsigned int ret = 0;
+	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
+	{
+		if (itr->second->getType() == EntityType::kEntityRobot ||
+			itr->second->getType() == EntityType::kEntityBoss)
+		{
+			++ret;
+		}
+	}
+	return ret;
+}
+
 // 销毁实例
 void EntityManger::destroyEntity(int id)
 {

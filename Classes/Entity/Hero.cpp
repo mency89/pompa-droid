@@ -103,6 +103,12 @@ Node* Hero::getWeaponSkin()
 	return weapon_skin_;
 }
 
+// 获取跳跃前的y值
+float Hero::getBeforeJumpPositionY()
+{
+	return getStateMachine()->userdata().before_jump_y;
+}
+
 // 获取攻击力
 unsigned int Hero::getAttack() const
 {
