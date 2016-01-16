@@ -114,15 +114,21 @@ public:
 	void destroyBody();
 
 	/**
-	 * 移动实体
+	 * 移动
 	 * @param float 移动速度
 	 */
-	void moveEntity(float speed);
+	void move(float speed);
 
 	/**
-	 * 移动实体
+	 * 移动
 	 */
-	void moveEntity(const cocos2d::Vec2 &velocity);
+	void move(const cocos2d::Vec2 &velocity);
+
+	/**
+	 * 后退
+	 * @param float 移动速度
+	 */
+	void stepback(float speed);
 
 	/**
 	 * 获取跑动速度

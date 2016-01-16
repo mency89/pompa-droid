@@ -59,7 +59,7 @@ void BossWalk::exit(Boss *object)
 
 void BossWalk::execute(Boss *object)
 {
-	object->moveEntity(object->getWalkSpeed());
+	object->move(object->getWalkSpeed());
 }
 
 bool BossWalk::on_message(Boss *object, const Message &msg)
@@ -101,6 +101,21 @@ bool BossAttack::on_message(Boss *object, const Message &msg)
 
 void BossHurt::enter(Boss *object)
 {
+	// 面向对你造成伤害者
+	int entity_id = object->getStateMachine()->userdata().hurt_source;
+	BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
+	if (entity != nullptr)
+	{
+		if (entity->getPositionX() < object->getPositionX())
+		{
+			object->setDirection(BaseGameEntity::kLeftDirection);
+		}
+		else
+		{
+			object->setDirection(BaseGameEntity::kRightDirection);
+		}
+	}
+
 	system_clock::time_point current_time = system_clock::now();
 	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().was_hit_time;
 	system_clock::duration duration = current_time - last_hurt_time;
@@ -163,6 +178,7 @@ void BossKnockout::exit(Boss *object)
 
 void BossKnockout::execute(Boss *object)
 {
+	object->stepback(1.0f);
 	if (object->getActionByTag(ActionTags::kBossKnockout) == nullptr)
 	{
 		if (object->isDeath())
@@ -203,20 +219,6 @@ void BossGetup::execute(Boss *object)
 {
 	if (object->getActionByTag(ActionTags::kBossGetup) == nullptr)
 	{
-		// 面向对你造成伤害者
-		int entity_id = object->getStateMachine()->userdata().hurt_source;
-		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
-		if (entity != nullptr)
-		{
-			if (entity->getPositionX() < object->getPositionX())
-			{
-				object->setDirection(BaseGameEntity::kLeftDirection);
-			}
-			else
-			{
-				object->setDirection(BaseGameEntity::kRightDirection);
-			}
-		}
 		object->getStateMachine()->change_state(BossIdle::instance());
 	}
 }
@@ -257,7 +259,7 @@ void BossBeelineWalk::execute(Boss *object)
 		velocity.normalize();
 		velocity.x *= object->getWalkSpeed();
 		velocity.y *= object->getWalkSpeed();
-		object->moveEntity(velocity);
+		object->move(velocity);
 	}
 }
 

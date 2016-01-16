@@ -87,7 +87,7 @@ void RobotWalk::exit(Robot *object)
 
 void RobotWalk::execute(Robot *object)
 {
-	object->moveEntity(object->getWalkSpeed());
+	object->move(object->getWalkSpeed());
 }
 
 bool RobotWalk::on_message(Robot *object, const Message &msg)
@@ -143,6 +143,21 @@ bool RobotAttack::on_message(Robot *object, const Message &msg)
 
 void RobotHurt::enter(Robot *object)
 {
+	// 面向对你造成伤害者
+	int entity_id = object->getStateMachine()->userdata().hurt_source;
+	BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
+	if (entity != nullptr)
+	{
+		if (entity->getPositionX() < object->getPositionX())
+		{
+			object->setDirection(BaseGameEntity::kLeftDirection);
+		}
+		else
+		{
+			object->setDirection(BaseGameEntity::kRightDirection);
+		}
+	}
+
 	system_clock::time_point current_time = system_clock::now();
 	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().was_hit_time;
 	system_clock::duration duration = current_time - last_hurt_time;
@@ -232,6 +247,7 @@ void RobotKnockout::exit(Robot *object)
 
 void RobotKnockout::execute(Robot *object)
 {
+	object->stepback(1.0f);
 	if (object->getActionByTag(ActionTags::kRobotKnockout) == nullptr)
 	{
 		if (object->isDeath())
@@ -286,20 +302,6 @@ void RobotGetup::execute(Robot *object)
 {
 	if (object->getActionByTag(ActionTags::kRobotGetup) == nullptr)
 	{
-		// 面向对你造成伤害者
-		int entity_id = object->getStateMachine()->userdata().hurt_source;
-		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
-		if (entity != nullptr)
-		{
-			if (entity->getPositionX() < object->getPositionX())
-			{
-				object->setDirection(BaseGameEntity::kLeftDirection);
-			}
-			else
-			{
-				object->setDirection(BaseGameEntity::kRightDirection);
-			}
-		}
 		object->getStateMachine()->change_state(RobotIdle::instance());
 	}
 }
@@ -340,7 +342,7 @@ void RobotBeelineWalk::execute(Robot *object)
 		velocity.normalize();
 		velocity.x *= object->getWalkSpeed();
 		velocity.y *= object->getWalkSpeed();
-		object->moveEntity(velocity);
+		object->move(velocity);
 	}
 }
 

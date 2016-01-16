@@ -192,7 +192,7 @@ void HeroWalk::exit(Hero *object)
 
 void HeroWalk::execute(Hero *object)
 {
-	object->moveEntity(object->getWalkSpeed());
+	object->move(object->getWalkSpeed());
 	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
 }
 
@@ -249,7 +249,7 @@ void HeroRun::exit(Hero *object)
 
 void HeroRun::execute(Hero *object)
 {
-	object->moveEntity(object->getRunSpeed());
+	object->move(object->getRunSpeed());
 	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
 }
 
@@ -329,11 +329,11 @@ void HeroJump::execute(Hero *object)
 	{
 		if (previous_state == HeroWalk::instance())
 		{
-			object->moveEntity(object->getWalkSpeed());
+			object->move(object->getWalkSpeed());
 		}
 		else if (previous_state == HeroRun::instance())
 		{
-			object->moveEntity(object->getRunSpeed());
+			object->move(object->getRunSpeed());
 		}
 		object->getEntityManger()->getCurrentLevel()->adjustmentHeroPositionX();
 	}
@@ -449,7 +449,7 @@ void HeroRuningAttack::exit(Hero *object)
 
 void HeroRuningAttack::execute(Hero *object)
 {
-	object->moveEntity(object->getWalkSpeed());
+	object->move(object->getWalkSpeed());
 	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPosition();
 	if (object->getActionByTag(ActionTags::kHeroRunAttcak) == nullptr)
 	{
@@ -499,6 +499,21 @@ bool HeroJumpingAttack::on_message(Hero *object, const Message &msg)
 
 void HeroHurt::enter(Hero *object)
 {
+	// 面向对你造成伤害者
+	int entity_id = object->getStateMachine()->userdata().hurt_source;
+	BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
+	if (entity != nullptr)
+	{
+		if (entity->getPositionX() < object->getPositionX())
+		{
+			object->setDirection(BaseGameEntity::kLeftDirection);
+		}
+		else
+		{
+			object->setDirection(BaseGameEntity::kRightDirection);
+		}
+	}
+
 	system_clock::time_point current_time = system_clock::now();
 	system_clock::time_point last_hurt_time = object->getStateMachine()->userdata().was_hit_time;
 	system_clock::duration duration = current_time - last_hurt_time;
@@ -567,6 +582,9 @@ void HeroKnockout::exit(Hero *object)
 
 void HeroKnockout::execute(Hero *object)
 {
+	object->stepback(1.0f);
+	object->getEntityManger()->getCurrentLevel()->adjustmentHeroPositionX();
+
 	if (HeroJump::instance() == object->getStateMachine()->get_previous_state() ||
 		HeroJumpingAttack::instance() == object->getStateMachine()->get_previous_state())
 	{
@@ -617,20 +635,6 @@ void HeroGetup::execute(Hero *object)
 {
 	if (object->getActionByTag(ActionTags::kheroGetup) == nullptr)
 	{
-		// 面向对你造成伤害者
-		int entity_id = object->getStateMachine()->userdata().hurt_source;
-		BaseGameEntity *entity = object->getEntityManger()->getEntityByID(entity_id);
-		if (entity != nullptr)
-		{
-			if (entity->getPositionX() < object->getPositionX())
-			{
-				object->setDirection(BaseGameEntity::kLeftDirection);
-			}
-			else
-			{
-				object->setDirection(BaseGameEntity::kRightDirection);
-			}
-		}
 		object->getStateMachine()->change_state(HeroIdle::instance());
 	}
 }

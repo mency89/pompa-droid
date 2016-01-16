@@ -290,8 +290,8 @@ void BaseGameEntity::setEntityManger(EntityManger *manager)
 	manager_ = manager;
 }
 
-// 移动实体
-void BaseGameEntity::moveEntity(float speed)
+// 移动
+void BaseGameEntity::move(float speed)
 {
 	if (direction_ == kUpDirection)
 	{
@@ -311,8 +311,8 @@ void BaseGameEntity::moveEntity(float speed)
 	}
 }
 
-// 移动实体
-void BaseGameEntity::moveEntity(const cocos2d::Vec2 &velocity)
+// 移动
+void BaseGameEntity::move(const cocos2d::Vec2 &velocity)
 {
 	if (velocity.x > 0.0f)
 	{
@@ -323,6 +323,12 @@ void BaseGameEntity::moveEntity(const cocos2d::Vec2 &velocity)
 		setDirection(kLeftDirection);
 	}
 	setPosition(getPosition() + velocity);
+}
+
+// 后退
+void BaseGameEntity::stepback(float speed)
+{
+	setPositionX(getPositionX() + (isFlippedX() ? speed : -speed));
 }
 
 // 获取跑动速度
