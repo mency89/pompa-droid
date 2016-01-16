@@ -91,12 +91,12 @@ public:
 	/**
 	 * 拾取武器
 	 */
-	bool pickUpWeaponForHero();
+	bool pickUpWeapon(Hero *hero);
 
 	/**
-	 * 英雄掉落武器
+	 * 掉落武器
 	 */
-	void dropWeaponFromHero();
+	void dropWeapon(Hero *hero);
 
 	/**
 	 * 掉落武器

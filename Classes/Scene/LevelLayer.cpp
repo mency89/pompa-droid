@@ -336,13 +336,14 @@ bool LevelLayer::isAdjacent(BaseGameEntity *a, BaseGameEntity *b)
 }
 
 // 拾取武器
-bool LevelLayer::pickUpWeaponForHero()
+bool LevelLayer::pickUpWeapon(Hero *hero)
 {
-	if (getHeroEntity() != nullptr)
+	CCAssert(hero == getHeroEntity(), "");
+	if (hero != nullptr)
 	{
-		Rect rect = getHeroEntity()->getRealRect();
-		Vec2 pos(rect.origin.x + rect.size.width * getHeroEntity()->getAnchorPoint().x,
-				 rect.origin.y + rect.size.height * getHeroEntity()->getAnchorPoint().y);
+		Rect rect = hero->getRealRect();
+		Vec2 pos(rect.origin.x + rect.size.width * hero->getAnchorPoint().x,
+				 rect.origin.y + rect.size.height * hero->getAnchorPoint().y);
 		for (auto entity : entity_manger_->getAllEntitys())
 		{
 			if (entity->getType() == EntityType::kEntityWeapon)
@@ -350,7 +351,7 @@ bool LevelLayer::pickUpWeaponForHero()
 				Weapon *weapon = dynamic_cast<Weapon *>(entity);
 				if (!weapon->isLoaded() && entity->getRealRect().containsPoint(pos))
 				{
-					getHeroEntity()->loadWeapon(weapon);
+					hero->loadWeapon(weapon);
 					return true;
 				}
 			}
@@ -359,13 +360,14 @@ bool LevelLayer::pickUpWeaponForHero()
 	return false;
 }
 
-// 英雄掉落武器
-void LevelLayer::dropWeaponFromHero()
+// 掉落武器
+void LevelLayer::dropWeapon(Hero *hero)
 {
-	if (getHeroEntity() != nullptr && getHeroEntity()->hasWeapon())
+	CCAssert(hero == getHeroEntity(), "");
+	if (hero != nullptr && hero->hasWeapon())
 	{
-		Weapon *weapon = getHeroEntity()->unloadWeapon();
-		setRealEntityPosition(weapon, getRealEntityPosition(getHeroEntity()));
+		Weapon *weapon = hero->unloadWeapon();
+		setRealEntityPosition(weapon, getRealEntityPosition(hero));
 		Vec2 pos = getRealEntityPosition(weapon);
 		weapon->runAction(MoveBy::create(0.5f, Vec2(0, pos.y > 20 ? -20 : -pos.y)));
 	}

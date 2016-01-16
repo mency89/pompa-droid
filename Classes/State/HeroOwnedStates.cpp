@@ -234,6 +234,12 @@ void HeroRun::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroRun);
 	object->runAction(animate);
+
+	if (object->hasWeapon())
+	{
+		auto current_level = object->getEntityManger()->getCurrentLevel();
+		current_level->dropWeapon(object);
+	}
 }
 
 void HeroRun::exit(Hero *object)
@@ -290,7 +296,7 @@ void HeroJump::enter(Hero *object)
 	if (object->hasWeapon())
 	{
 		auto current_level = object->getEntityManger()->getCurrentLevel();
-		current_level->dropWeaponFromHero();
+		current_level->dropWeapon(object);
 	}
 }
 
@@ -361,7 +367,7 @@ bool HeroJump::on_message(Hero *object, const Message &msg)
 
 void HeroAttack::enter(Hero *object)
 {
-	if (object->getEntityManger()->getCurrentLevel()->pickUpWeaponForHero())
+	if (object->getEntityManger()->getCurrentLevel()->pickUpWeapon(object))
 	{
 		object->getStateMachine()->userdata().hit_target_count = 0;
 		object->getStateMachine()->change_state(HeroIdle::instance());
@@ -434,12 +440,6 @@ void HeroRuningAttack::enter(Hero *object)
 	Animate *animate = Animate::create(animation);
 	animate->setTag(ActionTags::kHeroRunAttcak);
 	object->runAction(animate);
-
-	if (object->hasWeapon())
-	{
-		auto current_level = object->getEntityManger()->getCurrentLevel();
-		current_level->dropWeaponFromHero();
-	}
 }
 
 void HeroRuningAttack::exit(Hero *object)
@@ -527,7 +527,7 @@ void HeroHurt::enter(Hero *object)
 	if (object->hasWeapon())
 	{
 		auto current_level = object->getEntityManger()->getCurrentLevel();
-		current_level->dropWeaponFromHero();
+		current_level->dropWeapon(object);
 	}
 }
 
