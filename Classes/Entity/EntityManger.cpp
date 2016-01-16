@@ -82,8 +82,8 @@ unsigned int EntityManger::getEnemyNum() const
 	unsigned int ret = 0;
 	for (auto itr = entitys_.begin(); itr != entitys_.end(); ++itr)
 	{
-		if (itr->second->getType() == EntityType::kEntityRobot ||
-			itr->second->getType() == EntityType::kEntityBoss)
+		if (!itr->second->isDeath() && 
+			(itr->second->getType() == EntityType::kEntityRobot || itr->second->getType() == EntityType::kEntityBoss))
 		{
 			++ret;
 		}
