@@ -450,6 +450,9 @@ void LevelLayer::trashcanAvoidanceX(BaseGameEntity *entity)
 				trashcanRet.getMaxY() < entityRet.getMinY()
 				))
 			{
+				CCLOG("%f, %f", entity->getPreviousPositionX(), entity->getPreviousPositionY());
+				CCLOG("%f, %f", entity->getPositionX(), entity->getPositionY());
+				CCLOG("===================");
 				entity->setPositionX(entity->getPreviousPositionX());
 			}
 		}
@@ -464,7 +467,6 @@ void LevelLayer::adjustmentPosition(BaseGameEntity *entity)
 	{
 		if (!insideOfFloor(entity))
 		{
-			CCLOG("%f, %f", entity->getPreviousPosition().x, entity->getPreviousPosition().y);
 			entity->setPosition(entity->getPreviousPosition());
 		}
 		trashcanAvoidance(entity);

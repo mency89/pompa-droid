@@ -230,7 +230,7 @@ public:
 	 */
 	float getPreviousPositionX() const;
 	float getPreviousPositionY() const;
-	const cocos2d::Vec2& getPreviousPosition() const;
+	cocos2d::Vec2 getPreviousPosition() const;
 
 
 	/* 重写父类函数 */
@@ -241,7 +241,7 @@ public:
 
 	virtual void setPosition(const cocos2d::Vec2 &pos) override;
 
-	//virtual void setPosition(float x, float y) override;
+	virtual void setPosition(float x, float y) override;
 
 	virtual void setParent(cocos2d::Node* parent) override;
 
