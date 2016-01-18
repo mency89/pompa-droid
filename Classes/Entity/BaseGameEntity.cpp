@@ -124,6 +124,22 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 	}
 }
 
+// 获取上一位置
+float BaseGameEntity::getPreviousPositionX() const
+{
+	return previous_pos_.x;
+}
+
+float BaseGameEntity::getPreviousPositionY() const
+{
+	return previous_pos_.y;
+}
+
+const cocos2d::Vec2& BaseGameEntity::getPreviousPosition() const
+{
+	return previous_pos_;
+}
+
 // 全宽
 float BaseGameEntity::fullWidth() const
 {
@@ -484,24 +500,28 @@ std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
 /** 父类函数重写 **/
 void BaseGameEntity::setPositionX(float x)
 {
+	previous_pos_ = getPosition();
 	Sprite::setPositionX(x);
 	updateBodyPosition();
 }
 
 void BaseGameEntity::setPositionY(float y)
 {
+	previous_pos_ = getPosition();
 	Sprite::setPositionY(y);
 	updateBodyPosition();
 }
 
 void BaseGameEntity::setPosition(const Vec2 &pos)
 {
+	previous_pos_ = getPosition();
 	Sprite::setPosition(pos);
 	updateBodyPosition();
 }
 
-void BaseGameEntity::setPosition(float x, float y)
-{
-	Sprite::setPosition(x, y);;
-	updateBodyPosition();
-}
+//void BaseGameEntity::setPosition(float x, float y)
+//{
+//	previous_pos_ = getPosition();
+//	Sprite::setPosition(x, y);;
+//	updateBodyPosition();
+//}
