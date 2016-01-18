@@ -485,19 +485,16 @@ std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
 void BaseGameEntity::setPositionX(float x)
 {
 	Sprite::setPositionX(x);
-	updateBodyPosition();
 }
 
 void BaseGameEntity::setPositionY(float y)
 {
 	Sprite::setPositionY(y);
-	updateBodyPosition();
 }
 
 void BaseGameEntity::setPosition(const Vec2 &pos)
 {
 	Sprite::setPosition(pos);
-	updateBodyPosition();
 }
 
 void BaseGameEntity::setPosition(float x, float y)

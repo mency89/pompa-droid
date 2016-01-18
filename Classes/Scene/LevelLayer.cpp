@@ -66,10 +66,10 @@ bool LevelLayer::init()
 	hero_ = getHero();
 
 	// 加载触发器
-	loadTriggers();
+	//loadTriggers();
 
 	// 创建障碍物
-	//createTrashcan();
+	createTrashcan();
 
 	// 掉落武器
 	dropWeapon(Vec2(200, 80));
