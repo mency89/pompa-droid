@@ -124,22 +124,6 @@ void BaseGameEntity::updateCollisionBodyBySpriteframe()
 	}
 }
 
-// 获取上一位置
-float BaseGameEntity::getPreviousPositionX() const
-{
-	return previous_pos_.x;
-}
-
-float BaseGameEntity::getPreviousPositionY() const
-{
-	return previous_pos_.y;
-}
-
-cocos2d::Vec2 BaseGameEntity::getPreviousPosition() const
-{
-	return previous_pos_;
-}
-
 // 全宽
 float BaseGameEntity::fullWidth() const
 {
@@ -515,7 +499,6 @@ void BaseGameEntity::setPosition(const Vec2 &pos)
 
 void BaseGameEntity::setPosition(float x, float y)
 {
-	previous_pos_ = getPosition();
 	Sprite::setPosition(x, y);;
 	updateBodyPosition();
 }
