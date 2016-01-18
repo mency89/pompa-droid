@@ -225,6 +225,14 @@ public:
 	 */
 	void updateCollisionBodyBySpriteframe();
 
+	/**
+	 * 获取上一位置
+	 */
+	float getPreviousPositionX() const;
+	float getPreviousPositionY() const;
+	cocos2d::Vec2 getPreviousPosition() const;
+
+
 	/* 重写父类函数 */
 public:
 	virtual void setPositionX(float x) override;
@@ -280,6 +288,7 @@ private:
 	std::shared_ptr<b2World>	world_;
 	EntityManger*				manager_;
 	b2Body*						collision_body_;
+	cocos2d::Vec2				previous_pos_;
 	float						run_speed_;
 	float						walk_speed_;
 	float						jump_force_;
