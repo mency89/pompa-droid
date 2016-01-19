@@ -474,6 +474,7 @@ void LevelLayer::adjustmentPositionX(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(right_boundary, realEntityPos.y));
 			}
 		}
+		trashcanAvoidance(entity);
 	}
 }
 
@@ -499,34 +500,31 @@ void LevelLayer::adjustmentPositionY(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
+		trashcanAvoidance(entity);
 	}
 }
 
 // 避开障碍物
 void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 {
-	Rect entityRet = entity->getRealRect();
+	Vec2 velocity = entity->getVelocity();
+	Rect entityRect = entity->getRealRect();
 	Vec2 entityPos = getRealEntityPosition(entity);
 	for (auto *trashcan : entity_manger_->getAllEntitys())
 	{
 		if (strcmp(trashcan->name(), "trashcan") == 0)
 		{
-			Rect trashcanRet = trashcan->getRealRect();
-			trashcanRet.size.height = Trashcan::kWidth3d;
+			Rect trashcanRect = trashcan->getRealRect();
+			trashcanRect.size.height = Trashcan::kWidth3d;
 			const float offset = entity->realWidth() * entity->getAnchorPoint().x;
 
-			if (!(entityRet.getMaxX() < trashcanRet.getMinX() ||
-				trashcanRet.getMaxX() < entityRet.getMinX() ||
-				entityRet.getMinY() < trashcanRet.getMinY() ||
-				trashcanRet.getMaxY() < entityRet.getMinY()
+			if (!(entityRect.getMaxX() < trashcanRect.getMinX() ||
+				trashcanRect.getMaxX() < entityRect.getMinX() ||
+				entityRect.getMinY() < trashcanRect.getMinY() ||
+				trashcanRect.getMaxY() < entityRect.getMinY()
 				))
 			{
-				Vec2 normalize = entity->getVelocity();
-				normalize.normalize();
-				float diffX = trashcanRet.getMinX() - entityRet.getMaxX();
-				float diffY = trashcanRet.getMinY() - entityRet.getMinY();
-				entity->setPositionX(entity->getPositionX() + diffX * normalize.x);
-				entity->setPositionY(entity->getPositionY() + diffY * normalize.y);
+				entity->setPosition(entity->getPosition() - velocity);
 			}
 		}
 	}
