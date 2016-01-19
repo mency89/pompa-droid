@@ -153,7 +153,6 @@ void BossKnockout::exit(Boss *object)
 void BossKnockout::execute(Boss *object)
 {
 	object->stepback(1.0f);
-	object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
 
 	if (object->getActionByTag(ActionTags::kBossKnockout) == nullptr)
 	{
@@ -240,7 +239,6 @@ void BossWalk::execute(Boss *object)
 		velocity.x *= object->getWalkSpeed();
 		velocity.y *= object->getWalkSpeed();
 		object->move(velocity);
-		object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
 	}
 }
 

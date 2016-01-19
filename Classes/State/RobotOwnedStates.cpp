@@ -208,7 +208,6 @@ void RobotKnockout::exit(Robot *object)
 void RobotKnockout::execute(Robot *object)
 {
 	object->stepback(1.0f);
-	object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
 
 	if (object->getActionByTag(ActionTags::kRobotKnockout) == nullptr)
 	{
@@ -322,8 +321,8 @@ void RobotWalk::execute(Robot *object)
 		velocity.normalize();
 		velocity.x *= object->getWalkSpeed();
 		velocity.y *= object->getWalkSpeed();
-		object->move(velocity);
-		object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
+		object->move(Vec2(velocity.x , 0));
+		object->move(Vec2(0, velocity.y));
 	}
 }
 

@@ -500,7 +500,7 @@ void BaseGameEntity::setPositionY(float y)
 
 void BaseGameEntity::setPosition(const Vec2 &pos)
 {
-	Sprite::setPosition(pos);
+	Sprite::setPosition(pos);	
 }
 
 void BaseGameEntity::setPosition(float x, float y)
