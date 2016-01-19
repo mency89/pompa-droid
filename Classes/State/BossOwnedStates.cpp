@@ -41,32 +41,6 @@ bool BossIdle::on_message(Boss *object, const Message &msg)
 	return false;
 }
 
-/******Boss行走状态******/
-
-void BossWalk::enter(Boss *object)
-{
-	Animation *animation = AnimationManger::instance()->getAnimation("boss_walk");
-	animation->setLoops(-1);
-	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::kBossWalk);
-	object->runAction(animate);
-}
-
-void BossWalk::exit(Boss *object)
-{
-	object->stopActionByTag(ActionTags::kBossWalk);
-}
-
-void BossWalk::execute(Boss *object)
-{
-	object->move(object->getWalkSpeed());
-}
-
-bool BossWalk::on_message(Boss *object, const Message &msg)
-{
-	return false;
-}
-
 /******Boss攻击状态******/
 
 void BossAttack::enter(Boss *object)
@@ -179,6 +153,8 @@ void BossKnockout::exit(Boss *object)
 void BossKnockout::execute(Boss *object)
 {
 	object->stepback(1.0f);
+	object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
+
 	if (object->getActionByTag(ActionTags::kBossKnockout) == nullptr)
 	{
 		if (object->isDeath())
@@ -233,19 +209,23 @@ bool BossGetup::on_message(Boss *object, const Message &msg)
 /* Behavior layer state                                                 */
 /************************************************************************/
 
-/******Boss直线行走状态******/
+/******Boss行走状态******/
 
-void BossBeelineWalk::enter(Boss *object)
+void BossWalk::enter(Boss *object)
 {
-	BossWalk::instance()->enter(object);
+	Animation *animation = AnimationManger::instance()->getAnimation("boss_walk");
+	animation->setLoops(-1);
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::kBossWalk);
+	object->runAction(animate);
 }
 
-void BossBeelineWalk::exit(Boss *object)
+void BossWalk::exit(Boss *object)
 {
-	BossWalk::instance()->exit(object);
+	object->stopActionByTag(ActionTags::kBossWalk);
 }
 
-void BossBeelineWalk::execute(Boss *object)
+void BossWalk::execute(Boss *object)
 {
 	const cocos2d::Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
 	if (target_pos.distance(object->getPosition()) <= object->getWalkSpeed())
@@ -260,12 +240,13 @@ void BossBeelineWalk::execute(Boss *object)
 		velocity.x *= object->getWalkSpeed();
 		velocity.y *= object->getWalkSpeed();
 		object->move(velocity);
+		object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
 	}
 }
 
-bool BossBeelineWalk::on_message(Boss *object, const Message &msg)
+bool BossWalk::on_message(Boss *object, const Message &msg)
 {
-	return BossWalk::instance()->on_message(object, msg);
+	return false;
 }
 
 /******Boss休息一会儿状态******/
@@ -308,7 +289,7 @@ void BossGlobal::exit(Boss *object)
 
 void BossGlobal::execute(Boss *object)
 {
-	SimpleRobotLogic<Boss, BossIdle, BossIdleLittleWhile, BossBeelineWalk, BossAttack>(object);
+	SimpleRobotLogic<Boss, BossIdle, BossIdleLittleWhile, BossWalk, BossAttack>(object);
 }
 
 bool BossGlobal::on_message(Boss *object, const Message &msg)

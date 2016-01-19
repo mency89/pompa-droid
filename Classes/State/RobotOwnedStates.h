@@ -47,23 +47,6 @@ public:
 };
 
 /**
- * 机器人行走状态
- */
-class RobotWalk : public State < Robot >, public Singleton < RobotWalk >
-{
-	SINGLETON_DEFAULT(RobotWalk);
-
-public:
-	virtual void enter(Robot *object) override;
-
-	virtual void exit(Robot *object) override;
-
-	virtual void execute(Robot *object) override;
-
-	virtual bool on_message(Robot *object, const Message &msg) override;
-};
-
-/**
  * 机器人攻击状态
  */
 class RobotAttack : public State < Robot >, public Singleton < RobotAttack >
@@ -136,11 +119,11 @@ public:
 /************************************************************************/
 
 /**
- * 机器人直线行走状态
+ * 机器人行走状态
  */
-class RobotBeelineWalk : public State < Robot >, public Singleton < RobotBeelineWalk >
+class RobotWalk : public State < Robot >, public Singleton < RobotWalk >
 {
-	SINGLETON_DEFAULT(RobotBeelineWalk);
+	SINGLETON_DEFAULT(RobotWalk);
 
 public:
 	virtual void enter(Robot *object) override;

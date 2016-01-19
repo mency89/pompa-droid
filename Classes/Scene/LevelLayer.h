@@ -77,6 +77,8 @@ public:
 	 * 避开障碍物
 	 */
 	void trashcanAvoidance(BaseGameEntity *entity);
+	void trashcanAvoidanceX(BaseGameEntity *entity);
+	void trashcanAvoidanceY(BaseGameEntity *entity);
 
 	/**
 	 * 播放受击特效

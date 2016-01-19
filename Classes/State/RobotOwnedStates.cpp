@@ -55,46 +55,6 @@ bool RobotIdle::on_message(Robot *object, const Message &msg)
 	return false;
 }
 
-/******机器人行走状态******/
-
-void RobotWalk::enter(Robot *object)
-{
-	Animation *animation = AnimationManger::instance()->getAnimation("robot_base_walk");
-	animation->setLoops(-1);
-	Animate *animate = Animate::create(animation);
-	animate->setTag(ActionTags::kRobotWalk);
-	object->runAction(animate);
-
-	animation = AnimationManger::instance()->getAnimation("robot_belt_walk");
-	animation->setLoops(-1);
-	animate = Animate::create(animation);
-	animate->setTag(ActionTags::kRobotBeltWalk);
-	object->getBeltSkin()->runAction(animate);
-
-	animation = AnimationManger::instance()->getAnimation("robot_smoke_walk");
-	animation->setLoops(-1);
-	animate = Animate::create(animation);
-	animate->setTag(ActionTags::kRobotSmokeWalk);
-	object->getSmokeSkin()->runAction(animate);
-}
-
-void RobotWalk::exit(Robot *object)
-{
-	object->stopActionByTag(ActionTags::kRobotWalk);
-	object->getBeltSkin()->stopActionByTag(ActionTags::kRobotBeltWalk);
-	object->getSmokeSkin()->stopActionByTag(ActionTags::kRobotSmokeWalk);
-}
-
-void RobotWalk::execute(Robot *object)
-{
-	object->move(object->getWalkSpeed());
-}
-
-bool RobotWalk::on_message(Robot *object, const Message &msg)
-{
-	return false;
-}
-
 /******机器人攻击状态******/
 
 void RobotAttack::enter(Robot *object)
@@ -248,6 +208,8 @@ void RobotKnockout::exit(Robot *object)
 void RobotKnockout::execute(Robot *object)
 {
 	object->stepback(1.0f);
+	object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
+
 	if (object->getActionByTag(ActionTags::kRobotKnockout) == nullptr)
 	{
 		if (object->isDeath())
@@ -316,19 +278,37 @@ bool RobotGetup::on_message(Robot *object, const Message &msg)
 /* Behavior layer state                                                 */
 /************************************************************************/
 
-/******机器人直线行走状态******/
+/******机器人行走状态******/
 
-void RobotBeelineWalk::enter(Robot *object)
+void RobotWalk::enter(Robot *object)
 {
-	RobotWalk::instance()->enter(object);
+	Animation *animation = AnimationManger::instance()->getAnimation("robot_base_walk");
+	animation->setLoops(-1);
+	Animate *animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotWalk);
+	object->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_belt_walk");
+	animation->setLoops(-1);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotBeltWalk);
+	object->getBeltSkin()->runAction(animate);
+
+	animation = AnimationManger::instance()->getAnimation("robot_smoke_walk");
+	animation->setLoops(-1);
+	animate = Animate::create(animation);
+	animate->setTag(ActionTags::kRobotSmokeWalk);
+	object->getSmokeSkin()->runAction(animate);
 }
 
-void RobotBeelineWalk::exit(Robot *object)
+void RobotWalk::exit(Robot *object)
 {
-	RobotWalk::instance()->exit(object);
+	object->stopActionByTag(ActionTags::kRobotWalk);
+	object->getBeltSkin()->stopActionByTag(ActionTags::kRobotBeltWalk);
+	object->getSmokeSkin()->stopActionByTag(ActionTags::kRobotSmokeWalk);
 }
 
-void RobotBeelineWalk::execute(Robot *object)
+void RobotWalk::execute(Robot *object)
 {
 	const cocos2d::Vec2 &target_pos = object->getStateMachine()->userdata().target_pos;
 	if (target_pos.distance(object->getPosition()) <= object->getWalkSpeed())
@@ -343,12 +323,13 @@ void RobotBeelineWalk::execute(Robot *object)
 		velocity.x *= object->getWalkSpeed();
 		velocity.y *= object->getWalkSpeed();
 		object->move(velocity);
+		object->getEntityManger()->getCurrentLevel()->trashcanAvoidance(object);
 	}
 }
 
-bool RobotBeelineWalk::on_message(Robot *object, const Message &msg)
+bool RobotWalk::on_message(Robot *object, const Message &msg)
 {
-	return RobotWalk::instance()->on_message(object, msg);
+	return false;
 }
 
 /******机器人休息一会儿状态******/
@@ -391,7 +372,7 @@ void RobotGlobal::exit(Robot *object)
 
 void RobotGlobal::execute(Robot *object)
 {
-	SimpleRobotLogic<Robot, RobotIdle, RobotIdleLittleWhile, RobotBeelineWalk, RobotAttack>(object);
+	SimpleRobotLogic<Robot, RobotIdle, RobotIdleLittleWhile, RobotWalk, RobotAttack>(object);
 }
 
 bool RobotGlobal::on_message(Robot *object, const Message &msg)

@@ -67,7 +67,7 @@ bool LevelLayer::init()
 	hero_ = getHero();
 
 	// 加载触发器
-	//loadTriggers();
+	loadTriggers();
 
 	// 创建障碍物
 	createTrashcan();
@@ -412,6 +412,97 @@ void LevelLayer::followHeroWithCamera()
 	}
 }
 
+// 避开障碍物
+void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
+{
+	Vec2 velocity = entity->getVelocity();
+	Rect entityRect = entity->getRealRect();
+	for (auto *trashcan : entity_manger_->getAllEntitys())
+	{
+		if (strcmp(trashcan->name(), "trashcan") == 0)
+		{
+			Rect trashcanRect = trashcan->getRealRect();
+			trashcanRect.size.height = Trashcan::kWidth3d;
+			if (entity->getType() == EntityType::kEntityHero)
+			{
+				Hero *hero = dynamic_cast<Hero *>(entity);
+				if (hero->isJumpingState())
+				{
+					entityRect.origin.y -= hero->getPositionY() - hero->getBeforeJumpPositionY();
+				}
+			}
+			if (!(entityRect.getMaxX() < trashcanRect.getMinX() ||
+				trashcanRect.getMaxX() < entityRect.getMinX() ||
+				entityRect.getMinY() < trashcanRect.getMinY() ||
+				trashcanRect.getMaxY() < entityRect.getMinY()
+				))
+			{
+				entity->setPosition(entity->getPosition() - velocity);
+			}
+		}
+	}
+}
+
+void LevelLayer::trashcanAvoidanceX(BaseGameEntity *entity)
+{
+	Vec2 velocity = entity->getVelocity();
+	Rect entityRect = entity->getRealRect();
+	for (auto *trashcan : entity_manger_->getAllEntitys())
+	{
+		if (strcmp(trashcan->name(), "trashcan") == 0)
+		{
+			Rect trashcanRect = trashcan->getRealRect();
+			trashcanRect.size.height = Trashcan::kWidth3d;
+			if (entity->getType() == EntityType::kEntityHero)
+			{
+				Hero *hero = dynamic_cast<Hero *>(entity);
+				if (hero->isJumpingState())
+				{
+					entityRect.origin.y -= hero->getPositionY() - hero->getBeforeJumpPositionY();
+				}
+			}
+			if (!(entityRect.getMaxX() < trashcanRect.getMinX() ||
+				trashcanRect.getMaxX() < entityRect.getMinX() ||
+				entityRect.getMinY() < trashcanRect.getMinY() ||
+				trashcanRect.getMaxY() < entityRect.getMinY()
+				))
+			{
+				entity->setPositionX(entity->getPosition().x - velocity.x);
+			}
+		}
+	}
+}
+
+void LevelLayer::trashcanAvoidanceY(BaseGameEntity *entity)
+{
+	Vec2 velocity = entity->getVelocity();
+	Rect entityRect = entity->getRealRect();
+	for (auto *trashcan : entity_manger_->getAllEntitys())
+	{
+		if (strcmp(trashcan->name(), "trashcan") == 0)
+		{
+			Rect trashcanRect = trashcan->getRealRect();
+			trashcanRect.size.height = Trashcan::kWidth3d;
+			if (entity->getType() == EntityType::kEntityHero)
+			{
+				Hero *hero = dynamic_cast<Hero *>(entity);
+				if (hero->isJumpingState())
+				{
+					entityRect.origin.y -= hero->getPositionY() - hero->getBeforeJumpPositionY();
+				}
+			}
+			if (!(entityRect.getMaxX() < trashcanRect.getMinX() ||
+				trashcanRect.getMaxX() < entityRect.getMinX() ||
+				entityRect.getMinY() < trashcanRect.getMinY() ||
+				trashcanRect.getMaxY() < entityRect.getMinY()
+				))
+			{
+				entity->setPositionY(entity->getPosition().y - velocity.y);
+			}
+		}
+	}
+}
+
 // 自动调整位置
 void LevelLayer::adjustmentPosition(BaseGameEntity *entity)
 {
@@ -474,7 +565,7 @@ void LevelLayer::adjustmentPositionX(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(right_boundary, realEntityPos.y));
 			}
 		}
-		trashcanAvoidance(entity);
+		trashcanAvoidanceX(entity);
 	}
 }
 
@@ -500,33 +591,7 @@ void LevelLayer::adjustmentPositionY(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
-		trashcanAvoidance(entity);
-	}
-}
-
-// 避开障碍物
-void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
-{
-	Vec2 velocity = entity->getVelocity();
-	Rect entityRect = entity->getRealRect();
-	Vec2 entityPos = getRealEntityPosition(entity);
-	for (auto *trashcan : entity_manger_->getAllEntitys())
-	{
-		if (strcmp(trashcan->name(), "trashcan") == 0)
-		{
-			Rect trashcanRect = trashcan->getRealRect();
-			trashcanRect.size.height = Trashcan::kWidth3d;
-			const float offset = entity->realWidth() * entity->getAnchorPoint().x;
-
-			if (!(entityRect.getMaxX() < trashcanRect.getMinX() ||
-				trashcanRect.getMaxX() < entityRect.getMinX() ||
-				entityRect.getMinY() < trashcanRect.getMinY() ||
-				trashcanRect.getMaxY() < entityRect.getMinY()
-				))
-			{
-				entity->setPosition(entity->getPosition() - velocity);
-			}
-		}
+		trashcanAvoidanceY(entity);
 	}
 }
 

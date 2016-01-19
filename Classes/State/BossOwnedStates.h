@@ -47,23 +47,6 @@ public:
 };
 
 /**
- * Boss行走状态
- */
-class BossWalk : public State < Boss >, public Singleton < BossWalk >
-{
-	SINGLETON_DEFAULT(BossWalk);
-
-public:
-	virtual void enter(Boss *object) override;
-
-	virtual void exit(Boss *object) override;
-
-	virtual void execute(Boss *object) override;
-
-	virtual bool on_message(Boss *object, const Message &msg) override;
-};
-
-/**
  * Boss攻击状态
  */
 class BossAttack : public State < Boss >, public Singleton < BossAttack >
@@ -136,11 +119,11 @@ public:
 /************************************************************************/
 
 /**
- * Boss直线行走状态
+ * Boss行走状态
  */
-class BossBeelineWalk : public State < Boss >, public Singleton < BossBeelineWalk >
+class BossWalk : public State < Boss >, public Singleton < BossWalk >
 {
-	SINGLETON_DEFAULT(BossBeelineWalk);
+	SINGLETON_DEFAULT(BossWalk);
 
 public:
 	virtual void enter(Boss *object) override;
