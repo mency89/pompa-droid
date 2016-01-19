@@ -4,10 +4,11 @@
 #include "VisibleRect.h"
 #include "Entity/Hero.h"
 #include "Entity/Weapon.h"
+#include "Entity/Trashcan.h"
+#include "Entity/EntityManger.h"
 #include "json/document.h"
 #include "AnimationManger.h"
 #include "State/HeroOwnedStates.h"
-#include "Entity/EntityManger.h"
 using namespace cocos2d;
 
 enum Direction
@@ -446,6 +447,7 @@ void LevelLayer::adjustmentPosition(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
+		trashcanAvoidance(entity);
 	}
 }
 
@@ -497,7 +499,6 @@ void LevelLayer::adjustmentPositionY(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
-		trashcanAvoidance(entity);
 	}
 }
 
@@ -511,7 +512,7 @@ void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 		if (strcmp(trashcan->name(), "trashcan") == 0)
 		{
 			Rect trashcanRet = trashcan->getRealRect();
-			trashcanRet.size.height = 27;
+			trashcanRet.size.height = Trashcan::kWidth3d;
 			const float offset = entity->realWidth() * entity->getAnchorPoint().x;
 
 			if (!(entityRet.getMaxX() < trashcanRet.getMinX() ||
@@ -520,31 +521,31 @@ void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 				trashcanRet.getMaxY() < entityRet.getMinY()
 				))
 			{
-				if (entityRet.getMaxX() > trashcanRet.getMinX() &&
+				/*if (entityRet.getMaxX() > trashcanRet.getMinX() &&
 					entityRet.getMinX() < trashcanRet.getMinX())
-				{
+					{
 					setRealEntityPosition(entity, Vec2(trashcanRet.getMinX() - offset, entityPos.y));
-				}
+					}
 
-				if (entityRet.getMaxX() > trashcanRet.getMaxX() &&
+					if (entityRet.getMaxX() > trashcanRet.getMaxX() &&
 					entityRet.getMinX() < trashcanRet.getMaxX())
-				{
+					{
 					setRealEntityPosition(entity, Vec2(trashcanRet.getMaxX() + offset, entityPos.y));
-				}
+					}
 
-				entityPos = getRealEntityPosition(entity);
-				if (entityRet.getMinY() > trashcanRet.getMinY() &&
+					entityPos = getRealEntityPosition(entity);
+					if (entityRet.getMinY() > trashcanRet.getMinY() &&
 					entityRet.getMinY() < trashcanRet.getMaxY())
-				{
+					{
 					if (entityRet.getMinY() - trashcanRet.getMinY() < trashcanRet.getMaxY() - entityRet.getMinY())
 					{
-						setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMinY()));
+					setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMinY()));
 					}
 					else
 					{
-						setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMaxY()));
+					setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMaxY()));
 					}
-				}
+					}*/
 			}
 		}
 	}

@@ -9,6 +9,9 @@ class Trashcan : public BaseGameEntity
 	typedef std::auto_ptr<StateMachine<Trashcan> > TrashcanStateMachine;
 
 public:
+	const static int kWidth3d = 27;
+
+public:
 	Trashcan(int type, std::shared_ptr<b2World> world);
 
 	~Trashcan();
