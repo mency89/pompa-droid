@@ -331,6 +331,12 @@ void BaseGameEntity::stepback(float speed)
 	setPositionX(getPositionX() + (isFlippedX() ? speed : -speed));
 }
 
+// 获取速度
+Vec2 BaseGameEntity::getVelocity() const
+{
+	return velocity_;
+}
+
 // 获取跑动速度
 float BaseGameEntity::getRunSpeed() const
 {
@@ -499,6 +505,8 @@ void BaseGameEntity::setPosition(const Vec2 &pos)
 
 void BaseGameEntity::setPosition(float x, float y)
 {
-	Sprite::setPosition(x, y);;
+	Vec2 previous = getPosition();
+	Sprite::setPosition(x, y);
+	velocity_ = getPosition() - previous;
 	updateBodyPosition();
 }

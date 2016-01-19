@@ -131,6 +131,11 @@ public:
 	void stepback(float speed);
 
 	/**
+	 * 获取速度
+	 */
+	cocos2d::Vec2 getVelocity() const;
+
+	/**
 	 * 获取跑动速度
 	 */
 	float getRunSpeed() const;
@@ -280,6 +285,7 @@ private:
 	std::shared_ptr<b2World>	world_;
 	EntityManger*				manager_;
 	b2Body*						collision_body_;
+	cocos2d::Vec2				velocity_;
 	float						run_speed_;
 	float						walk_speed_;
 	float						jump_force_;

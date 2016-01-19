@@ -521,31 +521,12 @@ void LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
 				trashcanRet.getMaxY() < entityRet.getMinY()
 				))
 			{
-				/*if (entityRet.getMaxX() > trashcanRet.getMinX() &&
-					entityRet.getMinX() < trashcanRet.getMinX())
-					{
-					setRealEntityPosition(entity, Vec2(trashcanRet.getMinX() - offset, entityPos.y));
-					}
-
-					if (entityRet.getMaxX() > trashcanRet.getMaxX() &&
-					entityRet.getMinX() < trashcanRet.getMaxX())
-					{
-					setRealEntityPosition(entity, Vec2(trashcanRet.getMaxX() + offset, entityPos.y));
-					}
-
-					entityPos = getRealEntityPosition(entity);
-					if (entityRet.getMinY() > trashcanRet.getMinY() &&
-					entityRet.getMinY() < trashcanRet.getMaxY())
-					{
-					if (entityRet.getMinY() - trashcanRet.getMinY() < trashcanRet.getMaxY() - entityRet.getMinY())
-					{
-					setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMinY()));
-					}
-					else
-					{
-					setRealEntityPosition(entity, Vec2(entityPos.x, trashcanRet.getMaxY()));
-					}
-					}*/
+				Vec2 normalize = entity->getVelocity();
+				normalize.normalize();
+				float diffX = trashcanRet.getMinX() - entityRet.getMaxX();
+				float diffY = trashcanRet.getMinY() - entityRet.getMinY();
+				entity->setPositionX(entity->getPositionX() + diffX * normalize.x);
+				entity->setPositionY(entity->getPositionY() + diffY * normalize.y);
 			}
 		}
 	}
