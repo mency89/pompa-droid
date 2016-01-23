@@ -380,7 +380,7 @@ bool RobotGlobal::on_message(Robot *object, const Message &msg)
 	{
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
-		object->getEntityManger()->getCurrentLevel()->playHitEffect(extra_info.local_pos, extra_info.value);
+		object->getEntityManger()->getCurrentLevel()->playHitEffect(extra_info.pos, extra_info.value);
 		object->hurtLife(extra_info.value);
 		if (object->isDeath())
 		{

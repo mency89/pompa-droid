@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="12" tilewidth="32" tileheight="32" nextobjectid="10">
- <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="512" columns="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="12" tilewidth="32" tileheight="32" nextobjectid="15">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="512">
   <image source="tiles.png" width="1024" height="512"/>
  </tileset>
  <layer name="title" width="100" height="12">
@@ -37,6 +37,36 @@
    <properties>
     <property name="left" value="[{&quot;robot&quot;:1}]"/>
     <property name="right" value="[{&quot;robot&quot;:2}]"/>
+   </properties>
+  </object>
+  <object id="10" name="trigger" type="trigger" x="700" y="286" width="32" height="96">
+   <properties>
+    <property name="left" value="[{&quot;robot&quot;:2}]"/>
+    <property name="right" value="[{&quot;robot&quot;:2}]"/>
+   </properties>
+  </object>
+  <object id="11" name="trigger" type="trigger" x="1300" y="286" width="32" height="96">
+   <properties>
+    <property name="left" value="[{&quot;robot&quot;:1}]"/>
+    <property name="right" value="[{&quot;robot&quot;:1}]"/>
+   </properties>
+  </object>
+  <object id="12" name="trigger" type="trigger" x="1961" y="286" width="32" height="96">
+   <properties>
+    <property name="left" value="[{&quot;robot&quot;:1}]"/>
+    <property name="right" value="[{&quot;robot&quot;:3}]"/>
+   </properties>
+  </object>
+  <object id="13" name="trigger" type="trigger" x="2528" y="286" width="32" height="96">
+   <properties>
+    <property name="left" value="[{&quot;robot&quot;:3}]"/>
+    <property name="right" value="[{&quot;robot&quot;:2}]"/>
+   </properties>
+  </object>
+  <object id="14" name="trigger" type="trigger" x="3048" y="286" width="32" height="96">
+   <properties>
+    <property name="left" value="[{&quot;robot&quot;:4}]"/>
+    <property name="right" value="[{&quot;robot&quot;:4},{&quot;boss&quot;:1}]"/>
    </properties>
   </object>
  </objectgroup>

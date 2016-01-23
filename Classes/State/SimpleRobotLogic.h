@@ -89,7 +89,7 @@ void SimpleRobotLogic(EntityType *object)
 				msg.msg_code = kMsgEntityHurt;
 
 				STEntityHurt extra_info;
-				extra_info.local_pos = collision.collision_pos;
+				extra_info.pos = collision.pos;
 				extra_info.value = object->getAttack();
 				msg.extra_info = &extra_info;
 				msg.extra_info_size = sizeof(STEntityHurt);

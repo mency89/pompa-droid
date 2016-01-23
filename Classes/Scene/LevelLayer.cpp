@@ -69,9 +69,6 @@ bool LevelLayer::init()
 	// 加载触发器
 	loadTriggers();
 
-	// 创建障碍物
-	createTrashcan();
-
 	// 掉落武器
 	dropWeapon(Vec2(200, 80));
 
@@ -92,9 +89,6 @@ void LevelLayer::loadLevel(const std::string &level_name)
 
 	// 加载触发器
 	loadTriggers();
-
-	// 创建障碍物
-	createTrashcan();
 
 	// 获取图层数量
 	layer_count_ = calcuLayerCount();
@@ -215,9 +209,9 @@ void LevelLayer::loadTriggers()
 				trigger.width = value.asValueMap()["width"].asFloat();
 				trigger.height = value.asValueMap()["height"].asFloat();
 				auto vec = unpack(Direction::Left, value.asValueMap()["left"].asString());
-				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
+				trigger.entitys.insert(trigger.entitys.end(), vec.begin(), vec.end());
 				vec = unpack(Direction::Right, value.asValueMap()["right"].asString());
-				trigger.creater_.insert(trigger.creater_.end(), vec.begin(), vec.end());
+				trigger.entitys.insert(trigger.entitys.end(), vec.begin(), vec.end());
 				triggers_.push_back(std::move(trigger));
 			}
 		}
@@ -239,7 +233,6 @@ void LevelLayer::createTrashcan()
 				auto entity = entity_manger_->create(EntityType::kEntityTrashcan);
 				entity->setAnchorPoint(Vec2(0.5f, 0.0f));
 				setRealEntityPosition(entity, Vec2(x, y));
-				break;
 			}
 		}
 	}
@@ -412,62 +405,6 @@ void LevelLayer::followHeroWithCamera()
 	}
 }
 
-// 避开障碍物
-bool LevelLayer::trashcanAvoidance(BaseGameEntity *entity)
-{
-	const float boundary = 1.0f;
-	Vec2 weight = entity->getVelocity();
-	Rect entityRect = entity->getRealRect();
-	weight.normalize();
-	weight.x = abs(weight.x);
-	weight.y = abs(weight.y);
-	
-	for (auto *trashcan : entity_manger_->getAllEntitys())
-	{
-		if (strcmp(trashcan->name(), "trashcan") == 0)
-		{
-			Rect trashcanRect = trashcan->getRealRect();
-			trashcanRect.size.height = Trashcan::kWidth3d;
-			if (entity->getType() == EntityType::kEntityHero)
-			{
-				Hero *hero = dynamic_cast<Hero *>(entity);
-				if (hero->isJumpingState())
-				{
-					entityRect.origin.y -= hero->getPositionY() - hero->getBeforeJumpPositionY();
-				}
-			}
-			if (!(entityRect.getMaxX() < trashcanRect.getMinX() ||
-				trashcanRect.getMaxX() < entityRect.getMinX() ||
-				entityRect.getMinY() < trashcanRect.getMinY() ||
-				trashcanRect.getMaxY() < entityRect.getMinY()
-				))
-			{
-				float diffX = 0, diffY = 0;
-				if (entityRect.getMaxX() < trashcanRect.getMaxX())
-				{
-					diffX = trashcanRect.getMinX() - entityRect.getMaxX() - boundary;
-					entity->setPositionX(entity->getPositionX() + diffX * weight.x);
-				}
-				else
-				{
-					diffX = trashcanRect.getMaxX() - entityRect.getMinX() + boundary;
-					entity->setPositionX(entity->getPositionX() + diffX * weight.x);
-				}
-
-				if (entityRect.getMinY() >= trashcanRect.getMinY() && entityRect.getMinY() <= trashcanRect.getMaxY())
-				{
-					float a = entityRect.getMinY() - trashcanRect.getMinY() - boundary;
-					float b = trashcanRect.getMaxY() - entityRect.getMinY() + boundary;
-					diffY = abs(a) < abs(b) ? a : b;
-					entity->setPositionY(entity->getPositionY() + diffY * weight.y);
-				}
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 // 自动调整位置
 void LevelLayer::adjustmentPosition(BaseGameEntity *entity)
 {
@@ -503,7 +440,6 @@ void LevelLayer::adjustmentPosition(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
-		trashcanAvoidance(entity);
 	}
 }
 
@@ -530,7 +466,6 @@ void LevelLayer::adjustmentPositionX(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(right_boundary, realEntityPos.y));
 			}
 		}
-		trashcanAvoidance(entity);
 	}
 }
 
@@ -556,12 +491,11 @@ void LevelLayer::adjustmentPositionY(BaseGameEntity *entity)
 				setRealEntityPosition(entity, Vec2(realEntityPos.x, top_boundary));
 			}
 		}
-		trashcanAvoidance(entity);
 	}
 }
 
 // 播放受击特效
-void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hurtOfValue)
+void LevelLayer::playHitEffect(const cocos2d::Vec2 &world_pos, unsigned short hurtOfValue)
 {
 	// 受击特效
 	{
@@ -577,7 +511,7 @@ void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hu
 			player = Sprite::create();
 			addChild(player, std::numeric_limits<unsigned short>::max() + 1);
 		}
-		player->setPosition(local_pos);
+		player->setPosition(convertToNodeSpace(world_pos));
 
 		Animation *animation = AnimationManger::instance()->getAnimation("hiteffect");
 		Animate *animate = Animate::create(animation);
@@ -605,7 +539,7 @@ void LevelLayer::playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hu
 			label = Label::createWithBMFont("fonts/damage.fnt", str);
 			addChild(label, std::numeric_limits<unsigned short>::max() + 1);
 		}
-		label->setPosition(local_pos);
+		label->setPosition(convertToNodeSpace(world_pos));
 
 		label->runAction(Sequence::create(MoveBy::create(0.5f, Vec2(0, 50)),
 			CallFunc::create([=]()
@@ -637,7 +571,7 @@ void LevelLayer::updateTruggersState()
 				// 生成机器人
 				std::vector<BaseGameEntity *> entitys;
 				Size size = Director::getInstance()->getWinSize();
-				for (auto &item : triggers_[i].creater_)
+				for (auto &item : triggers_[i].entitys)
 				{
 					// 创建实例a
 					entitys.clear();
@@ -661,7 +595,6 @@ void LevelLayer::updateTruggersState()
 							pos.x = size.width + entitys[i]->realWidth() / 2;
 						}
 						pos.y = rand() % int(getTileSize().height * floorHeight());
-						pos = convertToNodeSpace(pos);
 						setRealEntityPosition(entitys[i], pos);
 					}
 				}

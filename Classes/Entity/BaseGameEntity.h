@@ -27,7 +27,7 @@ public:
 	struct Collision
 	{
 		BaseGameEntity* entity;
-		cocos2d::Vec2 collision_pos;
+		cocos2d::Vec2 pos;
 		Collision()
 			: entity(nullptr)
 		{

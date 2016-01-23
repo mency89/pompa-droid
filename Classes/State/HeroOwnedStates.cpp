@@ -686,7 +686,7 @@ void HeroGlobal::execute(Hero *object)
 					msg.msg_code = kMsgEntityHurt;
 
 					STEntityHurt extra_info;
-					extra_info.local_pos = collision.collision_pos;
+					extra_info.pos = collision.pos;
 					msg.extra_info = &extra_info;
 					msg.extra_info_size = sizeof(STEntityHurt);
 
@@ -725,7 +725,7 @@ bool HeroGlobal::on_message(Hero *object, const Message &msg)
 	{
 		STEntityHurt extra_info = *reinterpret_cast<const STEntityHurt*>(msg.extra_info);
 		object->getStateMachine()->userdata().hurt_source = msg.sender;
-		object->getEntityManger()->getCurrentLevel()->playHitEffect(extra_info.local_pos, extra_info.value);
+		object->getEntityManger()->getCurrentLevel()->playHitEffect(extra_info.pos, extra_info.value);
 		object->hurtLife(extra_info.value);
 		if (object->isDeath())
 		{

@@ -468,7 +468,7 @@ std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
 					b2CircleShape *shapeA = dynamic_cast<b2CircleShape *>(fixtureA->GetShape());
 					b2CircleShape *shapeB = dynamic_cast<b2CircleShape *>(fixtureB->GetShape());
 					targets.resize(targets.size() + 1);
-					targets.back().collision_pos = getCollisionPosition(shapeA, shapeB, fixtureB->GetBody());
+					targets.back().pos = getCollisionPosition(shapeA, shapeB, fixtureB->GetBody());
 					targets.back().entity = reinterpret_cast<BaseGameEntity*>(fixtureB->GetBody()->GetUserData());
 				}
 				else if (fixtureB->GetBody() == collision_body_ &&
@@ -477,7 +477,7 @@ std::vector<BaseGameEntity::Collision> BaseGameEntity::getHitTargets() const
 					b2CircleShape *shapeA = dynamic_cast<b2CircleShape *>(fixtureA->GetShape());
 					b2CircleShape *shapeB = dynamic_cast<b2CircleShape *>(fixtureB->GetShape());
 					targets.resize(targets.size() + 1);
-					targets.back().collision_pos = getCollisionPosition(shapeB, shapeA, fixtureA->GetBody());
+					targets.back().pos = getCollisionPosition(shapeB, shapeA, fixtureA->GetBody());
 					targets.back().entity = reinterpret_cast<BaseGameEntity*>(fixtureA->GetBody()->GetUserData());
 				}
 			}

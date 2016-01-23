@@ -25,7 +25,7 @@ class LevelLayer : public cocos2d::TMXTiledMap
 		float y;
 		float width;
 		float height;
-		std::vector<SEntity> creater_;
+		std::vector<SEntity> entitys;
 	};
 
 public:
@@ -74,14 +74,9 @@ public:
 	void adjustmentPositionY(BaseGameEntity *entity);
 
 	/**
-	 * 避开障碍物
-	 */
-	bool trashcanAvoidance(BaseGameEntity *entity);
-
-	/**
 	 * 播放受击特效
 	 */
-	void playHitEffect(const cocos2d::Vec2 &local_pos, unsigned short hurtOfValue);
+	void playHitEffect(const cocos2d::Vec2 &world_pos, unsigned short hurtOfValue);
 
 	/**
 	 * 图层数量
